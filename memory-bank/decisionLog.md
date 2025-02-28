@@ -1,5 +1,16 @@
 # Decision Log
 
+## 2025-02-28 16:28 CST - D1 Database Environment Configuration
+
+**Decision**: Move preview environment D1 configuration to default configuration and use explicit environment flags.
+
+**Context**: The preview environment D1 database was not being properly detected by wrangler commands, causing deployment failures.
+
+**Solution**:
+1. Added --env flag to wrangler D1 commands to explicitly specify the environment
+2. Moved preview environment configuration to default configuration in wrangler.toml
+3. Removed redundant preview environment section to avoid confusion
+
 ## 2025-02-28 16:13 CST - D1 Database Configuration Improvements
 
 ### Context

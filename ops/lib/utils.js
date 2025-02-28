@@ -61,7 +61,7 @@ class WranglerCmd {
 
   createFeedDbTables() {
     const dbName = this.currentEnv !== 'development' ? this._non_dev_db() : 'FEED_DB --local';
-    const wranglerCmd = `wrangler d1 execute ${dbName} --file ops/db/init.sql`;
+    const wranglerCmd = `wrangler d1 execute ${dbName} --file ops/db/init.sql --env ${this.currentEnv}`;
     console.log(wranglerCmd);
     return this._getCmd(wranglerCmd);
   }

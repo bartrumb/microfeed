@@ -27,5 +27,13 @@ Fixed D1 database configuration issues in wrangler.toml and init_feed_db.js.
 # Next Steps
 1. Test preview deployment with updated D1 configuration
 2. Test production deployment with environment-specific database
-3. Set up GitHub Actions workflow for automated deployments
-4. Add monitoring for deployment issues
+3. Add monitoring for deployment issues
+
+# Recent Changes (2025-02-28 16:27 CST)
+1. Fixed D1 configuration for preview environment:
+   - Added --env flag to wrangler D1 commands in utils.js
+   - Moved preview environment D1 configuration to default configuration
+   - Removed redundant preview environment section
+   - Updated database IDs and names
+
+Rationale: The issue was that wrangler wasn't properly detecting the preview environment. By moving the preview configuration to the default configuration and explicitly passing the --env flag, we ensure proper environment detection during wrangler commands.

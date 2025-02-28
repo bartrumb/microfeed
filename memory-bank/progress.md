@@ -36,6 +36,14 @@
   - Fixed environment variable passing in preview environment
 
 # Next Steps
+## 2025-02-28 16:27 CST
+- Fixed D1 database configuration for preview environment:
+  - Added --env flag to wrangler D1 commands in utils.js
+  - Moved preview environment D1 configuration to default configuration
+  - Removed redundant preview environment section
+  - Updated database IDs and names
+  - Improved environment detection in wrangler commands
+
 1. Test preview deployment with updated D1 configuration
    - Run setup:preview to verify database setup
    - Check database tables are created correctly
@@ -50,8 +58,3 @@
    - Set up error tracking for database operations
    - Add logging for configuration updates
    - Monitor database performance metrics
-
-4. Implement automated testing
-   - Add tests for database configuration
-   - Add tests for environment-specific setups
-   - Add integration tests for database operations
