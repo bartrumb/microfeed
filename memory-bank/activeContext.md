@@ -18,46 +18,20 @@ Set up multiple environments (development, preview, production) for Cloudflare P
    - Preview: shop-dawg-microfeed_feed_db_preview
    - Production: shop-dawg-microfeed_feed_db_production
 
-# Recent Changes (2025-02-28 15:48 CST)
-1. Enhanced D1 database configuration:
+# Recent Changes (2025-02-28 16:03 CST)
+1. Fixed wrangler.toml D1 configuration:
+   - Removed invalid JSON-style env configuration
+   - Fixed environment-specific D1 database arrays using [[env.*.d1_databases]]
+   - Maintained proper database IDs across environments
+   - Ensured consistent binding names
+   - Fixed TOML syntax for array tables
+
+2. Previous D1 database configuration enhancements:
    - Modified init_feed_db.js to handle database ID automatically
    - Added database ID fetching and TOML updates
    - Improved error handling and validation
    - Added proper environment-specific configuration
    - Fixed ESLint issues in the implementation
-
-2. Improved database initialization robustness:
-   - Added graceful handling of "database exists" errors
-   - Improved error reporting for table creation
-   - Added proper error exit codes
-   - Enhanced logging for better debugging
-   - Added validation before TOML updates
-
-# Previous Changes (2025-02-28 15:42 CST)
-1. Added comprehensive D1 database configuration:
-   - Added environment-specific database bindings in wrangler.toml
-   - Configured preview and production databases
-   - Removed redundant database_id field
-   - Maintained consistent binding names across environments
-
-2. Improved database initialization robustness:
-   - Added graceful handling of "database exists" errors
-   - Improved error reporting for table creation
-   - Added proper error exit codes
-   - Enhanced logging for better debugging
-
-# Earlier Changes
-1. Fixed R2 initialization for preview environment:
-   - Added proper environment section to TOML configuration
-   - Added validation for required variables in generate_vars_toml.sh
-   - Fixed line ending handling for Windows/WSL compatibility
-   - Enhanced error messages in init_r2.js for missing variables
-   - Added fail-fast behavior to prevent partial configurations
-
-2. Improved error reporting:
-   - Added validation for required R2 variables
-   - Added descriptive error messages for missing variables
-   - Added variable tracking in TOML generation
 
 # Next Steps
 1. Test preview deployment with updated D1 configuration

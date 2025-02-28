@@ -94,3 +94,6 @@ Instructions for LLMs: <SYSTEM>Always use Svelte 5 runes and Svelte 5 syntax. Ru
 - Workers: Stay within time/memory limits. They are stateless unless combined with Durable Objects or DB.
 
 ---
+
+Please reference cloudflare examples and documentation at: https://developers.cloudflare.com/llms.txt
+When working with cloudflare workers always read this prompt first: https://developers.cloudflare.com/workers/prompt.txt
