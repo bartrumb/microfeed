@@ -18,7 +18,22 @@ Set up multiple environments (development, preview, production) for Cloudflare P
    - Preview: shop-dawg-microfeed_feed_db_preview
    - Production: shop-dawg-microfeed_feed_db_production
 
-# Recent Changes (2025-02-28 15:42 CST)
+# Recent Changes (2025-02-28 15:48 CST)
+1. Enhanced D1 database configuration:
+   - Modified init_feed_db.js to handle database ID automatically
+   - Added database ID fetching and TOML updates
+   - Improved error handling and validation
+   - Added proper environment-specific configuration
+   - Fixed ESLint issues in the implementation
+
+2. Improved database initialization robustness:
+   - Added graceful handling of "database exists" errors
+   - Improved error reporting for table creation
+   - Added proper error exit codes
+   - Enhanced logging for better debugging
+   - Added validation before TOML updates
+
+# Previous Changes (2025-02-28 15:42 CST)
 1. Added comprehensive D1 database configuration:
    - Added environment-specific database bindings in wrangler.toml
    - Configured preview and production databases
@@ -31,7 +46,7 @@ Set up multiple environments (development, preview, production) for Cloudflare P
    - Added proper error exit codes
    - Enhanced logging for better debugging
 
-# Previous Changes (2025-02-28 15:35 CST)
+# Earlier Changes
 1. Fixed R2 initialization for preview environment:
    - Added proper environment section to TOML configuration
    - Added validation for required variables in generate_vars_toml.sh
@@ -43,43 +58,6 @@ Set up multiple environments (development, preview, production) for Cloudflare P
    - Added validation for required R2 variables
    - Added descriptive error messages for missing variables
    - Added variable tracking in TOML generation
-
-# Earlier Changes
-1. Fixed R2 initialization for preview environment:
-   - Modified TOML variable formatting in generate_vars_toml.sh
-   - Added export statements for environment variables in setup:preview script
-   - Ensured environment variables are properly passed to shell script in preview
-   - Fixed AWS SDK path resolution issues
-   - Validated R2_PUBLIC_BUCKET configuration
-
-2. Updated deploy:cloudflare script to work in bash/WSL environment:
-   - Added proper environment variables (DEPLOYMENT_ENVIRONMENT, D1_DATABASE_NAME)
-   - Added sh for generate_vars_toml.sh execution
-   - Aligned with setup:preview script pattern
-
-3. Updated deploy:github script for consistency:
-   - Added same environment variables as deploy:cloudflare
-   - Added sh for generate_vars_toml.sh execution
-   - Maintained consistent deployment pattern across all scripts
-
-4. Fixed generate_vars_toml.sh script:
-   - Added proper shebang line (#!/bin/bash)
-   - Fixed shell script syntax
-   - Added success message for better feedback
-
-5. Updated deployment scripts to properly load environment variables:
-   - Added source command to load variables from .production.vars
-   - Used set -a/+a to automatically export variables
-   - Applied consistent environment loading across both deploy:cloudflare and deploy:github scripts
-
-6. Simplified deployment process:
-   - Modified generate_vars_toml.sh to read variables directly from .production.vars
-   - Removed environment variable handling from package.json scripts
-   - Added proper variable parsing using POSIX-compliant awk
-   - Fixed shell script compatibility issues with sh
-   - Switched to sed for more reliable variable parsing
-   - Fixed handling of hyphens in project names
-   - Improved line-by-line processing for better reliability
 
 # Next Steps
 1. Test preview deployment with updated D1 configuration
