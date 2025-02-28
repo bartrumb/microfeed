@@ -95,5 +95,9 @@ Instructions for LLMs: <SYSTEM>Always use Svelte 5 runes and Svelte 5 syntax. Ru
 
 ---
 
-Please reference cloudflare examples and documentation at: https://developers.cloudflare.com/llms.txt
+Always use fetch to reference cloudflare docs below when working the respective product:
 When working with cloudflare workers always read this prompt first: https://developers.cloudflare.com/workers/prompt.txt
+Wrangler configuration best practices can be foud here: https://raw.githubusercontent.com/cloudflare/cloudflare-docs/refs/heads/production/src/content/docs/workers/wrangler/configuration.mdx
+Wrangler commands here: https://raw.githubusercontent.com/cloudflare/cloudflare-docs/refs/heads/production/src/content/docs/workers/wrangler/commands.mdx 
+
+Examples for all cloudflare products and blogs at: https://developers.cloudflare.com/llms.txt

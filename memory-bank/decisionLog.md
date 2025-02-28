@@ -1,38 +1,41 @@
 # Decision Log
 
-## 2025-02-28 15:48 CST - D1 Database Configuration Enhancement
-**Decision**: Modify init_feed_db.js to handle database IDs automatically
-**Context**: Preview environment setup was failing due to missing database_id field in wrangler.toml
-**Rationale**:
-- Wrangler now requires database_id field for D1 database bindings
-- Manual ID management is error-prone and time-consuming
-- Project already had getDatabaseId utility that wasn't being utilized
+## 2025-02-28 16:13 CST - D1 Database Configuration Improvements
 
-**Implementation Details**:
-1. Enhanced init_feed_db.js to:
-   - Create database first
-   - Fetch database ID using existing utility
-   - Update wrangler.toml automatically
-   - Handle environment-specific configurations
-   - Maintain proper TOML structure
+### Context
+The wrangler.toml configuration for D1 databases was causing issues due to incorrect syntax and missing required fields.
 
-**Risks Considered**:
-- Database creation race conditions
-- API token permissions
-- TOML file corruption during updates
+### Decision
+1. Use TOML array table syntax for D1 database configuration:
+   - Chose `[[d1_databases]]` for base configuration
+   - Used `[[env.{environment}.d1_databases]]` for environment-specific configs
+   - Rationale: This follows Cloudflare's recommended structure for D1 bindings
 
-**Mitigation**:
-- Added proper error handling
-- Validate database ID before updating TOML
-- Maintain TOML structure during updates
-- Added detailed logging for troubleshooting
+2. Include required database_name field:
+   - Added database_name field to both base and environment configs
+   - Used cmd._non_dev_db() to maintain consistent naming
+   - Rationale: database_name is required by Cloudflare D1 configuration
 
-**Impact**:
-- Streamlined database setup process
-- Reduced manual configuration steps
-- Improved reliability of preview/production deployments
-- Better error feedback for failed operations
+3. Remove JSON-style configuration:
+   - Removed JSON object syntax from env configuration
+   - Switched to pure TOML syntax
+   - Rationale: Mixing JSON and TOML caused parsing errors
 
-## Earlier Decisions
+4. Improve configuration management:
+   - Added environment-specific configuration handling
+   - Preserved existing configurations when updating
+   - Rationale: Prevents accidental deletion of other environment settings
 
-[Previous decisions remain unchanged...]
+### Consequences
+- Positive:
+  * Proper D1 database configuration across environments
+  * More maintainable TOML structure
+  * Better error handling for configuration updates
+  * Preserved environment-specific settings
+- Negative:
+  * None identified
+
+### Implementation Notes
+- Used regex to safely update environment-specific sections
+- Added error handling for missing configuration files
+- Maintained backward compatibility with existing database IDs
