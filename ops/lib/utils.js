@@ -70,6 +70,49 @@ class WranglerCmd {
    * XXX: We use private api here, which may be changed on the cloudflare end...
    * https://github.com/cloudflare/wrangler2/blob/main/packages/wrangler/src/d1/list.tsx#L34
    */
+  createDatabaseViaApi(onSuccess) {
+    const dbName = this.currentEnv !== 'development' ? this._non_dev_db() : 'FEED_DB';
+    const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
+    const apiKey = this.v.get('CLOUDFLARE_API_TOKEN');
+    
+    const options = {
+      host: 'api.cloudflare.com',
+      port: '443',
+      path: `/client/v4/accounts/${accountId}/d1/database`,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const request = https.request(options, (response) => {
+      let data = '';
+      response.on('data', (chunk) => {
+        data = data + chunk.toString();
+      });
+
+      response.on('end', () => {
+        const body = JSON.parse(data);
+        if (body.success) {
+          onSuccess({
+            uuid: body.result.uuid,
+            name: body.result.name
+          });
+        } else {
+          onSuccess(null);
+        }
+      });
+    });
+
+    request.write(JSON.stringify({ name: dbName }));
+    request.on('error', (error) => {
+      console.error('Database creation error:', error);
+      onSuccess(null);
+    });
+    request.end();
+  }
+
   getDatabaseId(onSuccess) {
     const dbName = this.currentEnv !== 'development' ? this._non_dev_db() : 'FEED_DB';
     const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
