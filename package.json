@@ -4,11 +4,14 @@
   "license": "MIT",
   "scripts": {
     "build:production": "NODE_ENV=production webpack --config ./webpack.config.js",
-    "dev": "yarn setup:development && DEPLOYMENT_ENVIRONMENT=development wrangler pages dev --d1 FEED_DB --compatibility-date=2022-11-17 --persist -- webpack serve --host localhost --mode development",
+    "dev": "yarn setup:development && NODE_OPTIONS=\"--dns-result-order=ipv4first\" DEPLOYMENT_ENVIRONMENT=development D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_development wrangler pages dev --d1 FEED_DB --compatibility-date=2022-11-17 dist",
+    "dev:webpack": "webpack serve --config ./webpack.config.js",
     "setup:development": "yarn install && node ops/generate_local_vars.js && node ops/init_feed_db.js",
     "setup:production": "sh ops/generate_vars_toml.sh && yarn install && node ops/init_r2.js && node ops/init_feed_db.js && node ops/init_project.js",
-    "deploy:cloudflare": "node ops/sync_project_config.js && yarn build:production",
-    "deploy:github": "node ops/sync_project_config.js && node ops/direct_upload.js",
+    "setup:preview": "export DEPLOYMENT_ENVIRONMENT=preview && export D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_preview && sh ops/generate_vars_toml.sh && yarn install && node ops/init_r2.js && node ops/init_feed_db.js && node ops/init_project.js",
+    "deploy:preview": "DEPLOYMENT_ENVIRONMENT=preview D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_preview node ops/sync_project_config.js && yarn build:production",
+    "deploy:cloudflare": "sh ops/generate_vars_toml.sh && node ops/sync_project_config.js && yarn build:production",
+    "deploy:github": "sh ops/generate_vars_toml.sh && node ops/sync_project_config.js && node ops/direct_upload.js",
     "test": "TZ=UTC jest",
     "sync-version": "node ops/sync_microfeed_version.js"
   },
@@ -38,7 +41,9 @@
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.231.0",
     "@aws-sdk/s3-request-presigner": "^3.231.0",
-    "@babel/core": "^7.20.12",
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
     "@babel/runtime": "^7.20.13",
     "@databases/split-sql-query": "1.0.3",
     "@databases/sql": "3.2.0",
@@ -47,6 +52,7 @@
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
     "autoprefixer": "^10.4.12",
+    "babel-loader": "^10.0.0",
     "better-sqlite3": "^11.1.2",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.1",
@@ -68,6 +74,6 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1",
     "webpack-shell-plugin-next": "^2.2.2",
-    "wrangler": "^2.9.1"
+    "wrangler": "^3.111.0"
   }
 }

@@ -1,0 +1,96 @@
+## Core Requirements
+
+- Always start every message with the 🥷 emoji
+- Always TypeCheck ts files to ensure they are valid before running them
+- Always run lints to ensure they are valid before running them
+- When using pnpm do so in the corect app/projectname folder
+- Use NPM when not in the core app/projectname folder
+- Refer to docs/architecture/i18n-and-theming.md for internationalization and theming implementations
+
+## CLI Standards
+
+1. Use Windows PowerShell v7 cmdlets
+2. Never use bash commands
+3. Always run pnpm commands from app/dirname, not project root
+4. Use Remove-Item instead of rimraf
+5. Never run recursive commands on the root mcp-servers directory:
+   ```powershell
+   # ❌ AVOID - Will fill context and slow progress
+   cd C:\Code\mcp-servers && Get-ChildItem -Recurse -Filter "*log*"
+   ```
+
+```powershell
+# ✅ CORRECT
+Remove-Item -Path "dist" -Recurse -Force
+
+# ❌ AVOID
+rimraf dist
+```
+
+```powershell
+# ✅ CORRECT
+cd C:\Code\mcp-servers\browser-render-server && New-Item -ItemType Directory -Path "src/browser-render-server" -Force; Move-Item -Path "src/index.ts" -Destination "src/browser-render-server/index.ts" -Force
+
+# ❌ AVOID
+cd C:/Users/BrettBartrum/Documents/Cline/MCP/browser-render-server && mkdir src\browser-render-server && move src\index.ts src\browser-render-server\
+```
+
+```powershell
+# ✅ CORRECT
+cd C:\Code\mcp-servers\browser-render-server && Get-ChildItem -Path build -Recurse
+
+# ❌ AVOID
+cd C:/Users/BrettBartrum/Documents/Cline/MCP/browser-render-server && dir /s build
+```
+Instructions for LLMs: <SYSTEM>Always use Svelte 5 runes and Svelte 5 syntax. Runes do not need to be imported, they are globals. $state() runes are always declared using `let`, never with `const`. When passing a function to $derived, you must always use $derived.by(() => ...). Error boundaries can only catch errors during component rendering and at the top level of an $effect inside the error boundary. Error boundaries do not catch errors in onclick or other event handlers.</SYSTEM>
+
+## Theme and Internationalization Guidelines
+
+- Always follow the i18n and theme implementation patterns documented in docs/architecture/i18n-and-theming.md
+- Use DaisyUI for theming with custom light and dark themes
+- Follow Svelte 5 runes patterns for state management
+- Implement system preference detection for themes
+- Ensure proper SSR handling for theme and language state
+- Keep translations and theme configurations in their designated files
+- Use TypeScript interfaces for type safety
+
+- Create extra reference docs (e.g., `styleAesthetic.md`, `wireframes.md`) as needed, also in `cline_docs`.
+- Mention these in `codebaseSummary.md` so new devs can easily find them.
+- Please see svelte-complete-medium.md for local svelte documentaiton
+
+## User Interaction and Adaptive Behavior
+- Ask follow-up questions only if critical info is missing
+- Adjust approach based on project complexity and user preferences
+- Keep responses concise; emphasize efficiency
+- Present key technical choices clearly, with pros/cons, and let the user decide
+
+## Code Editing and File Operations
+- Organize new projects logically, mindful of dependencies and structure
+- Refer to the main Cline system for file handling specifics
+
+---
+
+## Svelte v5 Integration & Best Practices
+
+- **Explicit Reactivity w/ Runes**: Use `$state()` for stateful vars, `$derived()` for computed values, `$effect()` only for side effects. This prevents confusion from older implicit reactivity.
+- **Migration Gotcha**: If a variable is no longer reactive in v5, it likely needs `$state()`. `$props()` replaces older `export let`.
+- **Third-Party Compatibility**: Svelte 5 can still run older Svelte 3/4 code, so ecosystem packages should generally still work. Confirm that any library using Svelte internals is updated or tested with Svelte 5.
+- **Testing**: Use small tests for Svelte runes changes. Confirm that each reactive change is properly recognized. 
+- **Performance**: Svelte 5 is typically as fast or faster than prior versions, but watch out for any large `$effect` loops that might degrade performance.
+
+---
+
+## Cloudflare Services Usage Tips
+
+- **KV**: For global key-value data (cached reads, few writes). Eventual consistency (~60s). Great for config, caches, or flags.
+- **D1**: A serverless SQL DB. Strong consistency, good for relational data. Ideal for user records, structured queries. New but actively improving.
+- **R2**: Object storage (S3-compatible). Store large files (images, videos). No egress fees, beneficial for heavy bandwidth. Eventual consistency on updates.
+- **Workers**: Serverless functions at edge. Best for logic close to user. Limits on CPU time, but scales automatically. Combine with KV, D1, or R2 for a fully serverless stack.
+
+**Pitfalls**:
+- KV: Not for high-frequency writes, can have stale reads.
+- D1: Still evolving, check size/performance constraints.
+- R2: Use caching for best latency, handle versioning for overwrites.
+- Workers: Stay within time/memory limits. They are stateless unless combined with Durable Objects or DB.
+
+---

@@ -5,6 +5,7 @@ import {
 } from '../../common-src/Constants';
 import {msToRFC3339, rfc3399ToMs} from "../../common-src/TimeUtils";
 import FeedPublicJsonBuilder from "./FeedPublicJsonBuilder";
+import DatabaseInitializer from "./DatabaseInitializer";
 
 /**
  * support url query parameters:
@@ -81,6 +82,37 @@ export default class FeedDb {
   }
 
   /**
+   * Verify that all required database tables exist and are accessible
+   * @returns {Promise<boolean>} True if all tables exist and are accessible
+   */
+  async verifyDatabaseState() {
+    const tables = ['channels', 'items', 'settings'];
+    const missingTables = [];
+    const verificationErrors = [];
+    
+    for (const table of tables) {
+      try {
+        const result = await this.FEED_DB.prepare(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name = ?"
+        ).bind(table).all();
+        
+        if (!result.results.length) {
+          missingTables.push(table);
+        }
+      } catch (error) {
+        console.error(`Table verification failed for ${table}:`, error);
+        verificationErrors.push({ table, error: error.message });
+      }
+    }
+    
+    if (missingTables.length > 0 || verificationErrors.length > 0) {
+      console.error('Database state validation failed:', { missingTables, verificationErrors });
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * INSERT INTO users (name, age) VALUES (?1, ?2)
    * UPDATE users SET name = ?1 WHERE id = ?2
    */
@@ -134,29 +166,52 @@ export default class FeedDb {
     return this.FEED_DB.prepare(sql).bind(...insertBindList, ...updateBindList);
   }
 
+  /**
+   * Initialize the database with schema and initial data
+   */
   async initDb() {
-    const settings = {
-      [SETTINGS_CATEGORIES.SUBSCRIBE_METHODS]: {
-        methods: [
-          {...PREDEFINED_SUBSCRIBE_METHODS.rss, id: randomShortUUID(), editable: false, enabled: true},
-          {...PREDEFINED_SUBSCRIBE_METHODS.json, id: randomShortUUID(), editable: false, enabled: true},
-        ],
-      },
-      [SETTINGS_CATEGORIES.WEB_GLOBAL_SETTINGS]: {
-        favicon: {
-          'url': '/assets/default/favicon.png',
-          'contentType': 'image/png',
+    try {
+      const initialData = {
+        settings: {
+          [SETTINGS_CATEGORIES.SUBSCRIBE_METHODS]: {
+            methods: [
+              {...PREDEFINED_SUBSCRIBE_METHODS.rss, id: randomShortUUID(), editable: false, enabled: true},
+              {...PREDEFINED_SUBSCRIBE_METHODS.json, id: randomShortUUID(), editable: false, enabled: true},
+            ],
+        }  ,
+          [SETTINGS_CATEGORIES.WEB_GLOBAL_SETTINGS]: {
+            favicon: {
+              'url': '/assets/default/favicon.png',
+              'contentType': 'image/png',
+            },
+            'itemsSortOrder': ITEMS_SORT_ORDERS.NEWEST_FIRST,
+            'itemsPerPage': DEFAULT_ITEMS_PER_PAGE,
+        }  ,
+          [SETTINGS_CATEGORIES.ACCESS]: {
+            currentPolicy: 'public',
+          },
+          [SETTINGS_CATEGORIES.ANALYTICS]: {},
+          [SETTINGS_CATEGORIES.CUSTOM_CODE]: {},
         },
-        'itemsSortOrder': ITEMS_SORT_ORDERS.NEWEST_FIRST,
-        'itemsPerPage': DEFAULT_ITEMS_PER_PAGE,
-      },
-      [SETTINGS_CATEGORIES.ACCESS]: {
-        currentPolicy: 'public',
-      },
-      [SETTINGS_CATEGORIES.ANALYTICS]: {},
-      [SETTINGS_CATEGORIES.CUSTOM_CODE]: {},
-    };
-    const channel = {
+        channel: this._createInitialChannel()
+      };
+      const dbInitializer = new DatabaseInitializer(this.FEED_DB);
+      await dbInitializer.initialize(initialData);
+      return initialData;
+    } catch (error) {
+      console.error('Database initialization failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create initial channel data
+   */
+  _createInitialChannel() {
+   return {
+      'i': randomShortUUID(),
+      status: STATUSES.PUBLISHED,
+      is_primary: 1,
       image: '/assets/default/channel-image.png',
       link: this.baseUrl,
       language: 'en-us',
@@ -165,31 +220,7 @@ export default class FeedDb {
       'itunes:type': 'episodic',
       'itunes:complete': false,
       'itunes:block': false,
-      'copyright': `©${(new Date()).getFullYear()}`,
-    };
-
-    const batchStatements = [
-      this.getInsertSql('channels', {
-        'id': randomShortUUID(),
-        'status': STATUSES.PUBLISHED,
-        'is_primary': 1,
-        'data': JSON.stringify(channel),
-      }),
-    ];
-
-    Object.keys(settings).forEach((s) => {
-      batchStatements.push(this.getInsertSql('settings', {
-        'category': s,
-        'data': JSON.stringify(settings[s]),
-      }));
-    })
-
-    await this.FEED_DB.batch(batchStatements);
-
-    return {
-      channel,
-      items: [],
-      settings,
+      'copyright': `©${(new Date()).getFullYear()}`
     };
   }
 
@@ -213,9 +244,16 @@ export default class FeedDb {
    *   ]
    */
   async _getContent(things, sortOrder, fromUrl) {
+    // Verify database state before proceeding
+    const isValid = await this.verifyDatabaseState();
+    if (!isValid) {
+      throw new Error('Database state validation failed - required tables missing or inaccessible');
+    }
+
     const batchStatements = [];
     things.forEach((thing) => {
       let sql = `SELECT * FROM ${thing.table}`;
+      console.log(`Executing SQL for ${thing.table}:`, sql);
       const whereList = [];
       const bindList = [];
       if (thing.queryKwargs) {
@@ -244,11 +282,25 @@ export default class FeedDb {
       if (thing.limit) {
         sql = `${sql} LIMIT ${thing.limit}`;
       }
+      console.log('Final SQL:', sql);
       batchStatements.push(
         this.FEED_DB.prepare(sql).bind(...bindList)
       );
     });
-    const responses = await this.FEED_DB.batch(batchStatements);
+    let responses;
+    try {
+      responses = await this.FEED_DB.batch(batchStatements);
+      console.log('Query responses:', responses);
+    } catch (error) {
+      console.error('Database query failed:', {
+        error,
+        sqlStatements: batchStatements.map(stmt => stmt.toString()),
+        timestamp: new Date().toISOString(),
+        tables: things.map(t => t.table),
+        cause: error.cause || 'Unknown cause'
+      });
+      throw new Error(`Database query failed: ${error.message}`);
+    }
     const contentJson = {};
     for (let i = 0; i < things.length; i++) {
       const response = responses[i];

@@ -1,0 +1,14 @@
+{
+  "customModes": [
+    {
+      "slug": "debug",
+      "name": "Debug",
+      "roleDefinition": "Included in .clinerules-debug",
+      "groups": [
+        "read",
+        "command"
+      ],
+      "source": "project"
+    }
+  ]
+}

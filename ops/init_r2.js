@@ -7,7 +7,20 @@ class SetupR2 {
   constructor() {
     const currentEnv = process.env.DEPLOYMENT_ENVIRONMENT || 'production';
     this.v = new VarsReader(currentEnv);
-    this.endpoint = `https://${this.v.get('CLOUDFLARE_ACCOUNT_ID')}.r2.cloudflarestorage.com`;
+    
+    // Validate required variables
+    const required = ['CLOUDFLARE_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_PUBLIC_BUCKET'];
+    const missing = required.filter(key => !this.v.get(key));
+    
+    if (missing.length > 0) {
+      console.error('Error: Missing required configuration variables:');
+      missing.forEach(key => console.error(`  - ${key}`));
+      console.error('Please check your .vars.toml file');
+      process.exit(1);
+    }
+
+    const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
+    this.endpoint = `https://${accountId}.r2.cloudflarestorage.com`;
     
     this.s3 = new S3Client({
       region: 'auto',

@@ -48,5 +48,15 @@ module.exports = {
         "browser": true,
       },
     },
+    {
+      "files": ["**/*.test.{js,jsx}", "**/__tests__/**/*.{js,jsx}"],
+      "env": {
+        "jest": true,
+        "node": true
+      },
+      "globals": {
+        "jest": "readonly"
+      }
+    }
   ]
 };
