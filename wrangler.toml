@@ -11,3 +11,11 @@ database_id = ""
 # Preview environment configuration is now in the default configuration
 # since we're using --env preview flag to specify the environment
 # This ensures proper environment detection during wrangler commands
+
+[[env.preview.d1_databases]]
+binding = "FEED_DB"
+database_name = "shop-dawg-microfeed_feed_db_preview"
+database_id = "84edb8bb-eef5-495c-a0d6-91681a278bcf"
+
+[pages]
+pages_build_output_dir = "dist"
