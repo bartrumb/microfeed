@@ -4,14 +4,17 @@
   "license": "MIT",
   "scripts": {
     "build:production": "NODE_ENV=production webpack --config ./webpack.config.js",
-    "dev": "yarn setup:development && NODE_OPTIONS=\"--dns-result-order=ipv4first\" DEPLOYMENT_ENVIRONMENT=development D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_development wrangler pages dev --d1 FEED_DB --compatibility-date=2022-11-17 dist",
-    "dev:webpack": "webpack serve --config ./webpack.config.js",
-    "setup:development": "yarn install && node ops/generate_local_vars.js && node ops/init_feed_db.js",
-    "setup:production": "sh ops/generate_vars_toml.sh && yarn install && node ops/init_r2.js && node ops/init_feed_db.js && node ops/init_project.js",
-    "setup:preview": "export DEPLOYMENT_ENVIRONMENT=preview && export D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_preview && sh ops/generate_vars_toml.sh && yarn install && node ops/init_r2.js && node ops/init_feed_db.js && node ops/init_project.js",
-    "deploy:preview": "DEPLOYMENT_ENVIRONMENT=preview D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_preview node ops/sync_project_config.js && yarn build:production",
-    "deploy:cloudflare": "sh ops/generate_vars_toml.sh && node ops/sync_project_config.js && yarn build:production",
-    "deploy:github": "sh ops/generate_vars_toml.sh && node ops/sync_project_config.js && node ops/direct_upload.js",
+    "build:dev": "yarn install && node ops/generate_local_vars.js && node ops/init_feed_db.js && NODE_ENV=development webpack --config ./webpack.config.js",
+    "deploy:devn1": "NODE_OPTIONS=\"--dns-result-order=ipv4first\" DEPLOYMENT_ENVIRONMENT=development D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_development wrangler pages dev --port 9001 --d1 FEED_DB --compatibility-date=2022-11-17 dist",
+    "deploy:devn2": "NODE_OPTIONS=\"--dns-result-order=ipv4first\" DEPLOYMENT_ENVIRONMENT=development D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_development wrangler pages dev --d1 FEED_DB --compatibility-date=2022-11-17 dist",
+    
+    "build:preview": "node ops/generate_preview_vars.js && DEPLOYMENT_ENVIRONMENT=preview D1_DATABASE_NAME=shop-dawg-microfeed_feed_db_preview node ops/init_r2.js && node ops/init_feed_db.js && node ops/init_project.js && yarn build:production",
+    "deploy:preview": "DEPLOYMENT_ENVIRONMENT=preview node ops/sync_project_config.js && rm -rf dist && cp -r public/* dist/ && wrangler pages deploy dist --project-name shop-dawg-microfeed --branch preview",
+    
+    "build:prod": "DEPLOYMENT_ENVIRONMENT=production node ops/init_r2.js && node ops/init_feed_db.js && node ops/init_project.js && yarn build:production",
+    "deploy:prod": "bash -c 'read -p \"Are you sure you want to deploy to production? (y/N) \" confirm && [[ $confirm == [yY] ]] && node ops/sync_project_config.js && rm -rf dist && cp -r public/* dist/ && wrangler pages deploy dist --project-name shop-dawg-microfeed --branch main'",
+    
+    "deploy:github": "node ops/sync_project_config.js && node ops/direct_upload.js",
     "test": "TZ=UTC jest",
     "sync-version": "node ops/sync_microfeed_version.js"
   },

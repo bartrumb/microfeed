@@ -16,9 +16,17 @@ class VarsReader {
 
   flattenVars() {
     const varDict = {};
-    const keys = Object.keys(this.data).filter((k) => !['production', 'preview', 'development'].includes(k))
-    keys.forEach((k) => {
-      varDict[k] = this.get(k, '');
+    // Get environment-specific variables first
+    const envDict = this.data[this.currentEnv] || {};
+    Object.keys(envDict).forEach((k) => {
+      varDict[k] = envDict[k];
+    });
+    // Then get global variables that aren't overridden
+    const globalKeys = Object.keys(this.data).filter((k) => !['production', 'preview', 'development'].includes(k));
+    globalKeys.forEach((k) => {
+      if (!varDict[k]) {
+        varDict[k] = this.data[k];
+      }
     });
     return varDict;
   }
@@ -60,7 +68,7 @@ class WranglerCmd {
   }
 
   createFeedDbTables() {
-    const dbName = this.currentEnv !== 'development' ? this._non_dev_db() : 'FEED_DB --local';
+    const dbName = this._non_dev_db();
     const wranglerCmd = `wrangler d1 execute ${dbName} --file ops/db/init.sql --env ${this.currentEnv}`;
     console.log(wranglerCmd);
     return this._getCmd(wranglerCmd);
@@ -71,7 +79,7 @@ class WranglerCmd {
    * https://github.com/cloudflare/wrangler2/blob/main/packages/wrangler/src/d1/list.tsx#L34
    */
   createDatabaseViaApi(onSuccess) {
-    const dbName = this.currentEnv !== 'development' ? this._non_dev_db() : 'FEED_DB';
+    const dbName = this._non_dev_db();
     const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
     const apiKey = this.v.get('CLOUDFLARE_API_TOKEN');
     
@@ -89,7 +97,7 @@ class WranglerCmd {
     const request = https.request(options, (response) => {
       let data = '';
       response.on('data', (chunk) => {
-        data = data + chunk.toString();
+        data += chunk.toString();
       });
 
       response.on('end', () => {
@@ -100,6 +108,7 @@ class WranglerCmd {
             name: body.result.name
           });
         } else {
+          console.error('Database creation failed:', body.errors || body.messages || 'Unknown error');
           onSuccess(null);
         }
       });
@@ -114,7 +123,7 @@ class WranglerCmd {
   }
 
   getDatabaseId(onSuccess) {
-    const dbName = this.currentEnv !== 'development' ? this._non_dev_db() : 'FEED_DB';
+    const dbName = this._non_dev_db();
     const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
     const apiKey = this.v.get('CLOUDFLARE_API_TOKEN');
     const options = {
@@ -129,23 +138,31 @@ class WranglerCmd {
     const request = https.request(options, (response) => {
       let data = '';
       response.on('data', (chunk) => {
-        data = data + chunk.toString();
+        data += chunk.toString();
       });
 
       response.on('end', () => {
         const body = JSON.parse(data);
         let databaseId = '';
-        body.result.forEach((result) => {
-          if (result.name === dbName) {
-            databaseId = result.uuid;
+        if (body.result && Array.isArray(body.result)) {
+          body.result.forEach((result) => {
+            if (result.name === dbName) {
+              databaseId = result.uuid;
+            }
+          });
+        }
+        if (!databaseId) {
+          console.log('No matching database found for name:', dbName);
+          if (body.errors) {
+            console.error('API errors:', body.errors);
           }
-        });
+        }
         onSuccess(databaseId);
       });
     })
 
     request.on('error', (error) => {
-      console.log('An error', error);
+      console.error('Database lookup error:', error);
       onSuccess('');
     });
 

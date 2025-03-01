@@ -48,51 +48,44 @@ database_id = "${databaseId}"`;
   console.log(`Updated wrangler.toml with database ID: ${databaseId}`);
 }
 
-// Create database using direct API call
-cmd.createDatabaseViaApi((result) => {
-  if (!result) {
-    // Check if database already exists
-    cmd.getDatabaseId((existingId) => {
-      if (!existingId) {
-        console.error('Failed to create or find database');
-        process.exit(1);
-        return;
-      }
-      
+async function initializeDatabase() {
+  try {
+    // First try to get existing database
+    const existingId = await new Promise((resolve) => cmd.getDatabaseId(resolve));
+    
+    if (existingId) {
       console.log('Using existing database:', existingId);
       updateWranglerToml(existingId);
-      
-      // Create tables
-      exec(cmd.createFeedDbTables(), (error, stdout, stderr) => {
-        if (stdout) console.log(`stdout: ${stdout}`);
-        if (stderr) console.log(`stderr: ${stderr}`);
-
-        if (error) {
-          console.error(`Table creation error: ${error.message}`);
-          process.exit(1);
-          return;
-        }
-        
-        console.log('Database and tables setup completed successfully');
-      });
-    });
-    return;
-  }
-
-  console.log('Database created successfully:', result.uuid);
-  updateWranglerToml(result.uuid);
-
-  // Create tables
-  exec(cmd.createFeedDbTables(), (error, stdout, stderr) => {
-    if (stdout) console.log(`stdout: ${stdout}`);
-    if (stderr) console.log(`stderr: ${stderr}`);
-
-    if (error) {
-      console.error(`Table creation error: ${error.message}`);
-      process.exit(1);
+      await createTables();
       return;
     }
-    
-    console.log('Database and tables setup completed successfully');
+
+    // If no existing database, create new one
+    const result = await new Promise((resolve) => cmd.createDatabaseViaApi(resolve));
+
+    if (!result) {
+      throw new Error('Failed to create database');
+    }
+
+    console.log('Database created successfully:', result.uuid);
+    updateWranglerToml(result.uuid);
+    await createTables();
+  } catch (error) {
+    console.error('Database initialization failed:', error.message);
+    process.exit(1);
+  }
+}
+
+async function createTables() {
+  return new Promise((resolve, reject) => {
+    exec(cmd.createFeedDbTables(), (error, stdout, stderr) => {
+      if (error) reject(error);
+      if (stdout) console.log(stdout);
+      if (stderr) console.log(stderr);
+      console.log('Tables created successfully');
+      resolve();
+    });
   });
-});
+}
+
+initializeDatabase();

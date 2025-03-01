@@ -1,52 +1,57 @@
 # Decision Log
 
-## 2025-02-28 16:28 CST - D1 Database Environment Configuration
+## 2025-02-28: Database Initialization Improvements
 
-**Decision**: Move preview environment D1 configuration to default configuration and use explicit environment flags.
+**Decision**: Enhance database initialization process with better error handling and logging
+- Added detailed error logging for API responses
+- Improved environment-specific database configuration
+- Removed duplicate preview configuration in wrangler.toml
 
-**Context**: The preview environment D1 database was not being properly detected by wrangler commands, causing deployment failures.
+**Rationale**:
+- Silent failures were making it difficult to diagnose database creation issues
+- Duplicate configuration in wrangler.toml was causing potential conflicts
+- Better error messages will help future developers troubleshoot issues
 
-**Solution**:
-1. Added --env flag to wrangler D1 commands to explicitly specify the environment
-2. Moved preview environment configuration to default configuration in wrangler.toml
-3. Removed redundant preview environment section to avoid confusion
+**Impact**:
+- More reliable database initialization process
+- Clearer error messages when API calls fail
+- Simplified wrangler.toml configuration
 
-## 2025-02-28 16:13 CST - D1 Database Configuration Improvements
+## 2024-02-28: Deployment Script Restructuring
 
-### Context
-The wrangler.toml configuration for D1 databases was causing issues due to incorrect syntax and missing required fields.
+**Decision**: Separate build and deployment steps for each environment
+- Split into build:dev/deploy:dev
+- Created build:preview/deploy:preview
+- Added production safety check
 
-### Decision
-1. Use TOML array table syntax for D1 database configuration:
-   - Chose `[[d1_databases]]` for base configuration
-   - Used `[[env.{environment}.d1_databases]]` for environment-specific configs
-   - Rationale: This follows Cloudflare's recommended structure for D1 bindings
+**Rationale**:
+- Separating build and deploy steps provides more control
+- Safety check prevents accidental production deployments
+- Consistent structure across environments reduces confusion
 
-2. Include required database_name field:
-   - Added database_name field to both base and environment configs
-   - Used cmd._non_dev_db() to maintain consistent naming
-   - Rationale: database_name is required by Cloudflare D1 configuration
+**Impact**:
+- More predictable deployment process
+- Reduced risk of accidental production deployments
+- Better alignment with CI/CD best practices
 
-3. Remove JSON-style configuration:
-   - Removed JSON object syntax from env configuration
-   - Switched to pure TOML syntax
-   - Rationale: Mixing JSON and TOML caused parsing errors
+## 2024-02-28: Webpack Configuration Update
 
-4. Improve configuration management:
-   - Added environment-specific configuration handling
-   - Preserved existing configurations when updating
-   - Rationale: Prevents accidental deletion of other environment settings
+**Decision**: Update webpack configuration for better asset handling
+- Direct output to dist/
+- Proper asset paths for production
+- Unified build process for preview/production
 
-### Consequences
-- Positive:
-  * Proper D1 database configuration across environments
-  * More maintainable TOML structure
-  * Better error handling for configuration updates
-  * Preserved environment-specific settings
-- Negative:
-  * None identified
+**Rationale**:
+- Consistent output location simplifies deployment
+- Same build process reduces environment-specific issues
+- Clean plugin ensures no stale assets remain
 
-### Implementation Notes
-- Used regex to safely update environment-specific sections
-- Added error handling for missing configuration files
-- Maintained backward compatibility with existing database IDs
+**Impact**:
+- More reliable builds
+- Simplified deployment process
+- Reduced chance of serving stale assets
+
+## Next Decisions Needed
+1. Strategy for bundle size optimization
+2. Approach for deployment documentation
+3. Long-term database management strategy
