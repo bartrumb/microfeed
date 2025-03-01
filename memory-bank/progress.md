@@ -29,9 +29,18 @@
 - [x] Fix module system compatibility issues
   - [x] Convert Version.js to ES modules
 
-### Phase 4: Testing and Deployment 🔄
-- [x] Test local development setup
-- [ ] Verify database operations
+### Phase 4: Configuration Refinement ✅
+- [x] Update wrangler.toml configuration
+  - [x] Remove deprecated site configuration
+  - [x] Add required top-level fields
+  - [x] Maintain D1 database configurations
+  - [x] Fix configuration warnings
+
+### Phase 5: Testing and Deployment 🔄
+- [ ] Test local development setup
+  - [x] Build process
+  - [ ] Development server
+  - [ ] Database operations
 - [ ] Test preview deployment
 - [ ] Test production deployment
 - [ ] Verify all environments
@@ -45,12 +54,23 @@
 - ✅ Set up environment variables structure
 - ✅ Updated CI/CD workflow
 - ✅ Fixed module system compatibility issues
+- ✅ Updated wrangler configuration
 
 ## Next Steps
 1. Complete database operations verification
+   - Test channel creation
+   - Verify settings retrieval
+   - Check item operations
 2. Test preview deployment
+   - Verify D1 database connections
+   - Check environment variables
+   - Test all CRUD operations
 3. Test production deployment
+   - Follow same verification steps as preview
 4. Verify all environments
+   - Development
+   - Preview
+   - Production
 
 ## Notes
 - Keep testing after each major change

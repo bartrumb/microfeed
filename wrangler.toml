@@ -1,3 +1,6 @@
+name = "microfeed"
+compatibility_date = "2024-02-28"
+
 [[d1_databases]]
 binding = "FEED_DB"
 database_name = "shop-dawg-microfeed_feed_db_development"
@@ -11,7 +14,3 @@ database_id = ""
 [[env.preview.d1_databases]]
 binding = "FEED_DB"
 database_name = "shop-dawg-microfeed_feed_db_preview"
-
-[site]
-bucket = "./dist"
-entry-point = "functions/index.jsx"

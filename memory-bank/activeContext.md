@@ -23,6 +23,10 @@ Migrating from Yarn/Webpack to pnpm/Vite with React and Cloudflare Workers
 - Initialized pnpm and installed dependencies
 - Approved native dependency builds
 - Fixed module system incompatibility in Version.js
+- Updated wrangler.toml configuration
+  - Removed deprecated site configuration
+  - Simplified for Pages + Functions setup
+  - Fixed configuration warnings
 
 🔄 In Progress:
 - Testing development server

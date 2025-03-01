@@ -86,3 +86,31 @@ Convert CommonJS modules to ES modules, starting with Version.js
 - Update import statements in dependent files
 - Maintain version information accessibility
 - Test in development environment first
+
+## [2025-03-01] Wrangler Configuration Update
+
+### Decision
+Simplified wrangler.toml configuration for Cloudflare Pages with Functions
+
+### Rationale
+1. **Configuration Cleanup**
+   - Removed deprecated `site` configuration
+   - Simplified to core Pages + Functions requirements
+   - Aligned with latest Cloudflare Pages best practices
+
+2. **Benefits**
+   - Cleaner configuration
+   - Reduced deprecation warnings
+   - Better maintainability
+   - Follows current Cloudflare recommendations
+
+### Impact
+- Resolves wrangler configuration warnings
+- Maintains all required functionality
+- Improves development server startup
+
+### Implementation
+- Removed deprecated `site` section
+- Added required top-level fields
+- Maintained D1 database configurations
+- Verified in local development

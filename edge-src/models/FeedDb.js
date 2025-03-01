@@ -209,7 +209,7 @@ export default class FeedDb {
    */
   _createInitialChannel() {
    return {
-      'i': randomShortUUID(),
+      'id': randomShortUUID(),
       status: STATUSES.PUBLISHED,
       is_primary: 1,
       image: '/assets/default/channel-image.png',
@@ -221,6 +221,7 @@ export default class FeedDb {
       'itunes:complete': false,
       'itunes:block': false,
       'copyright': `©${(new Date()).getFullYear()}`
+,
     };
   }
 

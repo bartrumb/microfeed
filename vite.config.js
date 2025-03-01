@@ -32,6 +32,7 @@ export default defineConfig({
         entryFileNames: '[name].js',
         chunkFileNames: 'chunks/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]',
+        format: 'es',
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'utils': [
