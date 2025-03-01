@@ -1,17 +1,6 @@
 import React from 'react';
 
-const webpackStats = require("../../../functions/webpack-stats.json");
-
 export default class HtmlHeader extends React.Component {
-  getWebpackRealUrl(key) {
-    try {
-      return webpackStats.assets[webpackStats.chunks[key][0]].publicPath;
-    } catch (err) {
-      console.log(err);
-      return null;
-    }
-  }
-
   render() {
     const {
       title,
@@ -28,14 +17,12 @@ export default class HtmlHeader extends React.Component {
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
-        {webpackJsList && webpackJsList.length > 0 && webpackJsList.map((js) => {
-          const realUrl = this.getWebpackRealUrl(js);
-          return (realUrl ? <script key={js} type="text/javascript" src={realUrl} defer/> : '');
-        })}
-        {webpackCssList && webpackCssList.length > 0 && webpackCssList.map((css) => {
-          const realUrl = this.getWebpackRealUrl(css);
-          return (realUrl ? <link key={css} rel="stylesheet" type="text/css" href={realUrl}/> : '');
-        })}
+        {webpackJsList && webpackJsList.map((js) => (
+          <script key={js} type="text/javascript" src={`/dist/${js}.js`} defer/>
+        ))}
+        {webpackCssList && webpackCssList.map((css) => (
+          <link key={css} rel="stylesheet" type="text/css" href={`/dist/assets/${css}-DiAMbZxM.css`}/>
+        ))}
         {favicon && favicon['apple-touch-icon'] && <link
           rel="apple-touch-icon"
           sizes="180x180"

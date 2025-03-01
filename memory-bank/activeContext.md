@@ -22,6 +22,7 @@ Migrating from Yarn/Webpack to pnpm/Vite with React and Cloudflare Workers
 - Updated CI/CD workflow
 - Initialized pnpm and installed dependencies
 - Approved native dependency builds
+- Fixed module system incompatibility in Version.js
 
 🔄 In Progress:
 - Testing development server

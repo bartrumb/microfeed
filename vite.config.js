@@ -5,19 +5,20 @@ import path from 'path';
 export default defineConfig({
   plugins: [
     react({
-      include: '**/*.{jsx,js}', // Enable JSX in .js files
+      include: '**/*.{jsx,js}',
     })
   ],
   build: {
     outDir: 'dist',
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
         // Client-side entry points
-        'ClientAdminChannelApp': 'client-src/ClientAdminChannelApp/index.js',
-        'ClientAdminCustomCodeEditorApp': 'client-src/ClientAdminCustomCodeEditorApp/index.js',
-        'ClientAdminHomeApp': 'client-src/ClientAdminHomeApp/index.js',
-        'ClientAdminItemsApp': 'client-src/ClientAdminItemsApp/index.js',
-        'ClientAdminSettingsApp': 'client-src/ClientAdminSettingsApp/index.js',
+        'ClientAdminChannelApp': 'client-src/ClientAdminChannelApp/index.jsx',
+        'ClientAdminCustomCodeEditorApp': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
+        'ClientAdminHomeApp': 'client-src/ClientAdminHomeApp/index.jsx',
+        'ClientAdminItemsApp': 'client-src/ClientAdminItemsApp/index.jsx',
+        'ClientAdminSettingsApp': 'client-src/ClientAdminSettingsApp/index.jsx',
         // Edge entry points
         'EdgeAdminChannelApp': 'edge-src/EdgeAdminChannelApp/index.jsx',
         'EdgeAdminHomeApp': 'edge-src/EdgeAdminHomeApp/index.jsx',
@@ -30,7 +31,24 @@ export default defineConfig({
       output: {
         entryFileNames: '[name].js',
         chunkFileNames: 'chunks/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]'
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'utils': [
+            '@client/common/BrowserUtils',
+            '@client/common/ClientUrlUtils',
+            '@client/common/ToastUtils',
+            '@common/StringUtils',
+            '@common/TimeUtils'
+          ],
+          'ui-components': [
+            '@client/components/AdminCodeEditor',
+            '@client/components/AdminDialog',
+            '@client/components/AdminInput',
+            '@client/components/AdminSelect',
+            '@client/components/AdminSwitch'
+          ]
+        }
       }
     }
   },
@@ -40,7 +58,7 @@ export default defineConfig({
       '@edge': path.resolve(__dirname, './edge-src'),
       '@common': path.resolve(__dirname, './common-src')
     },
-    extensions: ['.js', '.jsx', '.ts', '.tsx'] // Add support for various extensions
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   server: {
     port: 3000,

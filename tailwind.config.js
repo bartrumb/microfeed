@@ -1,16 +1,19 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content: [
     "./client-src/**/*.{js,jsx}",
     "./public/*.html",
     "./edge-src/**/*.jsx"
   ],
-  darkMode: 'class', // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     screens: {
       xs: '375px',
-      ...defaultTheme.screens,
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
     },
     lineHeight: {
       none: '1',
@@ -63,7 +66,6 @@ module.exports = {
         'dark-deep': 'rgba(230,230,230)',
         'dark-light': 'rgba(240, 240, 240)',
       },
-
       width: {
         88: '22rem',
         'avatar-xs': '1.2rem',
@@ -75,7 +77,6 @@ module.exports = {
         'pod-img-lg': '6rem',
         'ad-image': '8rem',
       },
-
       height: {
         'avatar-xs': '1.2rem',
         'avatar-sm': '1.8rem',
@@ -85,24 +86,20 @@ module.exports = {
         'pod-img-md': '4.8rem',
         'pod-img-lg': '6rem',
       },
-
       maxHeight: {
         112: '28rem',
         128: '32rem',
       },
-
       minHeight: {
         16: '4rem',
         32: '8rem',
         64: '16rem',
         128: '32rem',
       },
-
       minWidth: {
         table: '48rem',
         24: '6rem',
       },
-
       maxWidth: {
         xxs: '12rem',
         '5/6': '83.3%',
@@ -110,19 +107,6 @@ module.exports = {
       },
       fontSize: {
         xxs: ['0.525rem', { lineHeight: '1rem' }],
-        // xs: ['0.625rem', { lineHeight: '1rem' }],
-        // sm: ['0.75rem', { lineHeight: '1rem' }],
-        // base: ['0.875rem', { lineHeight: '1.25rem' }],
-        // lg: ['1rem', { lineHeight: '1.5rem' }],
-        // xl: ['1.125rem', { lineHeight: '1.75rem' }],
-        // '2xl': ['1.25rem', { lineHeight: '1.75rem' }],
-        // '3xl': ['1.5rem', { lineHeight: '2rem' }],
-        // '4xl': ['1.875rem', { lineHeight: '2.25rem' }],
-        // '5xl': ['2.25rem', { lineHeight: '2.5rem' }],
-        // '6xl': ['3rem', { lineHeight: '1' }],
-        // '7xl': ['3.75rem', { lineHeight: '1' }],
-        // '8xl': ['4.5rem', { lineHeight: '1' }],
-        // '9xl': ['6rem', { lineHeight: '1' }],
       },
       rotate: {
         30: '30deg',
@@ -134,6 +118,5 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
-    require("tailwind-gradient-mask-image"),
   ],
 }

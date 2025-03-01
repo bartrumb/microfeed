@@ -12,3 +12,6 @@ database_id = ""
 binding = "FEED_DB"
 database_name = "shop-dawg-microfeed_feed_db_preview"
 
+[site]
+bucket = "./dist"
+entry-point = "functions/index.jsx"
