@@ -1,57 +1,60 @@
 # Decision Log
 
-## 2025-02-28: Database Initialization Improvements
+## [2025-02-28] Migration to pnpm/Vite/SvelteKit
 
-**Decision**: Enhance database initialization process with better error handling and logging
-- Added detailed error logging for API responses
-- Improved environment-specific database configuration
-- Removed duplicate preview configuration in wrangler.toml
+### Decision
+Migrate from Yarn/Webpack to pnpm/Vite with SvelteKit v5 and Cloudflare adapter
 
-**Rationale**:
-- Silent failures were making it difficult to diagnose database creation issues
-- Duplicate configuration in wrangler.toml was causing potential conflicts
-- Better error messages will help future developers troubleshoot issues
+### Rationale
+1. **Package Manager (pnpm)**
+   - Better disk space efficiency
+   - Strict dependency management
+   - Faster installation times
+   - Compatible with modern frontend tooling
 
-**Impact**:
-- More reliable database initialization process
-- Clearer error messages when API calls fail
-- Simplified wrangler.toml configuration
+2. **Bundler (Vite)**
+   - Significantly faster development server startup
+   - Better HMR performance
+   - Native ESM support
+   - Better integration with SvelteKit
+   - Simpler configuration compared to Webpack
 
-## 2024-02-28: Deployment Script Restructuring
+3. **Framework (SvelteKit v5)**
+   - Better performance with Runes
+   - Improved SSR capabilities
+   - Built-in routing and layouts
+   - Official Cloudflare adapter support
+   - Modern development experience
 
-**Decision**: Separate build and deployment steps for each environment
-- Split into build:dev/deploy:dev
-- Created build:preview/deploy:preview
-- Added production safety check
+4. **Not Using Bun**
+   - Ecosystem support still emerging
+   - Some compatibility issues with existing tools
+   - SvelteKit's Cloudflare adapter better tested with Node.js
 
-**Rationale**:
-- Separating build and deploy steps provides more control
-- Safety check prevents accidental production deployments
-- Consistent structure across environments reduces confusion
+### Impact
+- Requires migration of React components to Svelte
+- Environment variable handling will be simplified
+- Build and deployment processes will be streamlined
+- Better development experience with faster builds
+- Improved production performance
 
-**Impact**:
-- More predictable deployment process
-- Reduced risk of accidental production deployments
-- Better alignment with CI/CD best practices
+### Risks and Mitigations
+1. **Component Migration**
+   - Risk: Time-consuming conversion from React to Svelte
+   - Mitigation: Gradual migration, starting with critical paths
 
-## 2024-02-28: Webpack Configuration Update
+2. **Environment Variables**
+   - Risk: Different handling between Webpack and Vite
+   - Mitigation: Centralize in .env.shared with clear sections
 
-**Decision**: Update webpack configuration for better asset handling
-- Direct output to dist/
-- Proper asset paths for production
-- Unified build process for preview/production
+3. **Database Integration**
+   - Risk: D1 database bindings may need adjustment
+   - Mitigation: Careful testing in all environments
 
-**Rationale**:
-- Consistent output location simplifies deployment
-- Same build process reduces environment-specific issues
-- Clean plugin ensures no stale assets remain
-
-**Impact**:
-- More reliable builds
-- Simplified deployment process
-- Reduced chance of serving stale assets
-
-## Next Decisions Needed
-1. Strategy for bundle size optimization
-2. Approach for deployment documentation
-3. Long-term database management strategy
+### Implementation Plan
+1. Remove Yarn-specific files
+2. Set up new pnpm configuration
+3. Create Vite and SvelteKit configuration
+4. Update deployment scripts
+5. Begin component migration
+6. Test in all environments

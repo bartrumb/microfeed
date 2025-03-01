@@ -1,27 +1,38 @@
 # Active Context
 
 ## Current Task
-Optimizing build configuration and resolving deployment issues
+Migrating from Yarn/Webpack to pnpm/Vite with React and Cloudflare Workers
+
+## Environment Variables Management
+- Consolidated environment variables into .env.shared
+- Maintaining separate sections for DEV, PREVIEW, and PROD
+- Environment variables managed through Vite's env handling
+
+## Build Configuration
+- Migrated from Webpack to Vite
+- Configured for React and Cloudflare Workers
+- Maintaining D1 database configurations
+- Updated CI/CD pipeline for pnpm
 
 ## Status
 ✅ Completed:
-- Removed redundant @tailwindcss/line-clamp plugin (now included in Tailwind CSS v3.3+)
-- Fixed database initialization script
-- Enhanced error handling in Cloudflare API calls
-- Cleaned up wrangler.toml configuration
+- Removed Yarn and Webpack files
+- Created Vite configuration
+- Set up environment variables structure
+- Updated CI/CD workflow
+- Initialized pnpm and installed dependencies
+- Approved native dependency builds
 
-## Build Configuration
-- Tailwind CSS: Using built-in line-clamp functionality
-- Webpack: Clean plugin properly removing stale assets before builds
-- Database: Improved error handling and logging for D1 operations
+🔄 In Progress:
+- Testing development server
+- Verifying database operations
 
 ## Open Issues
-1. Database initialization needs to be tested in each environment
-2. Bundle size warnings need to be addressed (future optimization)
+1. Need to test database initialization in each environment
+2. Need to verify Cloudflare Workers functionality
+3. Need to test deployment pipeline
 
 ## Next Actions
-1. Test database initialization:
-   - Preview environment
-   - Production deployment
-2. Verify database tables are created correctly
-3. Test full deployment workflow in each environment
+1. Test local development server
+2. Verify database operations
+3. Test deployment workflow in each environment
