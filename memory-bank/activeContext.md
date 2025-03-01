@@ -27,6 +27,10 @@ Migrating from Yarn/Webpack to pnpm/Vite with React and Cloudflare Workers
   - Removed deprecated site configuration
   - Simplified for Pages + Functions setup
   - Fixed configuration warnings
+- Updated script loading for ES modules
+  - Changed script type to "module"
+  - Updated script paths for Vite output
+  - Renamed webpack-specific props to generic names
 
 🔄 In Progress:
 - Testing development server

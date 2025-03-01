@@ -5,8 +5,8 @@ export default class HtmlHeader extends React.Component {
     const {
       title,
       description,
-      webpackJsList,
-      webpackCssList,
+      scripts,
+      styles,
       favicon,
       canonicalUrl,
     } = this.props;
@@ -17,11 +17,11 @@ export default class HtmlHeader extends React.Component {
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
-        {webpackJsList && webpackJsList.map((js) => (
-          <script key={js} type="text/javascript" src={`/dist/${js}.js`} defer/>
+        {scripts && scripts.map((js) => (
+          <script key={js} type="module" src={`/dist/${js}.js`} defer/>
         ))}
-        {webpackCssList && webpackCssList.map((css) => (
-          <link key={css} rel="stylesheet" type="text/css" href={`/dist/assets/${css}-DiAMbZxM.css`}/>
+        {styles && styles.map((css) => (
+          <link key={css} rel="stylesheet" type="text/css" href={`/dist/assets/${css}.css`}/>
         ))}
         {favicon && favicon['apple-touch-icon'] && <link
           rel="apple-touch-icon"

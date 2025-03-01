@@ -7,8 +7,8 @@ export default class AdminWholeHtml extends React.Component {
     const {
       title,
       description,
-      webpackJsList,
-      webpackCssList,
+      scripts,
+      styles,
       feedContent,
       onboardingResult,
     } = this.props;
@@ -17,8 +17,8 @@ export default class AdminWholeHtml extends React.Component {
       <HtmlHeader
         title={title}
         description={description}
-        webpackJsList={webpackJsList}
-        webpackCssList={webpackCssList}
+        scripts={scripts}
+        styles={styles}
         favicon={{
           'apple-touch-icon': '/assets/favicon/apple-touch-icon.png',
           '32x32': '/assets/favicon/favicon-32x32.png',
