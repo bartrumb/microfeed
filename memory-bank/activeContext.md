@@ -1,47 +1,49 @@
 # Active Context
 
-## Current Task
-Migrating from Yarn/Webpack to pnpm/Vite with React and Cloudflare Workers
+## Current Focus
+WSL development environment configuration and Vite asset handling
 
-## Environment Variables Management
-- Consolidated environment variables into .env.shared
-- Maintaining separate sections for DEV, PREVIEW, and PROD
-- Environment variables managed through Vite's env handling
+## Recent Changes
+- Updated wrangler.toml with environment-specific database configurations
+- Enhanced DatabaseInitializer.js with better validation and logging
+- Fixed ESLint issues in DatabaseInitializer.js
+- Documented comprehensive WSL troubleshooting steps
+- Simplified Vite asset path handling for WSL compatibility
 
-## Build Configuration
-- Migrated from Webpack to Vite
-- Configured for React and Cloudflare Workers
-- Maintaining D1 database configurations
-- Updated CI/CD pipeline for pnpm
+## Current State
+- Database configurations are now properly separated by environment
+- Initialization process includes validation checks
+- Logging system is environment-aware
+- Code quality issues have been addressed
+- WSL development environment fully documented
+- Vite asset paths standardized for WSL compatibility
 
-## Status
-✅ Completed:
-- Removed Yarn and Webpack files
-- Created Vite configuration
-- Set up environment variables structure
-- Updated CI/CD workflow
-- Initialized pnpm and installed dependencies
-- Approved native dependency builds
-- Fixed module system incompatibility in Version.js
-- Updated wrangler.toml configuration
-  - Removed deprecated site configuration
-  - Simplified for Pages + Functions setup
-  - Fixed configuration warnings
-- Updated script loading for ES modules
-  - Changed script type to "module"
-  - Updated script paths for Vite output
-  - Renamed webpack-specific props to generic names
+## Implementation Notes
+- Using Cloudflare Workers environment detection (globalThis.ENVIRONMENT)
+- Each environment has a unique database_id
+- Local development has its own base configuration
+- Data validation compares stored and initial data
+- WSL requires specific network configuration:
+  - Binding to 0.0.0.0 for host access
+  - Port 8788 forwarding configuration
+  - WSL 2 NAT considerations
+- Asset path handling:
+  - Unified paths for development and production
+  - Removed manifest.json dependency
+  - Simplified path resolution logic
 
-🔄 In Progress:
-- Testing development server
-- Verifying database operations
-
-## Open Issues
-1. Need to test database initialization in each environment
-2. Need to verify Cloudflare Workers functionality
-3. Need to test deployment pipeline
+## Open Questions
+1. Should we add automated tests for the new validation logic?
+2. Do we need to implement data migration support for future schema changes?
+3. Should we add monitoring for initialization failures?
+4. Should we create a WSL-specific configuration script to automate setup?
+5. Do we need to document WSL firewall configuration steps in more detail?
+6. Should we implement a development-only asset manifest for better debugging?
 
 ## Next Actions
-1. Test local development server
-2. Verify database operations
-3. Test deployment workflow in each environment
+1. Test database initialization in each environment
+2. Consider implementing suggested monitoring improvements
+3. Plan for potential data migration support
+4. Evaluate need for WSL automation scripts
+5. Test WSL configuration across different Windows environments
+6. Verify asset loading in all admin routes

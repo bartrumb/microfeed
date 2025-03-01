@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:worker": "wrangler pages dev --compatibility-date=2024-02-28 --d1 FEED_DB -- npm run dev",
+    "build:dev": "vite build --mode development",
+    "dev:worker": "pnpm run build:dev && wrangler pages dev dist --compatibility-date=2024-02-28 --d1 FEED_DB --ip 0.0.0.0 --port 8788",
     "build": "vite build",
     "preview": "vite preview",
     "deploy:preview": "node ops/handle_vars.js preview && wrangler pages deploy dist --project-name shop-dawg-microfeed --branch preview",

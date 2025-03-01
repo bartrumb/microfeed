@@ -1,9 +1,10 @@
 import ReactDOMServer from "react-dom/server";
 import Theme from "../models/Theme";
 import FeedDb, {getFetchItemsParams} from "../models/FeedDb";
-import {CODE_TYPES, STATUSES} from "../../common-src/Constants";
+import {CODE_TYPES} from "../../common-src/Constants";
 import {ADMIN_URLS, escapeHtml, urlJoinWithRelative} from "../../common-src/StringUtils";
 import OnboardingChecker from "../../common-src/OnboardingUtils";
+import { getViteAssetPath } from "./ViteUtils";
 
 export function renderReactToHtml(Component) {
   return `<!DOCTYPE html>${ReactDOMServer.renderToString(Component)}`;
@@ -89,21 +90,10 @@ class ResponseBuilder {
     return getFetchItemsParams(
       this.request,
       {
-        // status: STATUSES.PUBLISHED,
         ...queryKwargs,
       }, this.fetchItemsObj.limit);
   }
 
-  /**
-   * Typically, code will look like this:
-   *
-   *   const res = super._getResponse(props);
-   *   res.headers.set('header-name', 'header-value');
-   *   return new Response(props.buildXmlFunc(this.jsonData), res);
-   *
-   * @returns {Response}
-   * @private
-   */
   _getResponse(/* props */) {
     return new Response('ok', {
       headers: {
@@ -192,24 +182,32 @@ export class SitemapResponseBuilder extends ResponseBuilder {
     return getFetchItemsParams(
       this.request,
       {
-        // status: STATUSES.PUBLISHED,
         ...queryKwargs,
       }, -1);
   }
 }
 
 class CodeInjector {
-  constructor(settings, theme, sharedTheme) {
+  constructor(settings, theme, sharedTheme, appName) {
     this.settings = settings;
     this.theme = theme;
     this.sharedTheme = sharedTheme;
+    this.appName = appName;
   }
+
   element(element) {
     if (!this.settings) {
       return;
     }
 
     if (element.tagName === 'head') {
+      // Add Vite client script in development
+      if (this.appName) {
+        element.append(`<script type="module" src="${getViteAssetPath(this.appName, 'js')}" defer></script>`, {html: true});
+        element.append(`<link rel="stylesheet" href="${getViteAssetPath(this.appName, 'css')}">`, {html: true});
+      }
+
+      // Add favicon
       if (this.settings.webGlobalSettings) {
         const {favicon, publicBucketUrl} = this.settings.webGlobalSettings;
         if (favicon && favicon.url) {
@@ -217,6 +215,8 @@ class CodeInjector {
           element.append(`<link rel="icon" type="${favicon.contentType}" href="${faviconUrl}">`, {html: true});
         }
       }
+
+      // Add custom header code
       element.append(this.sharedTheme.getWebHeader().html || '', {html: true});
       const {html} = this.theme.getWebHeader();
       element.append(html, {html: true});
@@ -246,9 +246,13 @@ export class WebResponseBuilder extends ResponseBuilder {
     }
     const fromReact = renderReactToHtml(component);
     const newRes = new Response(fromReact, res);
+
+    // Extract app name from component for asset loading
+    const appName = component.type?.name;
+
     return new HTMLRewriter()
-      .on('head', new CodeInjector(this.settings, theme, sharedTheme))
-      .on('body', new CodeInjector(this.settings, theme, sharedTheme))
+      .on('head', new CodeInjector(this.settings, theme, sharedTheme, appName))
+      .on('body', new CodeInjector(this.settings, theme, sharedTheme, appName))
       .transform(newRes);
   }
 }

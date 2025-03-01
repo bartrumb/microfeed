@@ -1,4 +1,5 @@
 import React from 'react';
+import { getViteAssetPath } from '../../common/ViteUtils';
 
 export default class HtmlHeader extends React.Component {
   render() {
@@ -18,10 +19,10 @@ export default class HtmlHeader extends React.Component {
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
         {scripts && scripts.map((js) => (
-          <script key={js} type="module" src={`/dist/${js}.js`} defer/>
+          <script key={js} type="module" src={getViteAssetPath(js, 'js')} defer/>
         ))}
         {styles && styles.map((css) => (
-          <link key={css} rel="stylesheet" type="text/css" href={`/dist/assets/${css}.css`}/>
+          <link key={css} rel="stylesheet" type="text/css" href={getViteAssetPath(css, 'css')}/>
         ))}
         {favicon && favicon['apple-touch-icon'] && <link
           rel="apple-touch-icon"

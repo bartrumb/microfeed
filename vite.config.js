@@ -8,6 +8,13 @@ export default defineConfig({
       include: '**/*.{jsx,js}',
     })
   ],
+  base: '/',
+  publicDir: 'public',
+  server: {
+    port: 3001,  // Use a different port to avoid conflict with Wrangler
+    host: true,
+    strictPort: true
+  },
   build: {
     outDir: 'dist',
     chunkSizeWarningLimit: 1000,
@@ -29,9 +36,9 @@ export default defineConfig({
         'EdgeSettingsApp': 'edge-src/EdgeSettingsApp/index.jsx'
       },
       output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: 'chunks/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]',
+        entryFileNames: 'assets/client/[name].js',
+        chunkFileNames: 'assets/client/chunks/[name]-[hash].js',
+        assetFileNames: 'assets/[name][extname]',
         format: 'es',
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
@@ -60,10 +67,6 @@ export default defineConfig({
       '@common': path.resolve(__dirname, './common-src')
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx']
-  },
-  server: {
-    port: 3000,
-    host: true
   },
   optimizeDeps: {
     include: [

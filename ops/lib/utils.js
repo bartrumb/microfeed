@@ -1,8 +1,8 @@
-const fs = require('fs');
-const toml = require('toml');
-const https = require('https');
+import fs from 'fs';
+import toml from 'toml';
+import https from 'https';
 
-class VarsReader {
+export class VarsReader {
   constructor(currentEnv, varsFilePath = '.vars.toml') {
     const varsBuffer = fs.readFileSync(varsFilePath);
     this.data = toml.parse(varsBuffer);
@@ -32,7 +32,7 @@ class VarsReader {
   }
 }
 
-class WranglerCmd {
+export class WranglerCmd {
   constructor(currentEnv) {
     this.currentEnv = currentEnv;
     this.v = new VarsReader(currentEnv);
@@ -169,8 +169,3 @@ class WranglerCmd {
     request.end();
   }
 }
-
-module.exports = {
-  VarsReader,
-  WranglerCmd,
-};

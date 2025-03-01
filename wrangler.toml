@@ -1,16 +1,28 @@
-name = "microfeed"
+# Base configuration
 compatibility_date = "2024-02-28"
+pages_build_output_dir = "dist"
 
+# Base D1 configuration for local development
 [[d1_databases]]
 binding = "FEED_DB"
 database_name = "shop-dawg-microfeed_feed_db_development"
-database_id = ""
+database_id = "local-dev-db-id"
 
-[[env.production.d1_databases]]
+# Environment-specific configurations
+[env.development]
+[[env.development.d1_databases]]
 binding = "FEED_DB"
-database_name = "shop-dawg-microfeed_feed_db_production"
-database_id = ""
+database_name = "shop-dawg-microfeed_feed_db_development"
+database_id = "dev-db-7cde2ea0-bd5e-4156-9c12-d953593c504e"
 
+[env.preview]
 [[env.preview.d1_databases]]
 binding = "FEED_DB"
 database_name = "shop-dawg-microfeed_feed_db_preview"
+database_id = "preview-db-8def3fb1-ce6f-4267-9d13-e064594c615f"
+
+[env.production]
+[[env.production.d1_databases]]
+binding = "FEED_DB"
+database_name = "shop-dawg-microfeed_feed_db_production"
+database_id = "prod-db-9fgh4gc2-df7g-5378-0e24-f175605d726g"

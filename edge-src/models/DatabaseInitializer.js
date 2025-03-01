@@ -6,6 +6,7 @@ class DatabaseInitializer {
   constructor(db) {
     this.db = db;
     this.maxRetries = 3;
+    this.isDevelopment = globalThis.ENVIRONMENT === 'development';
     this.retryDelay = 1000; // ms
   }
 
@@ -23,9 +24,18 @@ class DatabaseInitializer {
     try {
       const result = await stmt.bind(...tables).all();
       const existingTables = result.results.map(r => r.name);
+      const missingTables = tables.filter(table => !existingTables.includes(table));
+      
+      this.log('Database state', {
+        existingTables,
+        missingTables,
+        allTablesExist: missingTables.length === 0,
+        timestamp: new Date().toISOString()
+      });
+      
       return tables.every(table => existingTables.includes(table));
     } catch (error) {
-      console.error('Table verification failed:', error);
+      this.logError('Table verification failed:', { error, tables, timestamp: new Date().toISOString() });
       return false;
     }
   }
@@ -43,7 +53,13 @@ class DatabaseInitializer {
         return await operation();
       } catch (error) {
         lastError = error;
-        console.error(`${operationName} attempt ${attempt} failed:`, error);
+        this.logError(`${operationName} attempt ${attempt} failed:`, {
+          error,
+          attempt,
+          maxRetries: this.maxRetries,
+          retryDelay: this.retryDelay * attempt,
+          timestamp: new Date().toISOString()
+        });
         if (attempt < this.maxRetries) {
           await new Promise(resolve => setTimeout(resolve, this.retryDelay * attempt));
         }
@@ -60,7 +76,7 @@ class DatabaseInitializer {
     return this.withRetry(async () => {
       const hasSchema = await this.verifyTables();
       if (hasSchema) {
-        console.log('Database schema already exists');
+        this.log('Database schema verification complete', { status: 'Schema exists' });
         return;
       }
 
@@ -85,7 +101,10 @@ class DatabaseInitializer {
 
       const statements = schemaStatements.map(sql => this.db.prepare(sql));
       await this.db.batch(statements);
-      console.log('Database schema initialized successfully');
+      this.log('Database schema initialized', {
+        tableCount: schemaStatements.length,
+        timestamp: new Date().toISOString()
+      });
     }, 'Schema initialization');
   }
 
@@ -98,6 +117,12 @@ class DatabaseInitializer {
     return this.withRetry(async () => {
       const { channel, settings } = initialData;
 
+      this.log('Starting data initialization', {
+        hasChannel: !!channel,
+        settingsCategories: settings ? Object.keys(settings) : [],
+        timestamp: new Date().toISOString()
+      });
+
       // Handle channel insertion
       if (channel?.id && typeof channel.status !== 'undefined') {
         const channelStmt = this.db.prepare(
@@ -109,6 +134,10 @@ class DatabaseInitializer {
           channel.is_primary ? 1 : 0,
           JSON.stringify(channel)
         ).run();
+        this.log('Channel initialized', {
+          channelId: channel.id,
+          isPrimary: channel.is_primary
+        });
       }
 
       // Handle settings using UPSERT
@@ -126,11 +155,16 @@ class DatabaseInitializer {
               category,
               JSON.stringify(data)
             ).run();
+            this.log('Setting initialized', {
+              category,
+              dataKeys: Object.keys(data)
+            });
           }
         }
       }
 
-      console.log('Initial data inserted successfully');
+      this.log('Data initialization complete', { timestamp: new Date().toISOString() });
+      
     }, 'Data initialization');
   }
 
@@ -143,10 +177,98 @@ class DatabaseInitializer {
     try {
       await this.initializeSchema();
       await this.initializeData(initialData);
+      await this.validateInitialization(initialData);
     } catch (error) {
-      console.error('Initialization failed:', error);
+      this.logError('Database initialization failed', {
+        error,
+        hasInitialData: !!initialData,
+        timestamp: new Date().toISOString(),
+        cause: error.cause || 'Unknown cause'
+      });
+      throw new Error(`Database initialization failed: ${error.message}`, { cause: error });
+    }
+  }
+
+  /**
+   * Validates the database initialization by checking data integrity
+   * @param {Object} initialData - The initial data that was inserted
+   * @returns {Promise<void>}
+   */
+  async validateInitialization(initialData) {
+    this.log('Starting initialization validation', { 
+      hasChannel: !!initialData.channel,
+      hasSettings: !!initialData.settings
+    });
+    
+    try {
+      // Validate tables exist
+      const tablesExist = await this.verifyTables();
+      if (!tablesExist) {
+        throw new Error('Table validation failed: Required tables are missing');
+      }
+
+      // Validate channel data if provided
+      if (initialData.channel?.id) {
+        const channelStmt = this.db.prepare('SELECT * FROM channels WHERE id = ?');
+        const channelResult = await channelStmt.bind(initialData.channel.id).first();
+        
+        if (!channelResult) {
+          throw new Error(`Channel validation failed: Channel ${initialData.channel.id} not found`);
+        }
+
+        const channelData = JSON.parse(channelResult.data);
+        if (channelData.id !== initialData.channel.id) {
+          throw new Error('Channel validation failed: Data mismatch');
+        }
+      }
+
+      // Validate settings if provided
+      if (initialData.settings) {
+        for (const [category, settingData] of Object.entries(initialData.settings)) {
+          const settingStmt = this.db.prepare('SELECT * FROM settings WHERE category = ?');
+          const settingResult = await settingStmt.bind(category).first();
+
+          if (!settingResult) {
+            throw new Error(`Settings validation failed: Category ${category} not found`);
+          }
+
+          const storedData = JSON.parse(settingResult.data);
+          if (!storedData || JSON.stringify(storedData) !== JSON.stringify(settingData)) {
+            throw new Error(`Settings validation failed: Invalid data for category ${category}`);
+          }
+        }
+      }
+
+      this.log('Initialization validation complete', { 
+        status: 'All checks passed',
+        validatedChannel: !!initialData.channel,
+        validatedSettings: !!initialData.settings
+      });
+    } catch (error) {
+      this.logError('Initialization validation failed', { error });
       throw error;
     }
+  }
+
+  /**
+   * Logs a message with development-specific formatting
+   * @param {string} message - The message to log
+ with optional data
+   * @param {Object} [metadata] - Additional metadata to log
+   */
+  log(message, metadata = {}) {
+    if (this.isDevelopment || globalThis.DEBUG) {
+      console.log(`[D1 Init] ${message}`, { ...metadata, timestamp: new Date().toISOString() });
+    }
+  }
+
+  /**
+   * Logs an error with development-specific formatting
+   * @param {string} message - The error message
+   * @param {Object} [metadata] - Additional error metadata
+   */
+  logError(message, metadata = {}) {
+    console.error(`[D1 Init Error] ${message}`, { ...metadata, env: globalThis.ENVIRONMENT });
   }
 }
 

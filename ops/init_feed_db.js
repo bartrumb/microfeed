@@ -1,6 +1,6 @@
-const {exec} = require('child_process');
-const {WranglerCmd} = require("./lib/utils");
-const fs = require('fs');
+import { exec } from 'child_process';
+import { WranglerCmd } from "./lib/utils.js";
+import fs from 'fs';
 
 const cmd = new WranglerCmd(process.env.DEPLOYMENT_ENVIRONMENT || 'development');
 
