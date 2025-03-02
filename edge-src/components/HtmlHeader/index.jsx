@@ -11,6 +11,8 @@ const CRITICAL_CHUNKS = [
   'react-vendor',
   'utils',
   'ui-components'
+,
+  'constants'
 ];
 
 // Known entry points from vite.config.js
@@ -61,7 +63,7 @@ export default class HtmlHeader extends React.Component {
         })}
         {styles && styles.map((css) => {
           return css && (
-            <link 
+            <link
               key={css} 
               rel="stylesheet" 
               type="text/css"
@@ -71,6 +73,13 @@ export default class HtmlHeader extends React.Component {
           );
         })}
         {this.renderPreloadLinks()}
+        <link
+          key="admin-styles"
+          rel="stylesheet"
+          type="text/css"
+          href={getViteAssetPath('admin-styles', 'css')}
+          crossOrigin="anonymous"
+        />
         {favicon && favicon['apple-touch-icon'] && <link
           rel="apple-touch-icon"
           sizes="180x180"

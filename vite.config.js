@@ -122,9 +122,13 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
             '@client/components/AdminSwitch'
           ],
           'admin-styles': [
-            'client-src/common/admin_styles.css'
-,
+            // Common constants
             '@common/Constants'
+,
+            // Admin styles
+            'client-src/common/admin_styles.css'
+          ],
+          'constants': [
           ]
         },
         intro: isDev ? '' : `if(!('modulepreload' in document.createElement('link'))){document.head.insertAdjacentHTML('beforeend','<script src="/_app/immutable/chunks/modulepreload-polyfill.js"></script>');}`
