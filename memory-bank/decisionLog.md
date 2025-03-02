@@ -1,51 +1,39 @@
 # Decision Log
 
-## Accessibility and Performance Improvements (2025-03-01)
+## Asset Bundling Configuration Update (2025-03-01)
+- **Context**: Asset loading issues with unbundled assets and undefined Cloudflare configuration
+- **Decision**: Enhanced Vite build configuration for better asset handling
+- **Changes**:
+  1. Enabled manifest generation for better asset tracking
+  2. Implemented CSS code splitting for optimized loading
+  3. Reorganized output structure:
+     - Moved all assets to 'assets/' directory
+     - Improved naming patterns for better caching
+     - Fixed CSS file paths to use explicit paths instead of globs
+  4. Added dedicated styles chunk for CSS bundling
+  5. Configured CSS modules with scoped class names
+- **Rationale**:
+  - Manifest helps with asset versioning and cache invalidation
+  - CSS code splitting reduces initial bundle size
+  - Consistent asset directory structure improves caching
+  - Scoped CSS names prevent style conflicts
+  - Explicit CSS paths avoid filesystem glob issues
+- **Implementation**: Updated vite.config.js with new build options
 
-### Accessibility Utilities Implementation
-**Decision**: Created a centralized AccessibilityUtils.js file with reusable functions
-**Rationale**:
-- Promotes consistent accessibility implementation across components
-- Reduces code duplication
-- Makes accessibility features easier to maintain and update
-- Provides type-safe utilities for form fields, links, and images
+## WSL/Windows Filesystem Interaction (2025-03-01)
+- **Context**: Encountered I/O errors when trying to remove dist directory using WSL
+- **Decision**: Implemented a hybrid approach using PowerShell for file cleanup operations
+- **Rationale**: 
+  - WSL can sometimes have filesystem permission issues with Windows directories
+  - PowerShell provides more reliable file operations on Windows filesystems
+  - This approach maintains development workflow while avoiding filesystem conflicts
+- **Implementation**: 
+  - Use PowerShell's Remove-Item for cleanup operations
+  - Document this pattern for future reference
+  - Added to activeContext.md for tracking
 
-### HTML Header Enhancements
-**Decision**: Updated HtmlHeader component with comprehensive improvements
-**Rationale**:
-- Added lang attribute via JavaScript to ensure proper HTML language support
-- Updated charset meta tag format for better compatibility
-- Implemented security headers at component level for consistent application
-- Added CSS compatibility fixes with vendor prefixes
-
-### Form Component Accessibility
-**Decision**: Enhanced AdminInput component with accessibility features
-**Rationale**:
-- Used enhanceFieldAccessibility utility for consistent implementation
-- Added proper ARIA attributes and labels
-- Ensured all form fields have unique IDs and names
-- Maintained existing functionality while improving accessibility
-
-### Cache and Security Headers
-**Decision**: Implemented cache control and security headers in middleware
-**Rationale**:
-- Added X-Content-Type-Options for better security
-- Removed unnecessary CSP header to reduce overhead
-- Implemented proper cache control for static assets
-- Used immutable directive for better caching performance
-
-### Asset Loading and Cloudflare Configuration (2025-03-01)
-**Decision**: Switch from unbundled to bundled assets and fix Cloudflare configuration
-**Rationale**:
-- Current non-working version uses unbundled module-based client script
-- Working version uses properly bundled assets with content hashes
-- Cloudflare URLs are undefined in non-working version
-- Need to ensure proper asset bundling and Cloudflare configuration for production
-- Bundled assets provide better caching and performance
-- Content hashes enable cache busting when needed
-
-### Next Implementation Decisions Needed
-1. Choose an automated accessibility testing framework
-2. Decide on error boundary implementation strategy
-3. Plan accessibility improvements for remaining components
-4. Determine approach for image accessibility automation
+## Next Steps
+- Monitor build output and asset loading in production environment
+- Consider creating a utility script to handle cross-platform file operations
+- Document any additional filesystem-related workarounds as needed
+- Test CSS bundling and code splitting in production

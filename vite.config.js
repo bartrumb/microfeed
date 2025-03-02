@@ -16,7 +16,9 @@ export default defineConfig({
     strictPort: true
   },
   build: {
+    manifest: true,
     outDir: 'dist',
+    cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
@@ -36,9 +38,15 @@ export default defineConfig({
         'EdgeSettingsApp': 'edge-src/EdgeSettingsApp/index.jsx'
       },
       output: {
-        entryFileNames: 'build/[name]_js-[hash].js',
-        chunkFileNames: 'build/chunks/[name]-[hash].js',
-        assetFileNames: 'build/[name]_[ext]-[hash].[ext]',
+        entryFileNames: (chunkInfo) => {
+          return process.env.NODE_ENV === 'development' ? 'assets/[name].js' : 'assets/[name]-[hash].js';
+        },
+        chunkFileNames: (chunkInfo) => {
+          return process.env.NODE_ENV === 'development' ? 'assets/chunks/[name].js' : 'assets/chunks/[name]-[hash].js';
+        },
+        assetFileNames: (assetInfo) => {
+          return process.env.NODE_ENV === 'development' ? 'assets/[name].[ext]' : 'assets/[name]-[hash].[ext]';
+        },
         format: 'es',
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
@@ -57,6 +65,9 @@ export default defineConfig({
             '@client/components/AdminInput',
             '@client/components/AdminSelect',
             '@client/components/AdminSwitch'
+          ],
+          'admin-styles': [
+'client-src/common/admin_styles.css'
           ]
         }
       }
@@ -79,4 +90,11 @@ export default defineConfig({
     ]
   },
   envPrefix: ['VITE_', 'CLOUDFLARE_']
+,
+  css: {
+    modules: {
+      localsConvention: 'camelCase',
+      generateScopedName: '[name]__[local]__[hash:base64:5]'
+    }
+  }
 });

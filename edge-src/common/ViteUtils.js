@@ -1,18 +1,6 @@
 // During development, assets are served directly by Vite
 // In production, we need to use the manifest to get the correct hashed filenames
 
-// Constants for asset paths
-const PATHS = {
-  development: {
-    js: '/assets/client',  // Changed from '/src/client' to match Wrangler Pages dev server
-    css: '/assets'         // Changed from '/src' to match Wrangler Pages dev server
-  },
-  production: {
-    js: '/assets/client',
-    css: '/assets'
-  }
-};
-
 // Detect development environment using Miniflare
 const isDev = typeof globalThis !== 'undefined' && globalThis.MINIFLARE !== undefined;
 
@@ -33,8 +21,14 @@ export function getViteAssetPath(name, type = 'js') {
     throw new Error('Asset type must be "js" or "css"');
   }
 
-  // Use environment-specific paths
-  const path = `${PATHS[isDev ? 'development' : 'production'][type]}/${name}.${type}`;
+  // In development, use predictable paths
+  if (isDev) {
+    return `/assets/${name}.${type}`;
+  }
+
+  // In production, use the actual hashed filenames from the build output
+  const path = `/assets/${name}-[hash].${type}`;
+
   console.log('Asset path:', {
     name,
     type,
