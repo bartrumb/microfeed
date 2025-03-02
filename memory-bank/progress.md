@@ -1,5 +1,22 @@
 # Progress Tracking
 
+## Upcoming Tasks - Vite and Cloudflare Integration (2025-03-02)
+- 🔄 Asset Structure Migration
+  - Move assets to /_app/immutable/
+  - Update path references
+  - Configure proper hashing
+  - Test asset loading
+- 🔄 Cloudflare Integration
+  - Install @cloudflare/workers-vite
+  - Configure Vite plugin
+  - Update wrangler.toml
+  - Test Cloudflare deployment
+- 🔄 Path Resolution Updates
+  - Standardize ViteUtils.js
+  - Update HtmlHeader paths
+  - Fix modulepreload polyfill
+  - Test all environments
+
 ## Completed Tasks
 
 ### Asset Path Standardization (2025-03-02)
@@ -79,28 +96,33 @@
   - Validated manifest generation
 
 ## Next Steps
-1. Test the production build in preview environment:
+1. Begin Vite and Cloudflare integration:
+   - Install required dependencies
+   - Update configurations
+   - Test local development
+   - Verify preview deployment
+2. Test the production build in preview environment:
    - Deploy to preview environment
    - Verify asset loading and caching
    - Test CSS application and scoping
    - Validate bundling optimization
-2. Test Cloudflare integration:
+3. Test Cloudflare integration:
    - Verify Pages deployment
    - Check R2 bucket access
    - Test custom domain configuration
    - Validate asset caching
-3. Update remaining form components with accessibility enhancements:
+4. Update remaining form components with accessibility enhancements:
    - AdminSelect
    - AdminTextarea
    - AdminRadio
    - AdminSwitch
-4. Add accessibility improvements to link components
-5. Implement image accessibility across the application
-6. Add automated accessibility testing
-7. Review and enhance error boundaries
-8. Add monitoring for initialization failures
-9. Consider adding data migration support for future schema changes
-10. Add automated tests for validation logic
-11. Test database operations in each environment
-12. Create utility script for cross-platform file operations
-13. Document filesystem interaction best practices
+5. Add accessibility improvements to link components
+6. Implement image accessibility across the application
+7. Add automated accessibility testing
+8. Review and enhance error boundaries
+9. Add monitoring for initialization failures
+10. Consider adding data migration support for future schema changes
+11. Add automated tests for validation logic
+12. Test database operations in each environment
+13. Create utility script for cross-platform file operations
+14. Document filesystem interaction best practices

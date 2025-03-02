@@ -1,4 +1,5 @@
 import React from 'react';
+import { getViteAssetPath } from '../../common/ViteUtils';
 const isDev = process.env.NODE_ENV === 'development';
 
 // Critical chunks that should be preloaded
@@ -24,7 +25,7 @@ export default class HtmlHeader extends React.Component {
       <link 
         key={`preload-${chunk}`}
         rel="modulepreload"
-        href={`/assets/client/chunks/${chunk}.js`}
+        href={getViteAssetPath(chunk, 'js')}
         crossOrigin="anonymous"
       />
     ));
@@ -50,12 +51,7 @@ export default class HtmlHeader extends React.Component {
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
         {scripts && scripts.map((js) => {
-          // In development, let Vite handle the paths
-          const path = isDev
-            ? `/${js}.js`
-            : ENTRY_POINTS.includes(js)
-              ? `/assets/client/${js}.js`
-              : `/assets/client/chunks/${js}.js`;
+          const path = getViteAssetPath(js, 'js');
           return <script key={js} type="module" src={path} crossOrigin="anonymous"/>;
         })}
         {styles && styles.map((css) => {
@@ -66,7 +62,7 @@ export default class HtmlHeader extends React.Component {
               key={css} 
               rel="stylesheet" 
               type="text/css" 
-              href={`/assets/${name}.css`}
+              href={getViteAssetPath(name, 'css')}
               crossOrigin="anonymous"
             />
           );

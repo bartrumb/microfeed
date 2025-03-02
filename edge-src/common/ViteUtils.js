@@ -50,8 +50,11 @@ export function getViteAssetPath(name, type = 'js') {
     }
   }
 
-  // In production, use a predictable hash for now
-  return `/assets/${type === 'js' ? 'client/' : ''}${finalName}.${type}`;
+  // In production, use Cloudflare Pages structure
+  const base = '/_app/immutable';
+  const isEntry = ENTRY_POINTS.includes(name);
+  const path = type === 'js' ? (isEntry ? `entry-${name}` : `chunks/${name}`) : `assets/${finalName}`;
+  return `${base}/${path}.${type}`;
 }
 
 // Export for testing

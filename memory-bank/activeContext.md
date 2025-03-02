@@ -1,7 +1,7 @@
 # Active Context
 
 ## Current Focus
-Asset path standardization and build configuration improvements
+Vite and Cloudflare Pages Integration - Asset Path Standardization
 
 ## Recent Changes
 - Fixed HTML rendering and asset loading issues:
@@ -24,11 +24,6 @@ Asset path standardization and build configuration improvements
   - Fixed HtmlHeader component path resolution
   - Implemented consistent path structure
   - Removed environment-specific logic
-- Fixed development environment:
-  - Disabled manifest in development
-  - Implemented proper path resolution
-  - Fixed file cleanup issues
-  - Added PowerShell-based cleanup
 
 ## Current State
 - ✅ Build system improvements completed:
@@ -50,13 +45,36 @@ Asset path standardization and build configuration improvements
   - Assets loading correctly in development
   - Proper directory structure in place
 
+## Implementation Plan
+1. **Asset Structure Migration**
+   - Move from `/assets/client/` to `/_app/immutable/`
+   - Update all path references
+   - Ensure proper hashing for cache busting
+
+2. **Cloudflare Integration**
+   - Install @cloudflare/workers-vite plugin
+   - Configure Vite for Cloudflare Pages
+   - Update wrangler.toml settings
+
+3. **Path Resolution Standardization**
+   - Unify development and production paths
+   - Update ViteUtils.js path handling
+   - Fix HtmlHeader component paths
+   - Relocate modulepreload polyfill
+
+4. **Testing Strategy**
+   - Verify local development (`pnpm dev`)
+   - Test preview deployment
+   - Validate production build
+   - Check asset loading and caching
+
 ## Implementation Notes
 - Using PowerShell for reliable file operations
 - CSS bundling now uses explicit file paths
-- Asset output structure reorganized:
-  - JS files in /assets/client/
-  - Chunks in /assets/client/chunks/
-  - CSS files in /assets/
+- Asset output structure being reorganized:
+  - JS files in /_app/immutable/
+  - Chunks in /_app/immutable/chunks/
+  - CSS files in /_app/immutable/assets/
 - Build manifest disabled in development
 - CSS modules configured with scoped names
 - Cache-Control headers set for static assets
@@ -76,11 +94,15 @@ Asset path standardization and build configuration improvements
 8. Do we need additional fallback strategies for asset loading?
 
 ## Next Actions
-1. Deploy to preview environment to test changes
-2. Verify asset loading in production-like environment
-3. Test CSS bundling and code splitting
-4. Validate cache control headers
-5. Check manifest usage for asset versioning
-6. Monitor build performance metrics
-7. Document new build configuration
-8. Create filesystem operation guidelines
+1. Install @cloudflare/workers-vite plugin
+2. Update Vite configuration for Cloudflare
+3. Modify asset path resolution
+4. Test local development build
+5. Deploy to preview environment
+6. Verify asset loading in production-like environment
+7. Test CSS bundling and code splitting
+8. Validate cache control headers
+9. Check manifest usage for asset versioning
+10. Monitor build performance metrics
+11. Document new build configuration
+12. Create filesystem operation guidelines

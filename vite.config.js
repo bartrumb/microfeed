@@ -38,7 +38,7 @@ export default defineConfig({
   },
   build: {
     manifest: !isDev, // Only enable manifest in production
-    outDir: 'dist',
+    outDir: 'dist/_app',
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
@@ -50,18 +50,18 @@ export default defineConfig({
         // In development, use simpler paths
         entryFileNames: (chunkInfo) => {
           const name = chunkInfo.name.replace(/^edge_/, '');
-          return `assets/client/${name}.js`;
+          return isDev ? `assets/client/${name}.js` : `immutable/entry-${name}.[hash].js`;
         },
         chunkFileNames: (chunkInfo) => {
           const name = chunkInfo.name;
-          return `assets/client/chunks/${name}.js`;
+          return isDev ? `assets/client/chunks/${name}.js` : `immutable/chunks/${name}.[hash].js`;
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `assets/${name}.css`;
+            return isDev ? `assets/${name}.css` : `immutable/assets/${name}.[hash].css`;
           }
-          return `assets/${assetInfo.name}`;
+          return isDev ? `assets/${assetInfo.name}` : `immutable/assets/${assetInfo.name}`;
         },
         format: 'esm',
         manualChunks: {
@@ -90,7 +90,7 @@ export default defineConfig({
             '@common/Constants'
           ]
         },
-        intro: isDev ? '' : `if(!('modulepreload' in document.createElement('link'))){document.head.insertAdjacentHTML('beforeend','<script src="/assets/client/chunks/modulepreload-polyfill.js"></script>');}`
+        intro: isDev ? '' : `if(!('modulepreload' in document.createElement('link'))){document.head.insertAdjacentHTML('beforeend','<script src="/_app/immutable/chunks/modulepreload-polyfill.[hash].js"></script>');}`
       }
     }
   },

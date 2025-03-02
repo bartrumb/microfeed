@@ -1,6 +1,6 @@
 # Base configuration
 compatibility_date = "2024-02-28"
-pages_build_output_dir = "dist"
+pages_build_output_dir = "dist/_app"
 main = "functions/index.jsx"
 
 [vars]
