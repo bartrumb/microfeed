@@ -1,6 +1,10 @@
 import React from 'react';
 import { getViteAssetPath } from '../../common/ViteUtils';
-const isDev = process.env.NODE_ENV === 'development';
+
+// Use same environment detection as ViteUtils
+const isDev = typeof process !== 'undefined' && 
+  process.env.NODE_ENV === 'development' && 
+  !process.env.CF_PAGES;
 
 // Critical chunks that should be preloaded
 const CRITICAL_CHUNKS = [
@@ -11,15 +15,15 @@ const CRITICAL_CHUNKS = [
 
 // Known entry points from vite.config.js
 const ENTRY_POINTS = ['adminhome',
- 'admincustomcode',
- 'adminchannel',
- 'adminitems',
- 'adminsettings'];
+  'admincustomcode',
+  'adminchannel',
+  'adminitems',
+  'adminsettings'];
 
 export default class HtmlHeader extends React.Component {
   renderPreloadLinks() {
     if (isDev) {
-      return null; // Skip preload in development
+      return null; // Skip preloading in development mode
     }
     return CRITICAL_CHUNKS.map(chunk => (
       <link 
@@ -55,8 +59,7 @@ export default class HtmlHeader extends React.Component {
           return <script key={js} type="module" src={path} crossOrigin="anonymous"/>;
         })}
         {styles && styles.map((css) => {
-          // Remove any leading slashes and .css extension
-          const name = css.replace(/^\//, '').replace(/\.css$/, '');
+          const name = css.replace(/^\//, '').replace(/\.css$/, ''); // Clean the CSS filename
           return (
             <link 
               key={css} 

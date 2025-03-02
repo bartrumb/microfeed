@@ -13,24 +13,50 @@
 2. **Vite Configuration Updates**
    ```js
    // vite.config.js changes
-   import { createCloudflareWorkers } from '@cloudflare/workers-vite';
-
    export default defineConfig({
      plugins: [
-       react(),
-       createCloudflareWorkers({
-         entry: 'functions/index.jsx',
-         pagesDir: 'dist'
+       react({
+         include: '**/*.{jsx,js}',
        })
      ],
+     base: '',
+     publicDir: 'public',
+     server: {
+       port: 3001,
+       host: true,
+       strictPort: true
+     },
      build: {
        outDir: 'dist',
        manifest: !isDev,
+       cssCodeSplit: true,
+       chunkSizeWarningLimit: 1000,
        rollupOptions: {
+         input: {
+           adminhome: 'client-src/ClientAdminHomeApp/index.jsx',
+           admincustomcode: 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
+           adminchannel: 'client-src/ClientAdminChannelApp/index.jsx',
+           adminitems: 'client-src/ClientAdminItemsApp/index.jsx',
+           adminsettings: 'client-src/ClientAdminSettingsApp/index.jsx'
+         },
          output: {
-           entryFileNames: '_app/immutable/[name].[hash].js',
-           chunkFileNames: '_app/immutable/chunks/[name].[hash].js',
-           assetFileNames: '_app/immutable/assets/[name].[hash][extname]'
+           entryFileNames: isDev
+             ? '_app/assets/client/[name].js'
+             : '_app/immutable/entry-[name].[hash].js',
+           chunkFileNames: isDev
+             ? '_app/assets/client/chunks/[name].js'
+             : '_app/immutable/chunks/[name].[hash].js',
+           assetFileNames: (assetInfo) => {
+             if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+               const baseName = assetInfo.name.replace('.css', '');
+               return isDev
+                 ? `_app/assets/${baseName}.css`
+                 : `_app/immutable/assets/${baseName}.[hash].css`;
+             }
+             return isDev
+               ? `_app/assets/[name].[ext]`
+               : `_app/immutable/assets/[name].[hash].[ext]`;
+           }
          }
        }
      }
@@ -41,9 +67,19 @@
    ```js
    // Unified path resolution
    export function getViteAssetPath(name, type = 'js') {
-     const base = isDev ? '' : '/_app/immutable';
-     const dir = type === 'css' ? 'assets' : isDev ? '' : '';
-     return `${base}/${dir}/${name}.${type}`;
+     if (isDev) {
+       if (type === 'js') {
+         return `/_app/assets/client/chunks/${name}.js`;
+       } else {
+         return `/_app/assets/${name}.css`;
+       }
+     } else {
+       if (type === 'js') {
+         return `/_app/immutable/chunks/${name}.js`;
+       } else {
+         return `/_app/immutable/assets/${name}.css`;
+       }
+     }
    }
    ```
 
@@ -68,6 +104,14 @@
    ```toml
    # wrangler.toml updates
    pages_build_output_dir = "dist"
+   compatibility_date = "2024-02-28"
+   main = "functions/index.jsx"
+
+   [env.development]
+   # Development-specific settings
+
+   [env.preview]
+   # Preview-specific settings
    ```
 
 - **Implementation Steps**:
@@ -99,8 +143,38 @@
   - Document current asset paths
   - Maintain ability to revert to previous structure if needed
 
-## Asset Path Standardization (2025-03-02)
-[Previous entry preserved...]
+- **Port Configuration Note**:
+   - Using port 3001 for Vite dev server
+   - Avoids conflicts with Wrangler's default ports
+   - Added strictPort: true to fail on port conflicts
+   - Can be adjusted if needed, but must avoid port conflicts
+
+## Environment Detection and Asset Path Fixes (2025-03-02)
+- **Context**: Asset paths were failing in Cloudflare Workers environment due to unreliable environment detection
+- **Decision**: Implement more robust environment detection and standardize asset paths
+- **Changes Made**:
+
+1. **Improved Environment Detection**
+   ```js
+   const isDev = typeof process !== 'undefined' && 
+     process.env.NODE_ENV === 'development' && 
+     !process.env.CF_PAGES;
+   ```
+   - Added check for process existence
+   - Added CF_PAGES environment check
+   - Implemented in both ViteUtils.js and HtmlHeader component
+
+2. **Production Path Structure**
+   - Updated chunk paths to use proper Cloudflare Pages structure
+   - JS entries: `/_app/immutable/entries/[name].[hash].js`
+   - JS chunks: `/_app/immutable/chunks/[name].[hash].js`
+   - CSS files: `/_app/immutable/assets/[name].[hash].css`
+
+- **Testing Required**:
+  1. Verify asset loading in development environment
+  2. Test asset paths in Cloudflare Pages preview deployment
+  3. Confirm proper path resolution in production environment
+  4. Check modulepreload functionality in all environments
 
 ## WSL/Windows Filesystem Interaction (2025-03-01)
 [Previous entry preserved...]
@@ -110,3 +184,5 @@
 - Consider creating a utility script to handle cross-platform file operations
 - Document any additional filesystem-related workarounds as needed
 - Test CSS bundling and code splitting in production
+- Verify environment detection in all deployment scenarios
+- Monitor asset loading performance in production

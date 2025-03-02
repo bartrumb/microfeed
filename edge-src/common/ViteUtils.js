@@ -10,7 +10,12 @@ const ENTRY_POINTS = [
   'adminsettings'
 ];
 
-const isDev = process.env.NODE_ENV !== 'production';
+// More reliable environment detection for Cloudflare Workers
+const isDev = typeof process !== 'undefined' && 
+  process.env.NODE_ENV === 'development' && 
+  // Additional check for Cloudflare Pages preview environment
+  !process.env.CF_PAGES;
+
 
 /**
  * Get the appropriate asset path based on environment and asset type
@@ -43,7 +48,7 @@ export function getViteAssetPath(name, type = 'js') {
     if (type === 'js') {
       // Handle JS chunks and entry points
       const isEntry = ENTRY_POINTS.includes(name);
-      return isEntry ? `/${name}.${type}` : `/chunks/${name}.${type}`;
+      return isEntry ? `/${name}.${type}` : `/assets/chunks/${name}.${type}`;
     } else {
       // Handle CSS files
       return `/${finalName}.${type}`;
@@ -53,7 +58,13 @@ export function getViteAssetPath(name, type = 'js') {
   // In production, use Cloudflare Pages structure
   const base = '/_app/immutable';
   const isEntry = ENTRY_POINTS.includes(name);
-  const path = type === 'js' ? (isEntry ? `entry-${name}` : `chunks/${name}`) : `assets/${finalName}`;
+  
+  let path;
+  if (type === 'js') {
+    path = isEntry ? `entries/${name}` : `chunks/${name}`;
+  } else {
+    path = `assets/${finalName}`;
+  }
   return `${base}/${path}.${type}`;
 }
 

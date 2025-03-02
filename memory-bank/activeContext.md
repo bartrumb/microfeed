@@ -51,10 +51,11 @@ Vite and Cloudflare Pages Integration - Asset Path Standardization
    - Update all path references
    - Ensure proper hashing for cache busting
 
-2. **Cloudflare Integration**
-   - Install @cloudflare/workers-vite plugin
-   - Configure Vite for Cloudflare Pages
-   - Update wrangler.toml settings
+2. **Development Environment Setup**
+   - Configure port 3001 to avoid Wrangler conflicts
+   - Enable strictPort for fail-fast behavior
+   - Set up proper host configuration
+   - Test hot module replacement
 
 3. **Path Resolution Standardization**
    - Unify development and production paths
@@ -71,16 +72,21 @@ Vite and Cloudflare Pages Integration - Asset Path Standardization
 ## Implementation Notes
 - Using PowerShell for reliable file operations
 - CSS bundling now uses explicit file paths
+- Development server configured:
+  - Port 3001 to avoid Wrangler conflicts
+  - strictPort enabled for fail-fast behavior
+  - Host configuration for proper networking
 - Asset output structure being reorganized:
-  - JS files in /_app/immutable/
-  - Chunks in /_app/immutable/chunks/
-  - CSS files in /_app/immutable/assets/
+  - JS entries in /_app/immutable/entry-[name].[hash].js
+  - Chunks in /_app/immutable/chunks/[name].[hash].js
+  - CSS files in /_app/immutable/assets/[name].[hash].css
+  - Other assets in /_app/immutable/assets/[name].[hash].[ext]
 - Build manifest disabled in development
 - CSS modules configured with scoped names
 - Cache-Control headers set for static assets
 - Security headers implemented in middleware
 - HTML rendering now properly handles DOCTYPE and formatting
-- Asset paths standardized between dev and prod
+- Asset paths standardized between dev and prod with consistent structure
 - Development environment now matches production paths
 
 ## Open Questions
@@ -94,9 +100,9 @@ Vite and Cloudflare Pages Integration - Asset Path Standardization
 8. Do we need additional fallback strategies for asset loading?
 
 ## Next Actions
-1. Install @cloudflare/workers-vite plugin
-2. Update Vite configuration for Cloudflare
-3. Modify asset path resolution
+1. Configure development server port and settings
+2. Update Vite configuration with new output structure
+3. Implement enhanced asset path resolution
 4. Test local development build
 5. Deploy to preview environment
 6. Verify asset loading in production-like environment
