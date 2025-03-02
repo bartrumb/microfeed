@@ -17,35 +17,42 @@ export default defineConfig({
   },
   build: {
     manifest: true,
-    outDir: 'dist',
+    outDir: 'build',
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
         // Client-side entry points
-        'ClientAdminChannelApp': 'client-src/ClientAdminChannelApp/index.jsx',
-        'ClientAdminCustomCodeEditorApp': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
-        'ClientAdminHomeApp': 'client-src/ClientAdminHomeApp/index.jsx',
-        'ClientAdminItemsApp': 'client-src/ClientAdminItemsApp/index.jsx',
-        'ClientAdminSettingsApp': 'client-src/ClientAdminSettingsApp/index.jsx',
+        'admin_home_js': 'client-src/ClientAdminHomeApp/index.jsx',
+        'admin_custom_code_js': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
+        'admin_channel_js': 'client-src/ClientAdminChannelApp/index.jsx',
+        'admin_items_js': 'client-src/ClientAdminItemsApp/index.jsx',
+        'admin_settings_js': 'client-src/ClientAdminSettingsApp/index.jsx',
         // Edge entry points
-        'EdgeAdminChannelApp': 'edge-src/EdgeAdminChannelApp/index.jsx',
-        'EdgeAdminHomeApp': 'edge-src/EdgeAdminHomeApp/index.jsx',
-        'EdgeAdminItemsApp': 'edge-src/EdgeAdminItemsApp/index.jsx',
-        'EdgeCustomCodeEditorApp': 'edge-src/EdgeCustomCodeEditorApp/index.jsx',
-        'EdgeHomeApp': 'edge-src/EdgeHomeApp/index.jsx',
-        'EdgeItemApp': 'edge-src/EdgeItemApp/index.jsx',
-        'EdgeSettingsApp': 'edge-src/EdgeSettingsApp/index.jsx'
+        'edge_admin_channel_js': 'edge-src/EdgeAdminChannelApp/index.jsx',
+        'edge_admin_home_js': 'edge-src/EdgeAdminHomeApp/index.jsx',
+        'edge_admin_items_js': 'edge-src/EdgeAdminItemsApp/index.jsx',
+        'edge_custom_code_js': 'edge-src/EdgeCustomCodeEditorApp/index.jsx',
+        'edge_home_js': 'edge-src/EdgeHomeApp/index.jsx',
+        'edge_item_js': 'edge-src/EdgeItemApp/index.jsx',
+        'edge_settings_js': 'edge-src/EdgeSettingsApp/index.jsx'
       },
       output: {
         entryFileNames: (chunkInfo) => {
-          return process.env.NODE_ENV === 'development' ? 'assets/[name].js' : 'assets/[name]-[hash].js';
+          return process.env.NODE_ENV === 'development' 
+            ? `${chunkInfo.name}.js` 
+            : `${chunkInfo.name}-[hash].js`;
         },
         chunkFileNames: (chunkInfo) => {
-          return process.env.NODE_ENV === 'development' ? 'assets/chunks/[name].js' : 'assets/chunks/[name]-[hash].js';
+          return process.env.NODE_ENV === 'development' 
+            ? 'chunks/[name].js' 
+            : 'chunks/[name]-[hash].js';
         },
         assetFileNames: (assetInfo) => {
-          return process.env.NODE_ENV === 'development' ? 'assets/[name].[ext]' : 'assets/[name]-[hash].[ext]';
+          const name = assetInfo.name.replace('.css', '_css');
+          return process.env.NODE_ENV === 'development'
+            ? `${name}.[ext]`
+            : `${name}-[hash].[ext]`;
         },
         format: 'es',
         manualChunks: {
@@ -67,7 +74,7 @@ export default defineConfig({
             '@client/components/AdminSwitch'
           ],
           'admin-styles': [
-'client-src/common/admin_styles.css'
+            'client-src/common/admin_styles.css'
           ]
         }
       }
@@ -89,8 +96,7 @@ export default defineConfig({
       'clsx'
     ]
   },
-  envPrefix: ['VITE_', 'CLOUDFLARE_']
-,
+  envPrefix: ['VITE_', 'CLOUDFLARE_'],
   css: {
     modules: {
       localsConvention: 'camelCase',

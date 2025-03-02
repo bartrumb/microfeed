@@ -13,31 +13,29 @@ export default class HtmlHeader extends React.Component {
       canonicalUrl,
       lang = defaultLang,
     } = this.props;
+
     return (
       <head>
-        {/* Add lang attribute to parent HTML element */}
-        <script dangerouslySetInnerHTML={{
-          __html: `document.documentElement.lang = '${lang}';`
-        }} />
-        
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charSet="utf-8"/>
         <title>{title}</title>
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
-        {scripts && scripts.map((js) => (
-          <script key={js} type="module" src={getViteAssetPath(js, 'js')} defer/>
-        ))}
-        {styles && styles.map((css) => (
-          <link 
-            key={css} 
-            rel="stylesheet" 
-            type="text/css" 
-            href={getViteAssetPath(css, 'css')}
-            // Add cache control headers
-            crossOrigin="anonymous"
-          />
-        ))}
+        {scripts && scripts.map((js) => {
+          const path = getViteAssetPath(js, 'js');
+          return <script key={js} type="text/javascript" src={path} defer/>;
+        })}
+        {styles && styles.map((css) => {
+          const path = getViteAssetPath(css, 'css');
+          return (
+            <link 
+              key={css} 
+              rel="stylesheet" 
+              type="text/css" 
+              href={path}
+            />
+          );
+        })}
         {favicon && favicon['apple-touch-icon'] && <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -72,14 +70,6 @@ export default class HtmlHeader extends React.Component {
           href={favicon['mask-icon'].href}
           color={favicon['mask-icon'].color}
         />}
-        
-        {/* Add security headers */}
-        <meta httpEquiv="X-Content-Type-Options" content="nosniff"/>
-        
-        {/* Add CSS compatibility styles */}
-        <style>
-          {`:root { text-size-adjust: 100%; -webkit-text-size-adjust: 100%; } * { -webkit-user-select: none; user-select: none; }`}
-        </style>
       </head>
     );
   }

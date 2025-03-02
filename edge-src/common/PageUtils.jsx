@@ -7,7 +7,7 @@ import OnboardingChecker from "../../common-src/OnboardingUtils";
 import { getViteAssetPath } from "./ViteUtils";
 
 export function renderReactToHtml(Component) {
-  return `<!DOCTYPE html>${ReactDOMServer.renderToString(Component)}`;
+  return ReactDOMServer.renderToString(Component);
 }
 
 class ResponseBuilder {
@@ -244,7 +244,7 @@ export class WebResponseBuilder extends ResponseBuilder {
     if (!component) {
       return ResponseBuilder.Response404();
     }
-    const fromReact = renderReactToHtml(component);
+    const fromReact = `<!DOCTYPE html>${renderReactToHtml(component)}`;
     const newRes = new Response(fromReact, res);
 
     // Extract app name from component for asset loading
