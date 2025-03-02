@@ -66,6 +66,7 @@
 3. **ViteUtils.js Standardization**
    ```js
    // Unified path resolution
+   const base = '/_app/immutable';
    export function getViteAssetPath(name, type = 'js') {
      if (isDev) {
        if (type === 'js') {
@@ -75,9 +76,9 @@
        }
      } else {
        if (type === 'js') {
-         return `/_app/immutable/chunks/${name}.js`;
+         return `${base}/chunks/${name}${isDev ? '' : '.[hash]'}.js`;
        } else {
-         return `/_app/immutable/assets/${name}.css`;
+         return `${base}/assets/${name}${isDev ? '' : '.[hash]'}.css`;
        }
      }
    }
@@ -148,6 +149,14 @@
    - Avoids conflicts with Wrangler's default ports
    - Added strictPort: true to fail on port conflicts
    - Can be adjusted if needed, but must avoid port conflicts
+
+## Asset Path Resolution Fix (2025-03-02)
+- **Context**: Asset paths were failing with 404s due to inconsistent path handling
+- **Changes Made**:
+  1. Updated wrangler.toml to use correct build output directory (dist)
+  2. Standardized asset paths in vite.config.js to use /_app/immutable/ in both dev and prod
+  3. Updated ViteUtils.js to use consistent path structure
+  4. Cleaned up old development directories
 
 ## Environment Detection and Asset Path Fixes (2025-03-02)
 - **Context**: Asset paths were failing in Cloudflare Workers environment due to unreliable environment detection

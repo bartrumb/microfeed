@@ -11,6 +11,7 @@ export default class AdminWholeHtml extends React.Component {
       styles,
       feedContent,
       onboardingResult,
+      manifest,
     } = this.props;
 
     return (
@@ -20,6 +21,7 @@ export default class AdminWholeHtml extends React.Component {
           description={description}
           scripts={scripts}
           styles={styles}
+          manifest={manifest}
           favicon={{
             'apple-touch-icon': '/assets/favicon/apple-touch-icon.png',
             '32x32': '/assets/favicon/favicon-32x32.png',

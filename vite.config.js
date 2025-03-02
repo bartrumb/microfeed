@@ -17,7 +17,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 // Ensure directories exist in development
 if (isDev) {
-  const dirs = ['public/assets/client/chunks'];
+  const dirs = ['public/_app/immutable/chunks', 'public/_app/immutable/assets'];
   dirs.forEach(dir => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   });
@@ -38,7 +38,9 @@ export default defineConfig({
   },
   build: {
     manifest: !isDev, // Only enable manifest in production
-    outDir: 'dist/_app',
+    outDir: 'dist',
+    emptyOutDir: true,
+    ssrManifest: true,
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
@@ -50,18 +52,18 @@ export default defineConfig({
         // In development, use simpler paths
         entryFileNames: (chunkInfo) => {
           const name = chunkInfo.name.replace(/^edge_/, '');
-          return isDev ? `assets/client/${name}.js` : `immutable/entry-${name}.[hash].js`;
+          return `_app/immutable/entry-${name}${isDev ? '' : '.[hash]'}.js`;
         },
         chunkFileNames: (chunkInfo) => {
           const name = chunkInfo.name;
-          return isDev ? `assets/client/chunks/${name}.js` : `immutable/chunks/${name}.[hash].js`;
+          return `_app/immutable/chunks/${name}${isDev ? '' : '.[hash]'}.js`;
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return isDev ? `assets/${name}.css` : `immutable/assets/${name}.[hash].css`;
+            return `_app/immutable/assets/${name}${isDev ? '' : '.[hash]'}.css`;
           }
-          return isDev ? `assets/${assetInfo.name}` : `immutable/assets/${assetInfo.name}`;
+          return `_app/immutable/assets/${assetInfo.name}`;
         },
         format: 'esm',
         manualChunks: {
@@ -90,7 +92,7 @@ export default defineConfig({
             '@common/Constants'
           ]
         },
-        intro: isDev ? '' : `if(!('modulepreload' in document.createElement('link'))){document.head.insertAdjacentHTML('beforeend','<script src="/_app/immutable/chunks/modulepreload-polyfill.[hash].js"></script>');}`
+        intro: isDev ? '' : `if(!('modulepreload' in document.createElement('link'))){document.head.insertAdjacentHTML('beforeend','<script src="/_app/immutable/chunks/modulepreload-polyfill.js"></script>');}`
       }
     }
   },

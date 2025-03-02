@@ -44,6 +44,7 @@ export default class HtmlHeader extends React.Component {
       styles,
       favicon,
       canonicalUrl,
+      manifest,
       lang = defaultLang,
     } = this.props;
 
@@ -64,7 +65,7 @@ export default class HtmlHeader extends React.Component {
             <link 
               key={css} 
               rel="stylesheet" 
-              type="text/css" 
+              type="text/css"
               href={getViteAssetPath(name, 'css')}
               crossOrigin="anonymous"
             />

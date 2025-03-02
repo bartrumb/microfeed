@@ -16,6 +16,8 @@ const isDev = typeof process !== 'undefined' &&
   // Additional check for Cloudflare Pages preview environment
   !process.env.CF_PAGES;
 
+// Load manifest in production
+let manifest = null;
 
 /**
  * Get the appropriate asset path based on environment and asset type
@@ -43,30 +45,62 @@ export function getViteAssetPath(name, type = 'js') {
   const finalName = type === 'css' ? 
     `${buildName}_css` : buildName;
 
+  // Base path is the same for both dev and prod
+  const base = '/_app/immutable';
+  const isEntry = ENTRY_POINTS.includes(name);
+
   // In development, use predictable paths
   if (isDev) {
     if (type === 'js') {
-      // Handle JS chunks and entry points
-      const isEntry = ENTRY_POINTS.includes(name);
-      return isEntry ? `/${name}.${type}` : `/assets/chunks/${name}.${type}`;
+      return isEntry 
+        ? `${base}/entry-${name}.js`
+        : `${base}/chunks/${name}.js`;
     } else {
-      // Handle CSS files
-      return `/${finalName}.${type}`;
+      return `${base}/assets/${finalName}.css`;
     }
   }
 
-  // In production, use Cloudflare Pages structure
-  const base = '/_app/immutable';
-  const isEntry = ENTRY_POINTS.includes(name);
-  
-  let path;
-  if (type === 'js') {
-    path = isEntry ? `entries/${name}` : `chunks/${name}`;
-  } else {
-    path = `assets/${finalName}`;
+  // In production, try to load and use the manifest
+  try {
+    if (!manifest) {
+      manifest = require('../../dist/.vite/manifest.json');
+    }
+
+    // Find the correct entry in the manifest
+    let manifestKey;
+    if (isEntry) {
+      // For entry points, look up by source file
+      manifestKey = `client-src/Client${name.charAt(0).toUpperCase() + name.slice(1)}App/index.jsx`;
+    } else {
+      // For chunks, look up by name
+      manifestKey = Object.keys(manifest).find(key => {
+        const entry = manifest[key];
+        return entry.name === name && 
+               entry.file && 
+               entry.file.includes('chunks') &&
+               !entry.isEntry;
+      });
+    }
+
+    if (manifestKey && manifest[manifestKey]) {
+      const entry = manifest[manifestKey];
+      if (type === 'css' && entry.css && entry.css.length > 0) {
+        return `/${entry.css[0]}`;
+      }
+      if (entry.file) {
+        return `/${entry.file}`;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to load or parse manifest:', e);
   }
-  return `${base}/${path}.${type}`;
+
+  // Fallback to predictable paths if manifest lookup fails
+  return `${base}/${
+    type === 'js' ? (isEntry ? `entry-${name}` : `chunks/${name}`) : 
+    `assets/${finalName}`
+  }.${type}`;
 }
 
 // Export for testing
-export const __testing = { getViteAssetPath };
+export const __testing = { getViteAssetPath, manifest };

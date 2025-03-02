@@ -4,9 +4,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build:dev": "vite build --mode development --watch",
+    "build": "vite build --mode development",
     "dev:worker": "wrangler pages dev dist --compatibility-date=2024-02-28 --d1 FEED_DB --ip 0.0.0.0 --port 8788",
-    "build": "vite build",
     "preview": "vite preview",
     "deploy:preview": "node ops/handle_vars.js preview && wrangler pages deploy dist --project-name shop-dawg-microfeed --branch preview",
     "deploy:prod": "node ops/handle_vars.js production && wrangler pages deploy dist --project-name shop-dawg-microfeed --branch main",
