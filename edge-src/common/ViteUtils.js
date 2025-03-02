@@ -33,8 +33,8 @@ export function getViteAssetPath(name, type = 'js') {
     throw new Error('Asset type must be "js" or "css"');
   }
 
-  // Use same paths for both dev and prod
-  const path = `${PATHS.production[type]}/${name}.${type}`;
+  // Use environment-specific paths
+  const path = `${PATHS[isDev ? 'development' : 'production'][type]}/${name}.${type}`;
   console.log('Asset path:', {
     name,
     type,

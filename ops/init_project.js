@@ -1,6 +1,6 @@
-const https = require('https');
+import https from 'https';
 
-const {VarsReader} = require('./lib/utils');
+import { VarsReader } from './lib/utils.js';
 
 class InitProject {
   constructor() {

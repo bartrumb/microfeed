@@ -3,6 +3,27 @@ import FeedDb, {getFetchItemsParams} from "../../edge-src/models/FeedDb";
 import OnboardingChecker from "../../common-src/OnboardingUtils";
 import {STATUSES} from "../../common-src/Constants";
 
+async function addSecurityHeaders({request, next}) {
+  const response = await next();
+  const newResponse = new Response(response.body, response);
+  
+  // Add security headers
+  newResponse.headers.set('X-Content-Type-Options', 'nosniff');
+  
+  // Remove unneeded headers
+  newResponse.headers.delete('content-security-policy');
+  
+  // Add cache control for static assets
+  const url = new URL(request.url);
+  if (url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|ico|svg)$/)) {
+    newResponse.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+  } else {
+    newResponse.headers.set('Cache-Control', 'no-cache, must-revalidate');
+  }
+  
+  return newResponse;
+}
+
 async function fetchFeed({request, next, env, data}) {
   const urlObj = new URL(request.url);
 
@@ -40,4 +61,4 @@ async function fetchFeed({request, next, env, data}) {
   return next();
 }
 
-export const onRequest = [fetchFeed];
+export const onRequest = [addSecurityHeaders, fetchFeed];
