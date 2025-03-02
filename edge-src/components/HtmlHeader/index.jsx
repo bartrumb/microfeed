@@ -1,7 +1,35 @@
 import React from 'react';
-import { getViteAssetPath } from '../../common/ViteUtils';
+const isDev = process.env.NODE_ENV === 'development';
+
+// Critical chunks that should be preloaded
+const CRITICAL_CHUNKS = [
+  'react-vendor',
+  'utils',
+  'ui-components'
+];
+
+// Known entry points from vite.config.js
+const ENTRY_POINTS = ['adminhome',
+ 'admincustomcode',
+ 'adminchannel',
+ 'adminitems',
+ 'adminsettings'];
 
 export default class HtmlHeader extends React.Component {
+  renderPreloadLinks() {
+    if (isDev) {
+      return null; // Skip preload in development
+    }
+    return CRITICAL_CHUNKS.map(chunk => (
+      <link 
+        key={`preload-${chunk}`}
+        rel="modulepreload"
+        href={`/assets/client/chunks/${chunk}.js`}
+        crossOrigin="anonymous"
+      />
+    ));
+  }
+
   render() {
     const defaultLang = 'en'; // Default to English
     const {
@@ -22,20 +50,28 @@ export default class HtmlHeader extends React.Component {
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
         {scripts && scripts.map((js) => {
-          const path = getViteAssetPath(js, 'js');
-          return <script key={js} type="text/javascript" src={path} defer/>;
+          // In development, let Vite handle the paths
+          const path = isDev
+            ? `/${js}.js`
+            : ENTRY_POINTS.includes(js)
+              ? `/assets/client/${js}.js`
+              : `/assets/client/chunks/${js}.js`;
+          return <script key={js} type="module" src={path} crossOrigin="anonymous"/>;
         })}
         {styles && styles.map((css) => {
-          const path = getViteAssetPath(css, 'css');
+          // Remove any leading slashes and .css extension
+          const name = css.replace(/^\//, '').replace(/\.css$/, '');
           return (
             <link 
               key={css} 
               rel="stylesheet" 
               type="text/css" 
-              href={path}
+              href={`/assets/${name}.css`}
+              crossOrigin="anonymous"
             />
           );
         })}
+        {this.renderPreloadLinks()}
         {favicon && favicon['apple-touch-icon'] && <link
           rel="apple-touch-icon"
           sizes="180x180"

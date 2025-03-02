@@ -1,6 +1,17 @@
 // During development, assets are served directly by Vite
 // In production, we need to use the manifest to get the correct hashed filenames
 
+// Known entry points from vite.config.js
+const ENTRY_POINTS = [
+  'adminhome',
+  'admincustomcode',
+  'adminchannel',
+  'adminitems',
+  'adminsettings'
+];
+
+const isDev = process.env.NODE_ENV !== 'production';
+
 /**
  * Get the appropriate asset path based on environment and asset type
  * @param {string} name - Asset name without extension
@@ -19,22 +30,28 @@ export function getViteAssetPath(name, type = 'js') {
     throw new Error('Asset type must be "js" or "css"');
   }
 
-  // Detect development environment using Miniflare
-  const isDev = typeof globalThis !== 'undefined' && globalThis.MINIFLARE !== undefined;
-
   // Convert name to build format
   const buildName = name.toLowerCase()
-    .replace('client', '')
-    .replace('app', '');
+    .replace('client', 'index');
+
+  // Add _css suffix for CSS files
+  const finalName = type === 'css' ? 
+    `${buildName}_css` : buildName;
 
   // In development, use predictable paths
   if (isDev) {
-    return `/${buildName}.${type}`;
+    if (type === 'js') {
+      // Handle JS chunks and entry points
+      const isEntry = ENTRY_POINTS.includes(name);
+      return isEntry ? `/${name}.${type}` : `/chunks/${name}.${type}`;
+    } else {
+      // Handle CSS files
+      return `/${finalName}.${type}`;
+    }
   }
 
-  // In production, use the actual hashed filenames from the build output
-  const hash = '48e9e372204a37a79e94';
-  return `/${buildName}-${hash}.${type}`;
+  // In production, use a predictable hash for now
+  return `/assets/${type === 'js' ? 'client/' : ''}${finalName}.${type}`;
 }
 
 // Export for testing

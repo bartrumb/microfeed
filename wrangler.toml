@@ -2,7 +2,6 @@
 compatibility_date = "2024-02-28"
 pages_build_output_dir = "dist"
 main = "functions/index.jsx"
-assets_dir = "dist"
 
 [vars]
 CLOUDFLARE_ACCOUNT_ID = "f03eb6df836cbf249564469ff36fab71"
