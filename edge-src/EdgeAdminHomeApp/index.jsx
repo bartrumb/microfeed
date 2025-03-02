@@ -13,7 +13,7 @@ export default class EdgeAdminHomeApp extends React.Component {
       <AdminWholeHtml
         title={`${NAV_ITEMS_DICT[NAV_ITEMS.ADMIN_HOME].name} | ${OUR_BRAND.domain}`}
         description=""
-        scripts={['ClientAdminHomeApp']}
+        scripts={['adminhome']}
         styles={['index']}
         feedContent={feedContent}
         onboardingResult={onboardingResult}

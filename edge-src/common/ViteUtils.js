@@ -24,17 +24,17 @@ export function getViteAssetPath(name, type = 'js') {
 
   // Convert name to build format
   const buildName = name.toLowerCase()
-    .replace('clientadmin', 'admin')
-    .replace('app', '_js');
+    .replace('client', '')
+    .replace('app', '');
 
   // In development, use predictable paths
   if (isDev) {
-    return `/build/${buildName}.${type}`;
+    return `/${buildName}.${type}`;
   }
 
   // In production, use the actual hashed filenames from the build output
-  const hash = type === 'js' ? '48e9e372204a37a79e94' : '48e9e372204a37a79e94';
-  return `/build/${buildName}-${hash}.${type}`;
+  const hash = '48e9e372204a37a79e94';
+  return `/${buildName}-${hash}.${type}`;
 }
 
 // Export for testing

@@ -8,7 +8,7 @@ export default defineConfig({
       include: '**/*.{jsx,js}',
     })
   ],
-  base: '/',
+  base: '',
   publicDir: 'public',
   server: {
     port: 3001,  // Use a different port to avoid conflict with Wrangler
@@ -17,17 +17,17 @@ export default defineConfig({
   },
   build: {
     manifest: true,
-    outDir: 'build',
+    outDir: 'dist',
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
         // Client-side entry points
-        'admin_home_js': 'client-src/ClientAdminHomeApp/index.jsx',
-        'admin_custom_code_js': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
-        'admin_channel_js': 'client-src/ClientAdminChannelApp/index.jsx',
-        'admin_items_js': 'client-src/ClientAdminItemsApp/index.jsx',
-        'admin_settings_js': 'client-src/ClientAdminSettingsApp/index.jsx',
+        'adminhome': 'client-src/ClientAdminHomeApp/index.jsx',
+        'admincustomcode': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
+        'adminchannel': 'client-src/ClientAdminChannelApp/index.jsx',
+        'adminitems': 'client-src/ClientAdminItemsApp/index.jsx',
+        'adminsettings': 'client-src/ClientAdminSettingsApp/index.jsx',
         // Edge entry points
         'edge_admin_channel_js': 'edge-src/EdgeAdminChannelApp/index.jsx',
         'edge_admin_home_js': 'edge-src/EdgeAdminHomeApp/index.jsx',
@@ -41,18 +41,18 @@ export default defineConfig({
         entryFileNames: (chunkInfo) => {
           return process.env.NODE_ENV === 'development' 
             ? `${chunkInfo.name}.js` 
-            : `${chunkInfo.name}-[hash].js`;
+            : `${chunkInfo.name}-48e9e372204a37a79e94.js`;
         },
         chunkFileNames: (chunkInfo) => {
           return process.env.NODE_ENV === 'development' 
             ? 'chunks/[name].js' 
-            : 'chunks/[name]-[hash].js';
+            : 'chunks/[name]-48e9e372204a37a79e94.js';
         },
         assetFileNames: (assetInfo) => {
           const name = assetInfo.name.replace('.css', '_css');
           return process.env.NODE_ENV === 'development'
             ? `${name}.[ext]`
-            : `${name}-[hash].[ext]`;
+            : `${name}-48e9e372204a37a79e94.[ext]`;
         },
         format: 'es',
         manualChunks: {
