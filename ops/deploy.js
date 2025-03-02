@@ -6,6 +6,10 @@ async function deploy() {
     console.log('Building project...');
     execSync('pnpm build', { stdio: 'inherit' });
     
+    // Process OpenAPI spec
+    console.log('Processing OpenAPI spec...');
+    execSync('node ops/process_openapi.js', { stdio: 'inherit' });
+    
     // Get environment from command line args
     const env = process.argv[2] || 'preview';
     
