@@ -6,18 +6,13 @@ async function deploy() {
     console.log('Building project...');
     execSync('pnpm build', { stdio: 'inherit' });
     
-    // Process OpenAPI spec
-    console.log('Processing OpenAPI spec...');
-    execSync('node ops/process_openapi.js', { stdio: 'inherit' });
-    
     // Get environment from command line args
     const env = process.argv[2] || 'preview';
     
     // Run deployment
     console.log(`Deploying to ${env}...`);
-    const branch = env === 'production' ? 'main' : 'preview';
     execSync(
-      `node ops/handle_vars.js ${env} && wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${branch} --commit-dirty=true`,
+      `wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle`,
       { stdio: 'inherit' }
     );
     
