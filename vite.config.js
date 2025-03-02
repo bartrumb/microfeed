@@ -43,6 +43,8 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'utils': [
+            'slugify',
+            'html-to-text',
             '@client/common/BrowserUtils',
             '@client/common/ClientUrlUtils',
             '@client/common/ToastUtils',

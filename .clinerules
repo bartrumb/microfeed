@@ -9,10 +9,9 @@
 
 ## CLI Standards
 
-1. Use Windows PowerShell v7 cmdlets
-2. Never use bash commands
+1. Use BASH commands with WSL and when making script for windows use Windows PowerShell v7 cmdlets
+2. Always use bash commands
 3. Always run pnpm commands from app/dirname, not project root
-4. Use Remove-Item instead of rimraf
 5. Never run recursive commands on the root mcp-servers directory:
    ```powershell
    # ❌ AVOID - Will fill context and slow progress
@@ -99,5 +98,4 @@ Always use fetch MCP server to reference cloudflare docs below when working the 
 When working with cloudflare workers always read this prompt first: https://developers.cloudflare.com/workers/prompt.txt
 Wrangler configuration best practices can be foud here: https://raw.githubusercontent.com/cloudflare/cloudflare-docs/refs/heads/production/src/content/docs/workers/wrangler/configuration.mdx
 Wrangler commands here: https://raw.githubusercontent.com/cloudflare/cloudflare-docs/refs/heads/production/src/content/docs/workers/wrangler/commands.mdx 
-
 Examples for all cloudflare products and blogs at: https://developers.cloudflare.com/llms.txt
