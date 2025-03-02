@@ -60,13 +60,12 @@ export default class HtmlHeader extends React.Component {
           return <script key={js} type="module" src={path} crossOrigin="anonymous"/>;
         })}
         {styles && styles.map((css) => {
-          const name = css.replace(/^\//, '').replace(/\.css$/, ''); // Clean the CSS filename
-          return (
+          return css && (
             <link 
               key={css} 
               rel="stylesheet" 
               type="text/css"
-              href={getViteAssetPath(name, 'css')}
+              href={getViteAssetPath(css.replace(/^\//, '').replace(/\.css$/, ''), 'css')}
               crossOrigin="anonymous"
             />
           );

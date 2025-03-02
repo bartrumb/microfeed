@@ -28,6 +28,40 @@ export default defineConfig({
     react({
       include: '**/*.{jsx,js}',
     })
+,
+    // Plugin to generate static manifest module
+    {
+      name: 'generate-manifest-module',
+      writeBundle: {
+        sequential: true,
+        order: 'post',
+        handler: async (options, bundle) => {
+          // Only generate in production
+          if (isDev) return;
+
+          // Create manifest data structure
+          const manifestData = {};
+          for (const [fileName, chunk] of Object.entries(bundle)) {
+            if (chunk.type === 'chunk' || chunk.type === 'asset') {
+              manifestData[fileName] = {
+                file: fileName,
+                css: chunk.viteMetadata?.importedCss || [],
+                assets: chunk.viteMetadata?.importedAssets || [],
+                isEntry: chunk.isEntry || false,
+                name: chunk.name || ''
+              };
+            }
+          }
+
+          // Write manifest module
+          const manifestModulePath = path.resolve(__dirname, 'dist/_app/manifest-module.js');
+          const manifestContent = `// Generated manifest data
+export const manifestData = ${JSON.stringify(manifestData, null, 2)};
+`;
+          fs.writeFileSync(manifestModulePath, manifestContent);
+        }
+      }
+    }
   ],
   base: '',
   publicDir: 'public',
@@ -52,17 +86,18 @@ export default defineConfig({
         // In development, use simpler paths
         entryFileNames: (chunkInfo) => {
           const name = chunkInfo.name.replace(/^edge_/, '');
-          return `_app/immutable/entry-${name}${isDev ? '' : '.[hash]'}.js`;
+          return `_app/immutable/entry-${name}.js`;
         },
         chunkFileNames: (chunkInfo) => {
           const name = chunkInfo.name;
-          return `_app/immutable/chunks/${name}${isDev ? '' : '.[hash]'}.js`;
+          return `_app/immutable/chunks/${name}.js`;
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `_app/immutable/assets/${name}${isDev ? '' : '.[hash]'}.css`;
+            return `_app/immutable/assets/${name}.css`;
           }
+ 
           return `_app/immutable/assets/${assetInfo.name}`;
         },
         format: 'esm',
