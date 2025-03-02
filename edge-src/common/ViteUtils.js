@@ -63,7 +63,7 @@ export function getViteAssetPath(name, type = 'js') {
   // In production, try to load and use the manifest
   try {
     if (!manifest) {
-      manifest = require('../../dist/.vite/manifest.json');
+      manifest = require('../../dist/_app/manifest.json');
     }
 
     // Find the correct entry in the manifest
