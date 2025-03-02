@@ -12,6 +12,25 @@ const entryPoints = {
   'adminsettings': 'client-src/ClientAdminSettingsApp/index.jsx'
 };
 
+// Add functions entry points
+const functionsDir = './functions';
+if (fs.existsSync(functionsDir)) {
+  const addFunctionEntries = (dir, base = '') => {
+    const entries = fs.readdirSync(dir);
+    entries.forEach(entry => {
+      const fullPath = path.join(dir, entry);
+      const relativePath = path.join(base, entry);
+      if (fs.statSync(fullPath).isDirectory()) {
+        addFunctionEntries(fullPath, relativePath);
+      } else if (entry.endsWith('.jsx') || entry.endsWith('.js')) {
+        const name = relativePath.replace(/\.[^/.]+$/, '').replace(/\\/g, '/');
+        entryPoints[`functions/${name}`] = path.relative('.', fullPath);
+      }
+    });
+  };
+  addFunctionEntries(functionsDir);
+}
+
 // Development-specific configuration
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -22,11 +41,6 @@ if (isDev) {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   });
 }
-
-// Copy functions directory to dist
-const copyFunctionsDir = () => {
-  fs.cpSync('./functions', './dist/functions', { recursive: true });
-};
 
 export default defineConfig({
   plugins: [
@@ -63,9 +77,6 @@ export default defineConfig({
 export const manifestData = ${JSON.stringify(manifestData, null, 2)};
 `;
           fs.writeFileSync(manifestModulePath, manifestContent);
-
-          // Copy functions directory after build
-          copyFunctionsDir();
         }
       }
     }
@@ -73,25 +84,24 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
   base: '',
   publicDir: 'public',
   server: {
-    port: 3001,  // Use a different port to avoid conflict with Wrangler
+    port: 3001,
     host: true,
     strictPort: true
   },
   build: {
-    manifest: !isDev, // Only enable manifest in production
+    manifest: !isDev,
     outDir: 'dist',
     emptyOutDir: true,
     ssrManifest: true,
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
-      input: {
-        ...entryPoints
-        // Entry points are handled by manualChunks
-      },
+      input: entryPoints,
       output: {
-        // In development, use simpler paths
         entryFileNames: (chunkInfo) => {
+          if (chunkInfo.name.startsWith('functions/')) {
+            return `${chunkInfo.name}.js`;
+          }
           const name = chunkInfo.name.replace(/^edge_/, '');
           return `_app/immutable/entry-${name}.js`;
         },
@@ -104,14 +114,12 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
             const name = assetInfo.name.replace('.css', '');
             return `_app/immutable/assets/${name}.css`;
           }
- 
           return `_app/immutable/assets/${assetInfo.name}`;
         },
         format: 'esm',
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'utils': [
-            // Common utilities
             'slugify',
             'html-to-text',
             '@client/common/BrowserUtils',
@@ -121,7 +129,6 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
             '@common/TimeUtils'
           ],
           'ui-components': [
-            // UI components
             '@client/components/AdminCodeEditor',
             '@client/components/AdminDialog',
             '@client/components/AdminInput',
@@ -129,7 +136,6 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
             '@client/components/AdminSwitch'
           ],
           'admin-styles': [
-            // Admin styles
             'client-src/common/admin_styles.css'
           ],
           'constants': [

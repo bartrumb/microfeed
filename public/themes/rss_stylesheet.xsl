@@ -12,8 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <style type="text/css">
           body {
-          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto
-          Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
           font-size: 12px;
           color: rgba(0, 0, 0, 0.80);
           background: rgba(0, 0, 0, 0.03);

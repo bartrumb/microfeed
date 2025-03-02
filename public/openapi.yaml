@@ -1,13 +1,6 @@
-import {MICROFEED_VERSION} from "../../../common-src/Version";
-
-export default async function handler(request, env, ctx) {
-  // Get the base URL from the request
-  const baseUrl = new URL(request.url).origin;
-
-  // Define the OpenAPI spec inline
-  const yamlContent = `openapi: "3.1.0"
+openapi: "3.1.0"
 info:
-  version: "${MICROFEED_VERSION}"
+  version: "{{microfeedVersion}}"
   title: "microfeed api"
   description: |
     Allows to use microfeed as a headless cms or integrate with external services like Zapier.
@@ -18,7 +11,7 @@ info:
     url: "https://www.microfeed.org"
     email: "support@microfeed.org"
 servers:
-  - url: "${baseUrl}"
+  - url: "{{baseUrl}}"
     description: API Production Server
 tags:
   - name: Feed API
@@ -26,14 +19,14 @@ tags:
       Read-only endpoints to fetch the jsonfeed and individual items.
       Anyone can use Feed API endpoints without authentication.
       In other words, these endpoints are public.
-      You can disable Feed API endpoints at ${baseUrl}/admin/settings/ -
+      You can disable Feed API endpoints at {{baseUrl}}/admin/settings/ -
       toggle "Visible" of "JSON" in the "Subscribe methods" section.
   - name: Admin API
     description: |
       Endpoints to do CRUD operations on the microfeed instance, e.g.,
       create a new item, update an existing item, delete an item, upload media files...
       You need to use your microfeed instance's API key to access these endpoints.
-      You can find your microfeed instance's API key at the API section of ${baseUrl}/admin/settings/.
+      You can find your microfeed instance's API key at the API section of {{baseUrl}}/admin/settings/.
 paths:
   /json:
     get:
@@ -87,11 +80,4 @@ paths:
             text/plain:
               schema:
                 type: string
-                description: "Not Found"`;
-
-  return new Response(yamlContent, {
-    headers: {
-      'Content-Type': 'application/yaml',
-    },
-  });
-}
+                description: "Not Found"
