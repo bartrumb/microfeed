@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - main
-      - preview
   pull_request:
     branches:
       - main
-      - preview
 
 jobs:
   deploy:
@@ -53,37 +51,62 @@ jobs:
 
       - name: Load environment variables
         run: |
-          if ($env:GITHUB_REF -eq 'refs/heads/preview') {
-            Get-Content .env.shared | Select-String -Pattern '^\[preview\]' -Context 0,10 | ForEach-Object { $_.Context.PostContext } | ForEach-Object { $_ -replace '^(\w+)=(.*)$', '$1=$2' } | Out-File -FilePath $env:GITHUB_ENV -Append
-          } elseif ($env:GITHUB_REF -eq 'refs/heads/main') {
-            Get-Content .env.shared | Select-String -Pattern '^\[production\]' -Context 0,10 | ForEach-Object { $_.Context.PostContext } | ForEach-Object { $_ -replace '^(\w+)=(.*)$', '$1=$2' } | Out-File -FilePath $env:GITHUB_ENV -Append
-          }
           Get-Content .env.shared | Select-String -Pattern '^\[shared\]' -Context 0,10 | ForEach-Object { $_.Context.PostContext } | ForEach-Object { $_ -replace '^(\w+)=(.*)$', '$1=$2' } | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Build (Preview)
-        if: github.ref == 'refs/heads/preview'
+      # Preview deployment (automatic on main)
+      - name: Build Preview
+        if: github.ref == 'refs/heads/main'
         run: pnpm build
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: ${{ secrets.PREVIEW_D1_DATABASE_ID }}
 
       - name: Deploy to Preview
-        if: github.ref == 'refs/heads/preview'
+        if: github.ref == 'refs/heads/main'
         run: pnpm deploy:preview
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: ${{ secrets.PREVIEW_D1_DATABASE_ID }}
 
-      - name: Build (Production)
-        if: github.ref == 'refs/heads/main'
+  # Production deployment (requires approval)
+  deploy-production:
+    needs: deploy
+    runs-on: windows-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://shop-dawg-microfeed.pages.dev
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Production
         run: pnpm build
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: ${{ secrets.PRODUCTION_D1_DATABASE_ID }}
 
       - name: Deploy to Production
-        if: github.ref == 'refs/heads/main'
         run: pnpm deploy:prod
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: ${{ secrets.PRODUCTION_D1_DATABASE_ID }}
