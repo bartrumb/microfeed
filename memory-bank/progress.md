@@ -1,28 +1,40 @@
-
 # Progress Tracking
 
 ## Upcoming Tasks - Vite and Cloudflare Integration (2025-03-02)
 
-- 🔄 Vite Configuration Updates
-  - Update base configuration:
-    - Set port to 3001 with strictPort
-    - Configure proper host settings
-    - Set up CSS code splitting
-  - Configure rollupOptions:
-    - Set up proper entry points for admin apps
-    - Configure dev vs prod output paths
-    - Implement proper CSS handling
-    - Set up asset file naming strategy
-
-- 🔄 Development Environment Setup
-  - Configure port 3001 for Vite dev server
-  - Set up proper environment detection
-  - Test hot module replacement
-  - Verify CSS changes reflect immediately
-  - Ensure no port conflicts with Wrangler
+- 🔄 Test Production Build
+  - Deploy to preview environment
+  - Verify asset loading and caching
+  - Test CSS application and scoping
+  - Validate bundling optimization
+  - Monitor environment detection
   - Test modulepreload functionality
 
+- 🔄 Accessibility Improvements
+  - Update remaining form components:
+    - AdminSelect
+    - AdminTextarea
+    - AdminRadio
+    - AdminSwitch
+  - Add accessibility improvements to link components
+  - Implement image accessibility across the application
+  - Add automated accessibility testing
+
 ## Completed Tasks
+
+### Cloudflare Workers Asset Loading Fix (2025-03-02)
+- ✅ Fixed dynamic require error in Cloudflare Workers:
+  - Replaced dynamic manifest.json require with static path generation
+  - Implemented predictable asset path structure
+  - Fixed development vs production path handling
+- ✅ Improved chunk configuration:
+  - Created dedicated constants chunk
+  - Fixed admin-styles CSS bundling
+  - Properly mapped dependencies to chunks
+- ✅ Enhanced HtmlHeader component:
+  - Added explicit admin-styles CSS loading
+  - Fixed CSS file path handling
+  - Improved resource preloading
 
 ### Environment Detection and Asset Path Fixes (2025-03-02)
 - ✅ Improved environment detection reliability:
@@ -120,36 +132,31 @@
   - Validated manifest generation
 
 ## Next Steps
-1. Begin Vite and Cloudflare integration:
-   - Install required dependencies
-   - Update configurations
-   - Test local development
-   - Verify preview deployment
-2. Test the production build in preview environment:
+1. Test the production build in preview environment:
    - Deploy to preview environment
    - Verify asset loading and caching
    - Test CSS application and scoping
    - Validate bundling optimization
-3. Test Cloudflare integration:
+2. Test Cloudflare integration:
    - Verify Pages deployment
    - Check R2 bucket access
    - Test custom domain configuration
    - Validate asset caching
-4. Update remaining form components with accessibility enhancements:
+3. Update remaining form components with accessibility enhancements:
    - AdminSelect
    - AdminTextarea
    - AdminRadio
    - AdminSwitch
-5. Add accessibility improvements to link components
-6. Implement image accessibility across the application
-7. Add automated accessibility testing
-8. Review and enhance error boundaries
-9. Add monitoring for initialization failures
-10. Consider adding data migration support for future schema changes
-11. Add automated tests for validation logic
-12. Test database operations in each environment
-13. Create utility script for cross-platform file operations
-14. Document filesystem interaction best practices
-15. Monitor environment detection in production
-16. Test asset loading across all environments
-17. Verify modulepreload functionality in production
+4. Add accessibility improvements to link components
+5. Implement image accessibility across the application
+6. Add automated accessibility testing
+7. Review and enhance error boundaries
+8. Add monitoring for initialization failures
+9. Consider adding data migration support for future schema changes
+10. Add automated tests for validation logic
+11. Test database operations in each environment
+12. Create utility script for cross-platform file operations
+13. Document filesystem interaction best practices
+14. Monitor environment detection in production
+15. Test asset loading across all environments
+16. Verify modulepreload functionality in production
