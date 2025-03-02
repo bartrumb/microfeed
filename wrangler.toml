@@ -1,28 +1,28 @@
 # Base configuration
+name = "shop-dawg-microfeed"
 compatibility_date = "2024-02-28"
 pages_build_output_dir = "dist"
-main = "functions/index.jsx"
 
-[vars]
+# Environment-specific configurations
+[env.preview]
+[env.preview.vars]
 CLOUDFLARE_ACCOUNT_ID = "f03eb6df836cbf249564469ff36fab71"
 CLOUDFLARE_PROJECT_NAME = "shop-dawg-microfeed"
 CLOUDFLARE_PAGES_URL = "shop-dawg-microfeed.pages.dev"
 CLOUDFLARE_R2_BUCKET = "shop-dawg-microfeed"
 
-# Environment-specific configurations
-[env.development]
-[[env.development.d1_databases]]
-binding = "FEED_DB"
-database_name = "shop-dawg-microfeed_feed_db_development"
-database_id = "dev-db-7cde2ea0-bd5e-4156-9c12-d953593c504e"
-
-[env.preview]
 [[env.preview.d1_databases]]
 binding = "FEED_DB"
 database_name = "shop-dawg-microfeed_feed_db_preview"
 database_id = "preview-db-8def3fb1-ce6f-4267-9d13-e064594c615f"
 
 [env.production]
+[env.production.vars]
+CLOUDFLARE_ACCOUNT_ID = "f03eb6df836cbf249564469ff36fab71"
+CLOUDFLARE_PROJECT_NAME = "shop-dawg-microfeed"
+CLOUDFLARE_PAGES_URL = "shop-dawg-microfeed.pages.dev"
+CLOUDFLARE_R2_BUCKET = "shop-dawg-microfeed"
+
 [[env.production.d1_databases]]
 binding = "FEED_DB"
 database_name = "shop-dawg-microfeed_feed_db_production"

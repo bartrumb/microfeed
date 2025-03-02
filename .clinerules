@@ -10,7 +10,6 @@
 
 Available pnpm commands:
 - `pnpm dev` - Start Vite development server
-- `pnpm build:dev` - Build project in development mode
 - `pnpm dev:worker` - Build and start Cloudflare Pages development server with D1 database
 - `pnpm build` - Build project for production
 - `pnpm preview` - Preview production build locally

@@ -23,12 +23,16 @@ if (isDev) {
   });
 }
 
+// Copy functions directory to dist
+const copyFunctionsDir = () => {
+  fs.cpSync('./functions', './dist/functions', { recursive: true });
+};
+
 export default defineConfig({
   plugins: [
     react({
       include: '**/*.{jsx,js}',
-    })
-,
+    }),
     // Plugin to generate static manifest module
     {
       name: 'generate-manifest-module',
@@ -59,6 +63,9 @@ export default defineConfig({
 export const manifestData = ${JSON.stringify(manifestData, null, 2)};
 `;
           fs.writeFileSync(manifestModulePath, manifestContent);
+
+          // Copy functions directory after build
+          copyFunctionsDir();
         }
       }
     }
@@ -104,7 +111,7 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'utils': [
- // Common utilities
+            // Common utilities
             'slugify',
             'html-to-text',
             '@client/common/BrowserUtils',
@@ -114,7 +121,7 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
             '@common/TimeUtils'
           ],
           'ui-components': [
- // UI components
+            // UI components
             '@client/components/AdminCodeEditor',
             '@client/components/AdminDialog',
             '@client/components/AdminInput',
