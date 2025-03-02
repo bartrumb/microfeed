@@ -1,0 +1,4 @@
+[[env.preview.d1_databases]]
+binding = "FEED_DB"
+database_name = "shop-dawg-microfeed_feed_db_preview"
+database_id = "84edb8bb-eef5-495c-a0d6-91681a278bcf"

@@ -2,5 +2,12 @@
   "name": "shop-dawg-microfeed",
   "compatibility_date": "2025-02-11",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "dist"
+  "pages_build_output_dir": "dist",
+  "d1_databases": [
+    {
+      "binding": "FEED_DB",
+      "database_name": "shop-dawg-microfeed_feed_db_preview",
+      "database_id": "84edb8bb-eef5-495c-a0d6-91681a278bcf"
+    }
+  ]
 }
