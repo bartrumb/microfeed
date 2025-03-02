@@ -36,9 +36,9 @@ export default defineConfig({
         'EdgeSettingsApp': 'edge-src/EdgeSettingsApp/index.jsx'
       },
       output: {
-        entryFileNames: 'assets/client/[name].js',
-        chunkFileNames: 'assets/client/chunks/[name]-[hash].js',
-        assetFileNames: 'assets/[name][extname]',
+        entryFileNames: 'build/[name]_js-[hash].js',
+        chunkFileNames: 'build/chunks/[name]-[hash].js',
+        assetFileNames: 'build/[name]_[ext]-[hash].[ext]',
         format: 'es',
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],

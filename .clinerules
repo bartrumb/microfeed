@@ -3,43 +3,56 @@
 - Always start every message with the 🥷 emoji
 - Always TypeCheck ts files to ensure they are valid before running them
 - Always run lints to ensure they are valid before running them
-- When using pnpm do so in the corect app/projectname folder
-- Use NPM when not in the core app/projectname folder
+- Always use pnpm for all tasks related to CI/CD, development, and package management
+- Never use npm, yarn, or direct wrangler commands - always use pnpm scripts
 - Refer to docs/architecture/i18n-and-theming.md for internationalization and theming implementations
+
+## Project Scripts
+
+Available pnpm commands:
+- `pnpm dev` - Start Vite development server
+- `pnpm build:dev` - Build project in development mode
+- `pnpm dev:worker` - Build and start Cloudflare Pages development server with D1 database
+- `pnpm build` - Build project for production
+- `pnpm preview` - Preview production build locally
+- `pnpm deploy:preview` - Deploy to preview environment
+- `pnpm deploy:prod` - Deploy to production environment
+- `pnpm test` - Run Jest tests
+- `pnpm sync-version` - Synchronize microfeed version
+- `pnpm lint` - Run ESLint
 
 ## CLI Standards
 
-1. Use BASH commands with WSL and when making script for windows use Windows PowerShell v7 cmdlets
-2. Always use bash commands
-3. Always run pnpm commands from app/dirname, not project root
-5. Never run recursive commands on the root mcp-servers directory:
-   ```powershell
+1. Always use bash commands with WSL
+2. Always run pnpm commands from app/dirname, not project root
+3. Never run recursive commands on the root mcp-servers directory:
+   ```bash
    # ❌ AVOID - Will fill context and slow progress
-   cd C:\Code\mcp-servers && Get-ChildItem -Recurse -Filter "*log*"
+   cd /mnt/c/Code/mcp-servers && find . -name "*log*"
    ```
 
-```powershell
+```bash
 # ✅ CORRECT
-Remove-Item -Path "dist" -Recurse -Force
+rm -rf dist
 
 # ❌ AVOID
 rimraf dist
 ```
 
-```powershell
+```bash
 # ✅ CORRECT
-cd C:\Code\mcp-servers\browser-render-server && New-Item -ItemType Directory -Path "src/browser-render-server" -Force; Move-Item -Path "src/index.ts" -Destination "src/browser-render-server/index.ts" -Force
+cd /mnt/c/Code/mcp-servers/browser-render-server && mkdir -p src/browser-render-server && mv src/index.ts src/browser-render-server/
 
 # ❌ AVOID
-cd C:/Users/BrettBartrum/Documents/Cline/MCP/browser-render-server && mkdir src\browser-render-server && move src\index.ts src\browser-render-server\
+cd /mnt/c/Users/BrettBartrum/Documents/Cline/MCP/browser-render-server && mkdir src\browser-render-server && move src\index.ts src\browser-render-server\
 ```
 
-```powershell
+```bash
 # ✅ CORRECT
-cd C:\Code\mcp-servers\browser-render-server && Get-ChildItem -Path build -Recurse
+cd /mnt/c/Code/mcp-servers/browser-render-server && find build -type f
 
 # ❌ AVOID
-cd C:/Users/BrettBartrum/Documents/Cline/MCP/browser-render-server && dir /s build
+cd /mnt/c/Users/BrettBartrum/Documents/Cline/MCP/browser-render-server && dir /s build
 ```
 Instructions for LLMs: <SYSTEM>Always use Svelte 5 runes and Svelte 5 syntax. Runes do not need to be imported, they are globals. $state() runes are always declared using `let`, never with `const`. When passing a function to $derived, you must always use $derived.by(() => ...). Error boundaries can only catch errors during component rendering and at the top level of an $effect inside the error boundary. Error boundaries do not catch errors in onclick or other event handlers.</SYSTEM>
 

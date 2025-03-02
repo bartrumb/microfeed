@@ -34,6 +34,16 @@
 - Implemented proper cache control for static assets
 - Used immutable directive for better caching performance
 
+### Asset Loading and Cloudflare Configuration (2025-03-01)
+**Decision**: Switch from unbundled to bundled assets and fix Cloudflare configuration
+**Rationale**:
+- Current non-working version uses unbundled module-based client script
+- Working version uses properly bundled assets with content hashes
+- Cloudflare URLs are undefined in non-working version
+- Need to ensure proper asset bundling and Cloudflare configuration for production
+- Bundled assets provide better caching and performance
+- Content hashes enable cache busting when needed
+
 ### Next Implementation Decisions Needed
 1. Choose an automated accessibility testing framework
 2. Decide on error boundary implementation strategy
