@@ -15,13 +15,13 @@ export default class AdminItemsNewApp extends React.Component {
         title={`${NAV_ITEMS_DICT[NAV_ITEMS.NEW_ITEM].name} | ${OUR_BRAND.domain}`}
         description=""
         scripts={isDev ? [
-          'adminitems'
+          'new_item_js'
         ] : [
           'react-vendor',
           'utils',
           'ui-components',
           'constants',
-          'adminitems'
+          'new_item_js'
         ]}
         styles={['index', 'admin-styles']}
         feedContent={feedContent}

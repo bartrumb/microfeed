@@ -5,11 +5,13 @@ import fs from 'fs';
 
 // Entry points configuration
 const entryPoints = {
-  'adminhome': 'client-src/ClientAdminHomeApp/index.jsx',
-  'admincustomcode': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
-  'adminchannel': 'client-src/ClientAdminChannelApp/index.jsx',
-  'adminitems': 'client-src/ClientAdminItemsApp/index.jsx',
-  'adminsettings': 'client-src/ClientAdminSettingsApp/index.jsx'
+  'admin_home_js': 'client-src/ClientAdminHomeApp/index.jsx',
+  'custom_code_editor_js': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
+  'edit_channel_js': 'client-src/ClientAdminChannelApp/index.jsx',
+  'all_items_js': 'client-src/ClientAdminItemsApp/index.jsx',
+  'settings_js': 'client-src/ClientAdminSettingsApp/index.jsx'
+,
+  'new_item_js': 'client-src/ClientAdminItemsApp/NewItem/index.jsx'
 };
 
 // Add functions entry points
@@ -72,7 +74,7 @@ export default defineConfig({
           }
 
           // Write manifest module
-          const manifestModulePath = path.resolve(__dirname, 'dist/_app/manifest-module.js');
+          const manifestModulePath = path.resolve(__dirname, 'dist/manifest-module.js');
           const manifestContent = `// Generated manifest data
 export const manifestData = ${JSON.stringify(manifestData, null, 2)};
 `;
@@ -102,19 +104,19 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
           if (chunkInfo.name.startsWith('functions/')) {
             return `${chunkInfo.name}.js`;
           }
-          const name = chunkInfo.name.replace(/^edge_/, '');
-          return `_app/immutable/entry-${name}.js`;
+          const name = chunkInfo.name;
+          return `${name}-[hash:8].js`;
         },
         chunkFileNames: (chunkInfo) => {
           const name = chunkInfo.name;
-          return `_app/immutable/chunks/${name}.js`;
+          return `${name}-[hash:8].js`;
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `_app/immutable/assets/${name}.css`;
+            return `${name}_css-[hash:8].css`;
           }
-          return `_app/immutable/assets/${assetInfo.name}`;
+          return assetInfo.name;
         },
         format: 'esm',
         manualChunks: {
