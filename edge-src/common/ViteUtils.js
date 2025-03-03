@@ -7,7 +7,8 @@ const ENTRY_POINTS = [
   'admincustomcode',
   'adminchannel',
   'adminitems',
-  'adminsettings'
+  'adminsettings',
+  'withManifest'
 ];
 
 // Match the same environment detection logic from ManifestUtils.js for consistency
@@ -47,7 +48,12 @@ export function getViteAssetPath(name, type = 'js') {
   }
 
   // Clean up the name
-  const cleanName = name.toLowerCase().replace('client', 'index');
+  let cleanName = name.toLowerCase().replace('client', 'index');
+  
+  // Special case for withManifest component
+  if (cleanName === 'withmanifest') {
+    return type === 'js' ? `${BASE_PATH}/chunks/withManifest.js` : `${BASE_PATH}/assets/index.css`;
+  }
 
   // Determine if this is an entry point
   const isEntry = ENTRY_POINTS.includes(name);

@@ -106,7 +106,7 @@ export function withRouteManifest(
     }
     
     // Try to get manifest from virtual module in Cloudflare Pages
-    if (process.env.CF_PAGES) {
+    if (isCloudflarePages) {
       try {
         manifest = virtualManifest as Manifest;
       } catch (e) {

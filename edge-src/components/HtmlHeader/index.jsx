@@ -2,12 +2,14 @@ import React from 'react';
 import { isDev, getAssetPath, getDevPath } from '../../common/ManifestUtils';
 
 // Critical chunks that should be preloaded
-const CRITICAL_CHUNKS = [
-  'react-vendor',
-  'utils',
-  'ui-components',
-  'constants'
-];
+const CRITICAL_CHUNKS = {
+  'react-vendor': '_app/immutable/chunks/react-vendor.js',
+  'utils': '_app/immutable/chunks/utils.js',
+  'ui-components': '_app/immutable/chunks/ui-components.js',
+  'constants': '_app/immutable/chunks/Constants.js',
+  'withManifest': '_app/immutable/chunks/withManifest.js',
+  'admin-styles': '_app/immutable/assets/admin-styles.css'
+};
 
 export default class HtmlHeader extends React.Component {
   render() {
@@ -28,7 +30,7 @@ export default class HtmlHeader extends React.Component {
 
     // Make sure we only include scripts that aren't critical chunks
     // This prevents duplicate loading of the same JS file
-    const filteredScripts = scripts.filter(name => !CRITICAL_CHUNKS.includes(name));
+    const filteredScripts = scripts.map(name => `_app/immutable/entry-${name}.js`);
 
     // Generate script paths for entry points
     const scriptPaths = filteredScripts.map(name => 
@@ -36,9 +38,7 @@ export default class HtmlHeader extends React.Component {
     ).filter(Boolean);
 
     // Generate critical chunk paths (they should ONLY be loaded as chunks, not as entries)
-    const criticalPaths = CRITICAL_CHUNKS.map(name => 
-      getAssetPath(manifestData, name, 'js', false)
-    ).filter(Boolean);
+    const criticalPaths = Object.values(CRITICAL_CHUNKS);
 
     // Generate style paths
     const stylePaths = styles.map(name => 
@@ -46,8 +46,7 @@ export default class HtmlHeader extends React.Component {
     ).filter(Boolean);
 
     // Get admin styles path if needed
-    const adminStylesPath = getAssetPath(manifest, 'admin-styles', 'css', false);
-    
+    const adminStylesPath = CRITICAL_CHUNKS['admin-styles'];
 
     return (
       <head>
@@ -68,7 +67,7 @@ export default class HtmlHeader extends React.Component {
           They exist only as chunks
         */}
         {criticalPaths.map(path => (
-          <script key={path} type="module" src={path} crossOrigin="anonymous" />
+          <script key={path} type="module" src={`/${path}`} crossOrigin="anonymous" />
         ))}
 
         {/* Then load entry points */}
@@ -86,15 +85,13 @@ export default class HtmlHeader extends React.Component {
           />
         ))}
 
-
-
         {/* Admin styles */}
         {adminStylesPath && (
           <link
             key="admin-styles"
             rel="stylesheet"
             type="text/css"
-            href={adminStylesPath}
+            href={`/${adminStylesPath}`}
             crossOrigin="anonymous"
           />
         )}

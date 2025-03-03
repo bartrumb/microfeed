@@ -1,20 +1,25 @@
 // Environment detection for Cloudflare Pages
-export const isDev = typeof process !== 'undefined' && 
-  process.env.NODE_ENV === 'development' &&
+export const isDev = typeof window !== 'undefined' && 
+  window.location.hostname === 'localhost' &&
   !process.env.REBUILD_WITH_MANIFEST;  // Allow using production paths in rebuild
 
 
 // Special flag for preview deployments with disabled hashing
 export const isPreviewMode = typeof process !== 'undefined' && 
-(
-  process.env.VITE_DISABLE_HASH === 'true' ||
-  (process.env.CF_PAGES && process.env.CF_PAGES_BRANCH !== 'main') ||
-  process.env.PREVIEW === 'true'
-);
+  (
+    process.env.VITE_DISABLE_HASH === 'true' ||
+    (process.env.CF_PAGES && process.env.CF_PAGES_BRANCH !== 'main') ||
+    process.env.PREVIEW === 'true'
+  ) || (
+    typeof window !== 'undefined' &&
+    window.location.hostname.includes('preview')
+  );
 
 // Detect Cloudflare Pages environment
 export const isCloudflarePages = typeof process !== 'undefined' && 
-  process.env.CF_PAGES === 'true';
+  process.env.CF_PAGES === 'true' || (
+    typeof window !== 'undefined' && window.location.hostname.endsWith('.pages.dev')
+  );
 
 const BASE_PATH = '/_app/immutable';
 
@@ -87,7 +92,7 @@ export function getDevPath(name, type = 'js', isEntry = true) {
 }
 
 // Critical chunks that should only be loaded as chunks, not as entries
-const CRITICAL_CHUNKS = ['react-vendor', 'utils', 'ui-components', 'constants'];
+const CRITICAL_CHUNKS = ['react-vendor', 'utils', 'ui-components', 'constants', 'withManifest'];
 
 /**
  * Get the asset path based on environment
@@ -118,7 +123,7 @@ export function getAssetPath(manifest, name, type = 'js', isEntry = true) {
   let manifestData = manifest || clientManifest || {};
 
   // In Cloudflare Pages production, try to load manifest from virtual module
-  if (process.env.CF_PAGES && !Object.keys(manifestData).length) {
+  if (typeof process !== 'undefined' && process.env.CF_PAGES && !Object.keys(manifestData).length) {
     try {
       const { manifestData: virtualManifest } = require('./manifest-virtual');
       manifestData = virtualManifest;

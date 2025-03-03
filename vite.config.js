@@ -17,6 +17,7 @@ const entryPoints = {
 const manualChunks = {
   'react-vendor': ['react', 'react-dom'],
   'utils': [
+    '@edge/common/withManifest',
     '@common/Constants',
     'slugify',
     'html-to-text',
@@ -135,7 +136,7 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `_app/immutable/assets/${name.includes('admin') ? 'admin-styles' : 'index'}.css`;
+            return `_app/immutable/assets/${name.includes('admin') ? 'admin-styles' : name.includes('withmanifest') ? 'withmanifest' : 'index'}.css`;
            }
           return `assets/[name][extname]`;
         },
