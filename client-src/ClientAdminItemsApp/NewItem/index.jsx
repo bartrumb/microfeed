@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import EditItemApp from "../components/EditItemApp";
+import EditItemApp from '../components/EditItemApp';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const $rootDom = document.getElementById('client-side-root');
-  if ($rootDom) {
-    const root = ReactDOM.createRoot($rootDom);
-    root.render(
-      <React.StrictMode>
-        <EditItemApp/>
-      </React.StrictMode>
-    );
+class NewItemApp extends React.Component {
+  render() {
+    return <EditItemApp {...this.props} />;
   }
-});
+}
+
+export default NewItemApp;
+
+if (typeof window !== 'undefined') {
+  const $rootDom = document.getElementById('client-side-root');
+  ReactDOM.createRoot($rootDom).render(<NewItemApp />);
+}

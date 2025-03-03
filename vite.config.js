@@ -5,13 +5,11 @@ import fs from 'fs';
 
 // Entry points configuration
 const entryPoints = {
-  'admin_home_js': 'client-src/ClientAdminHomeApp/index.jsx',
-  'custom_code_editor_js': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
-  'edit_channel_js': 'client-src/ClientAdminChannelApp/index.jsx',
-  'all_items_js': 'client-src/ClientAdminItemsApp/index.jsx',
-  'settings_js': 'client-src/ClientAdminSettingsApp/index.jsx'
-,
-  'new_item_js': 'client-src/ClientAdminItemsApp/NewItem/index.jsx'
+  'adminhome': 'client-src/ClientAdminHomeApp/index.jsx',
+  'admincustomcode': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
+  'adminchannel': 'client-src/ClientAdminChannelApp/index.jsx',
+  'adminitems': 'client-src/ClientAdminItemsApp/index.jsx',
+  'adminsettings': 'client-src/ClientAdminSettingsApp/index.jsx'
 };
 
 // Add functions entry points
@@ -49,49 +47,32 @@ export default defineConfig({
     react({
       include: '**/*.{jsx,js}',
     }),
-    // Plugin to generate static manifest module
     {
-      name: 'generate-manifest-module',
+      name: 'copy-manifest',
       writeBundle: {
         sequential: true,
         order: 'post',
         handler: async (options, bundle) => {
-          // Only generate in production
-          if (isDev) return;
-
-          // Create manifest data structure
-          const manifestData = {};
-          for (const [fileName, chunk] of Object.entries(bundle)) {
-            if (chunk.type === 'chunk' || chunk.type === 'asset') {
-              manifestData[fileName] = {
-                file: fileName,
-                css: chunk.viteMetadata?.importedCss || [],
-                assets: chunk.viteMetadata?.importedAssets || [],
-                isEntry: chunk.isEntry || false,
-                name: chunk.name || ''
-              };
-            }
+          // Copy manifest to dist directory
+          const manifestPath = path.resolve(__dirname, '.vite/manifest.json');
+          const destPath = path.resolve(__dirname, 'dist/.vite');
+          if (!fs.existsSync(destPath)) {
+            fs.mkdirSync(destPath, { recursive: true });
           }
-
-          // Write manifest module
-          const manifestModulePath = path.resolve(__dirname, 'dist/manifest-module.js');
-          const manifestContent = `// Generated manifest data
-export const manifestData = ${JSON.stringify(manifestData, null, 2)};
-`;
-          fs.writeFileSync(manifestModulePath, manifestContent);
+          fs.copyFileSync(manifestPath, path.join(destPath, 'manifest.json'));
         }
       }
     }
   ],
-  base: '',
-  publicDir: 'public',
+  base: '/',
+  publicDir: false,
   server: {
     port: 3001,
     host: true,
     strictPort: true
   },
   build: {
-    manifest: !isDev,
+    manifest: true,
     outDir: 'dist',
     emptyOutDir: true,
     ssrManifest: true,
@@ -104,19 +85,15 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
           if (chunkInfo.name.startsWith('functions/')) {
             return `${chunkInfo.name}.js`;
           }
-          const name = chunkInfo.name;
-          return `${name}-[hash:8].js`;
+          return `_app/immutable/entry-${chunkInfo.name}-[hash:8].js`;
         },
-        chunkFileNames: (chunkInfo) => {
-          const name = chunkInfo.name;
-          return `${name}-[hash:8].js`;
-        },
+        chunkFileNames: `_app/immutable/chunks/[name]-[hash:8].js`,
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `${name}_css-[hash:8].css`;
+            return `_app/immutable/assets/${name}-[hash:8].css`;
           }
-          return assetInfo.name;
+          return `_app/immutable/assets/[name]-[hash:8][extname]`;
         },
         format: 'esm',
         manualChunks: {
@@ -143,8 +120,7 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
           'constants': [
             '@common/Constants'
           ]
-        },
-        intro: isDev ? '' : `if(!('modulepreload' in document.createElement('link'))){document.head.insertAdjacentHTML('beforeend','<script src="/_app/immutable/chunks/modulepreload-polyfill.js"></script>');}`
+        }
       }
     }
   },

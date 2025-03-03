@@ -1,11 +1,10 @@
 import React from 'react';
 import AdminWholeHtml from "../components/AdminWholeHtml";
 import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
+import { isDev, loadManifest } from '../common/ManifestUtils';
 
-// Use same environment detection as ViteUtils
-const isDev = typeof process !== 'undefined' && 
-  process.env.NODE_ENV === 'development' && 
-  !process.env.CF_PAGES;
+// Load manifest data
+const manifest = loadManifest();
 
 export default class AdminSettingsApp extends React.Component {
   constructor(props) {
@@ -30,6 +29,7 @@ export default class AdminSettingsApp extends React.Component {
         styles={['index', 'admin-styles']}
         feedContent={feedContent}
         onboardingResult={onboardingResult}
+        manifest={manifest}
       />
     );
   }

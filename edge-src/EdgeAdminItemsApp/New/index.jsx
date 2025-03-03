@@ -1,11 +1,10 @@
 import React from 'react';
 import AdminWholeHtml from "../../components/AdminWholeHtml";
 import {NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND} from "../../../common-src/Constants";
+import { isDev, loadManifest } from '../../common/ManifestUtils';
 
-// Use same environment detection as ViteUtils
-const isDev = typeof process !== 'undefined' && 
-  process.env.NODE_ENV === 'development' && 
-  !process.env.CF_PAGES;
+// Load manifest data
+const manifest = loadManifest('../../../dist/.vite/manifest.json');
 
 export default class AdminItemsNewApp extends React.Component {
   render() {
@@ -15,17 +14,18 @@ export default class AdminItemsNewApp extends React.Component {
         title={`${NAV_ITEMS_DICT[NAV_ITEMS.NEW_ITEM].name} | ${OUR_BRAND.domain}`}
         description=""
         scripts={isDev ? [
-          'new_item_js'
+          'adminitems'
         ] : [
           'react-vendor',
           'utils',
           'ui-components',
           'constants',
-          'new_item_js'
+          'adminitems'
         ]}
         styles={['index', 'admin-styles']}
         feedContent={feedContent}
         onboardingResult={onboardingResult}
+        manifest={manifest}
       />
     );
   }

@@ -1,44 +1,16 @@
 import React from 'react';
-import { getViteAssetPath } from '../../common/ViteUtils';
-
-// Use same environment detection as ViteUtils
-const isDev = typeof process !== 'undefined' && 
-  process.env.NODE_ENV === 'development' && 
-  !process.env.CF_PAGES;
+import { isDev, getManifestPath } from '../common/ManifestUtils';
 
 // Critical chunks that should be preloaded
 const CRITICAL_CHUNKS = [
   'react-vendor',
   'utils',
-  'ui-components'
-,
+  'ui-components',
   'constants'
 ];
 
-// Known entry points from vite.config.js
-const ENTRY_POINTS = ['adminhome',
-  'admincustomcode',
-  'adminchannel',
-  'adminitems',
-  'adminsettings'];
-
 export default class HtmlHeader extends React.Component {
-  renderPreloadLinks() {
-    if (isDev) {
-      return null; // Skip preloading in development mode
-    }
-    return CRITICAL_CHUNKS.map(chunk => (
-      <link 
-        key={`preload-${chunk}`}
-        rel="modulepreload"
-        href={getViteAssetPath(chunk, 'js')}
-        crossOrigin="anonymous"
-      />
-    ));
-  }
-
   render() {
-    const defaultLang = 'en'; // Default to English
     const {
       title,
       description,
@@ -47,8 +19,33 @@ export default class HtmlHeader extends React.Component {
       favicon,
       canonicalUrl,
       manifest,
-      lang = defaultLang,
+      lang = 'en',
     } = this.props;
+
+    // In production, use the actual filenames from the build
+    const scriptPaths = scripts.map(name => {
+      if (isDev) {
+        return `/_app/immutable/entry-${name}.js`;
+      }
+      const filePath = getManifestPath(manifest, name, 'js');
+      return filePath ? `/${filePath}` : `/_app/immutable/entry-${name}.js`;
+    });
+
+    const criticalPaths = CRITICAL_CHUNKS.map(name => {
+      if (isDev) {
+        return `/_app/immutable/chunks/${name}.js`;
+      }
+      const filePath = getManifestPath(manifest, name, 'js');
+      return filePath ? `/${filePath}` : `/_app/immutable/chunks/${name}.js`;
+    });
+
+    const stylePaths = styles.map(name => {
+      if (isDev) {
+        return `/_app/immutable/assets/${name}.css`;
+      }
+      const filePath = getManifestPath(manifest, name, 'css');
+      return filePath ? `/${filePath}` : `/_app/immutable/assets/${name}.css`;
+    });
 
     return (
       <head>
@@ -57,29 +54,48 @@ export default class HtmlHeader extends React.Component {
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
-        {scripts && scripts.map((js) => {
-          const path = getViteAssetPath(js, 'js');
-          return <script key={js} type="module" src={path} crossOrigin="anonymous"/>;
-        })}
-        {styles && styles.map((css) => {
-          return css && (
-            <link
-              key={css} 
-              rel="stylesheet" 
-              type="text/css"
-              href={getViteAssetPath(css.replace(/^\//, '').replace(/\.css$/, ''), 'css')}
-              crossOrigin="anonymous"
-            />
-          );
-        })}
-        {this.renderPreloadLinks()}
+        
+        {/* Load critical chunks first */}
+        {criticalPaths.map(path => (
+          <script key={path} type="module" src={path} crossOrigin="anonymous"/>
+        ))}
+
+        {/* Then load entry points */}
+        {scriptPaths.map(path => (
+          <script key={path} type="module" src={path} crossOrigin="anonymous"/>
+        ))}
+
+        {/* Load styles */}
+        {stylePaths.map(path => (
+          <link
+            key={path} 
+            rel="stylesheet" 
+            type="text/css"
+            href={path}
+            crossOrigin="anonymous"
+          />
+        ))}
+
+        {/* Preload critical chunks */}
+        {criticalPaths.map(path => (
+          <link 
+            key={`preload-${path}`}
+            rel="modulepreload"
+            href={path}
+            crossOrigin="anonymous"
+          />
+        ))}
+
+        {/* Admin styles */}
         <link
           key="admin-styles"
           rel="stylesheet"
           type="text/css"
-          href={getViteAssetPath('admin-styles', 'css')}
+          href={isDev ? '/_app/immutable/assets/admin-styles.css' : `/${getManifestPath(manifest, 'admin-styles', 'css') || 'admin-styles.css'}`}
           crossOrigin="anonymous"
         />
+
+        {/* Favicon */}
         {favicon && favicon['apple-touch-icon'] && <link
           rel="apple-touch-icon"
           sizes="180x180"

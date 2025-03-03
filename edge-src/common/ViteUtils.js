@@ -13,11 +13,18 @@ const ENTRY_POINTS = [
 // More reliable environment detection for Cloudflare Workers
 const isDev = typeof process !== 'undefined' && 
   process.env.NODE_ENV === 'development' && 
-  // Additional check for Cloudflare Pages preview environment
   !process.env.CF_PAGES;
 
 // Base path for assets
 const BASE_PATH = '/_app/immutable';
+
+// Load manifest data
+let manifestData = null;
+try {
+  manifestData = require('../../dist/.vite/manifest.json');
+} catch (e) {
+  console.warn('Could not load manifest data:', e);
+}
 
 /**
  * Get the appropriate asset path based on environment and asset type
@@ -43,23 +50,48 @@ export function getViteAssetPath(name, type = 'js') {
   // Determine if this is an entry point
   const isEntry = ENTRY_POINTS.includes(name);
 
-  // Build the path based on the type and whether it's an entry point
-  let path;
+  // In development, use non-hashed paths
+  if (isDev) {
+    if (type === 'js') {
+      return isEntry 
+        ? `${BASE_PATH}/entry-${cleanName}.js`
+        : `${BASE_PATH}/chunks/${cleanName}.js`;
+    }
+    return `${BASE_PATH}/assets/${cleanName}.css`;
+  }
+
+  // In production, try to find the file in the manifest
+  if (manifestData) {
+    // For JS files
+    if (type === 'js') {
+      const entryKey = isEntry ? `entry-${cleanName}` : cleanName;
+      const manifestKey = Object.keys(manifestData).find(key => 
+        key.includes(entryKey) && key.endsWith('.js')
+      );
+      if (manifestKey) {
+        return `/${manifestData[manifestKey].file}`;
+      }
+    }
+    
+    // For CSS files
+    if (type === 'css') {
+      const manifestKey = Object.keys(manifestData).find(key => 
+        key.includes(cleanName) && key.endsWith('.css')
+      );
+      if (manifestKey) {
+        return `/${manifestData[manifestKey].file}`;
+      }
+    }
+  }
+
+  // Fallback to non-hashed paths
+  console.warn(`Could not find ${name} in manifest, using fallback path`);
   if (type === 'js') {
-    path = isEntry 
+    return isEntry 
       ? `${BASE_PATH}/entry-${cleanName}.js`
       : `${BASE_PATH}/chunks/${cleanName}.js`;
-  } else {
-    // CSS files
-    path = `${BASE_PATH}/assets/${cleanName}.css`;
   }
-
-  // Don't add hash placeholder - we'll use the actual filenames from the build
-  if (false) {
-    path = path.replace(/\.(js|css)$/, '.[hash].$1');
-  }
-
-  return path;
+  return `${BASE_PATH}/assets/${cleanName}.css`;
 }
 
 // Export for testing
