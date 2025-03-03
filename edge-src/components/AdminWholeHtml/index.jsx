@@ -12,6 +12,7 @@ export default class AdminWholeHtml extends React.Component {
       feedContent,
       onboardingResult,
       manifest,
+      themeTemplate,
     } = this.props;
 
     return (
@@ -47,6 +48,11 @@ export default class AdminWholeHtml extends React.Component {
             id="onboarding-result"
             type="application/json"
             dangerouslySetInnerHTML={{__html: escapeHtml(JSON.stringify(onboardingResult))}}
+          />}
+          {themeTemplate && <script
+            id="theme-tmpl-json"
+            type="application/json"
+            dangerouslySetInnerHTML={{__html: escapeHtml(JSON.stringify(themeTemplate))}}
           />}
         </body>
       </html>

@@ -1,74 +1,45 @@
 # Active Context - 2025-03-03
 
-## Current Focus: TypeScript Migration Cleanup
+## Current Focus: Resolving Asset Loading and Code Editor Issues
 
-We are currently in the process of migrating the Microfeed project from JavaScript/JSX to TypeScript. Several components have been successfully converted to TypeScript (.tsx), but the original JSX files still remain in the codebase. Our immediate focus is to clean up these redundant files.
+We are addressing several issues with asset loading and the code editor functionality:
 
-### Identified Issues
+### Fixed Issues
 
-1. **Redundant JSX Files**
-   - Several components now have both .jsx and .tsx versions
-   - This creates confusion about which file is actually being used
-   - May lead to inconsistencies if changes are made to one file but not the other
+1. **Code Editor Template Loading**
+   - ✅ Fixed missing theme template data in code editor
+   - ✅ Updated route handler to pass correct template data
+   - ✅ Ensured proper data structure for template rendering
+   - ✅ Fixed slugify function loading in utils chunk
 
-2. **File Structure Documentation**
-   - Need to maintain clear documentation of the migration progress
-   - Track which components have been migrated and which still need conversion
+2. **Asset Loading**
+   - ✅ Fixed CSS naming inconsistency
+   - ✅ Added constants chunk configuration
+   - ✅ Fixed path duplication in entry point file names
+   - ✅ Enabled public directory serving for OpenAPI files
+
+### Remaining Issues
+
+1. **404 Errors**
+   - [ ] ReactToastify.css.map not found
+   - [ ] Missing manifest data for some chunks
+   - [ ] Fallback paths being used for some assets
+
+2. **Asset Loading Improvements**
+   - [ ] Monitor asset loading performance
+   - [ ] Implement retry logic for failed loads
+   - [ ] Add error reporting for asset failures
 
 ### Action Items
 
-1. **Remove Redundant JSX Files**
-   - Identified 10 .jsx files that need to be removed (see progress.md for the list)
-   - Need to verify application builds and runs correctly after removal
+1. **Fix ReactToastify Issues**
+   - [ ] Add proper CSS map file
+   - [ ] Update CSS extraction configuration
 
-2. **Update Documentation**
-   - Created fileStructureUpdate.md to track migration progress
-   - Updated progress.md with current tasks
-
-## Previous Focus: Resolving Cloudflare Pages Deployment Issues
-
-## Current Focus: Resolving Cloudflare Pages Deployment Issues
-
-We are currently addressing persistent asset loading issues in the Cloudflare Pages preview deployment that are causing 404 errors and React warnings.
-
-### Detailed Diagnosis
-
-1. **CSS Asset Naming Inconsistency**
-   - Vite outputs all CSS to `_app/immutable/assets/style.css` (vite.config.js line 137)
-   - Application requests `admin-styles.css` and `index.css`
-   - CSS extract config specifies `admin-styles.css` (line 197)
-   - ManifestUtils.js expects either `admin-styles.css` or `index.css` (line 86)
-
-2. **Missing constants.js File**
-   - Referenced as critical chunk in ManifestUtils.js and withManifest.tsx
-   - No entry for 'constants' in manualChunks configuration in vite.config.js
-   - Results in 404 error for this resource
-
-3. **React Property Case Warning**
-   - Improper case for 'overRide' prop in AdminImageUploaderApp component
-   - React requires lowercase 'override' to follow DOM attribute naming conventions
-
-4. **Asset Validation Mismatch**
-   - deploy.js validates `style.css` but app requests `admin-styles.css`
-   - Allows deployment to succeed but fails at runtime
-
-### Recommended Solutions
-
-1. **Fix CSS Naming Consistency**
-   - Align vite.config.js asset naming with ManifestUtils.js expectations
-   - Use consistent CSS output filenames between build and runtime
-
-2. **Add Constants Chunk Configuration**
-   - Add 'constants' entry to manualChunks including Common-src/Constants.js
-   - Ensure it outputs to the path expected by withManifest.tsx
-
-3. **Fix React Prop Warning**
-   - Locate use of `overRide` prop
-   - Change to lowercase `override` to follow React naming conventions
-
-4. **Update Asset Validation**
-   - Align deploy.js asset validation with actual filenames used at runtime
-   - Add checks for all required CSS files
+2. **Manifest Generation**
+   - [ ] Fix manifest data generation
+   - [ ] Ensure all chunks are properly registered
+   - [ ] Update chunk naming strategy
 
 ### Dependencies
 - Vite configuration

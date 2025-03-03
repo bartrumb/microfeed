@@ -228,6 +228,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_index3.js",
       "_Constants.js",
+      "_index4.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -254,6 +255,7 @@ export const manifestData = {
       "functions/sitemap.xml.jsx",
       "_index3.js",
       "_Constants.js",
+      "_index4.js",
       "_withManifest.js"
     ]
   },
@@ -294,7 +296,8 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.jsx",
+      "_index4.js"
     ]
   },
   "functions/admin/items/new/index.jsx": {
@@ -306,6 +309,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_index3.js",
       "_Constants.js",
+      "_index4.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -322,6 +326,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_index3.js",
       "_Constants.js",
+      "_index4.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -338,6 +343,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_index3.js",
       "_Constants.js",
+      "_index4.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -461,6 +467,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_index3.js",
       "_Constants.js",
+      "_index4.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",

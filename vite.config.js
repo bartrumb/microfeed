@@ -17,16 +17,18 @@ const entryPoints = {
 const manualChunks = {
   'react-vendor': ['react', 'react-dom'],
   'utils': [
-    '@edge/common/withManifest',
-    '@common/Constants',
     'slugify',
     'html-to-text',
-    path.resolve(__dirname, './client-src/common/utils.ts'),
+    '@client/common/utils',
     '@client/common/BrowserUtils',
     '@client/common/ClientUrlUtils',
     '@client/common/ToastUtils',
     '@common/StringUtils',
     '@common/TimeUtils'
+  ],
+  'core-utils': [
+    '@edge/common/withManifest',
+    '@common/Constants'
   ],
   'ui-components': {
     include: [
@@ -38,6 +40,7 @@ const manualChunks = {
     ],
     enforce: true
   },
+  'constants': ['@common/Constants']
 };
 
 // Add functions entry points
@@ -77,7 +80,7 @@ export default defineConfig(({ mode }) => ({
     })
   ],
   base: '/',
-  publicDir: false,
+  publicDir: 'public',
   server: {
     port: 3001,
     host: true,
@@ -123,21 +126,17 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: (chunkInfo) => {
           if (chunkInfo.name.startsWith('functions/')) {
             return `${chunkInfo.name}.js`;
-          } else {
+          } else if (!chunkInfo.name.includes('_app/immutable/entry-')) {
             return `_app/immutable/entry-${chunkInfo.name}.js`;
           }
+          return chunkInfo.name;
         },
-        chunkFileNames: (chunkInfo) => {
-          if (Object.keys(manualChunks).includes(chunkInfo.name)) {
-            return `_app/immutable/chunks/${chunkInfo.name}.js`;
-          }
-          return `_app/immutable/chunks/${chunkInfo.name}.js`;
-        },
+        chunkFileNames: '_app/immutable/chunks/[name].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `_app/immutable/assets/${name.includes('admin') ? 'admin-styles' : name.includes('withmanifest') ? 'withmanifest' : 'index'}.css`;
-           }
+            return `_app/immutable/assets/${name.includes('admin') ? 'admin-styles' : 'index'}.css`;
+          }
           return `assets/[name][extname]`;
         },
         format: 'esm',
@@ -183,7 +182,9 @@ export default defineConfig(({ mode }) => ({
       'react',
       'react-dom',
       'axios',
-      'clsx'
+      'clsx',
+      'slugify',
+      'html-to-text'
     ]
   },
   envPrefix: ['VITE_', 'CLOUDFLARE_'],
@@ -192,9 +193,7 @@ export default defineConfig(({ mode }) => ({
       localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:5]',
       hashPrefix: 'microfeed'
-,
     },
-    // Ensure CSS is extracted to a single file
     extract: {
       filename: '_app/immutable/assets/[name].css'
     }

@@ -17,12 +17,26 @@ export async function onRequestGet({request, data}) {
   }
 
   const theme = new Theme(await feedDb.getPublicJsonData(feedContent), settings, themeName);
+  
+  // Get theme template data
+  const themeTemplate = {
+    themeName: theme.name(),
+    webHeader: theme.getWebHeaderTmpl(),
+    webBodyStart: theme.getWebBodyStartTmpl(),
+    webBodyEnd: theme.getWebBodyEndTmpl(),
+    webFeed: theme.getWebFeedTmpl(),
+    webItem: theme.getWebItemTmpl(),
+    rssStylesheet: theme.getRssStylesheetTmpl()
+  };
+
   const fromReact = renderReactToHtml(
     <EdgeSettingsStylingApp
       feedContent={feedContent}
       theme={theme}
       onboardingResult={onboardingResult}
+      themeTemplate={themeTemplate}
     />);
+
   return new Response(fromReact, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',

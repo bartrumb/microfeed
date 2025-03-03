@@ -18,7 +18,7 @@ class EdgeCustomCodeEditorApp extends React.Component {
   }
 
   render() {
-    const {feedContent, onboardingResult, manifest} = this.props;
+    const {feedContent, onboardingResult, manifest, themeTemplate} = this.props;
 
     // In development, we only need the entry point
     // In production, we need both entry points and critical chunks
@@ -34,6 +34,7 @@ class EdgeCustomCodeEditorApp extends React.Component {
         styles={['index', 'admin-styles']}
         feedContent={feedContent}
         onboardingResult={onboardingResult}
+        themeTemplate={themeTemplate}
         manifest={manifest}
       />
     );

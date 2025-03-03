@@ -1,11 +1,11 @@
 /**
  * Core utility functions with proper TypeScript types and exports
  */
-import { default as slugifyLib } from 'slugify';
+import slugify from 'slugify';
 import { htmlToText } from 'html-to-text';
 
-// Re-export with explicit names to prevent minification issues
-export const slugify = slugifyLib;
+// Export slugify directly to maintain function reference
+export { slugify };
 export const convertHtmlToText = htmlToText;
 
 // Add the 'c' export that's needed by ui-components

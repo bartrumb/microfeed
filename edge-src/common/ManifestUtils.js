@@ -87,8 +87,13 @@ export function getDevPath(name, type = 'js', isEntry = true) {
       ? `${BASE_PATH}/entry-${name}.js`
       : `${BASE_PATH}/chunks/${name}.js`;
   }
-  // CSS files are always in assets directory
-  return `${BASE_PATH}/assets/${name === 'admin-styles' ? name : 'index'}.css`;
+  
+  // CSS files handling
+  if (type === 'css') {
+    const cssName = name === 'admin-styles' ? name : 'index';
+    return `${BASE_PATH}/assets/${cssName}.css`;
+  }
+  return null;
 }
 
 // Critical chunks that should only be loaded as chunks, not as entries
@@ -134,7 +139,7 @@ export function getAssetPath(manifest, name, type = 'js', isEntry = true) {
 
   const manifestPath = getManifestPath(manifestData, name, type, isEntry);
   if (!manifestPath) {
-    console.warn(`Could not find ${name} in manifest for ${type}, using fallback path`);
+    console.debug(`Could not find ${name} in manifest for ${type}, using fallback path`);
     return getDevPath(name, type, isEntry);
   }
 

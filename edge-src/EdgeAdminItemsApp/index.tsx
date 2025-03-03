@@ -34,7 +34,13 @@ class EdgeAdminItemsApp extends React.Component<EdgeAdminItemsAppProps & WithMan
         if (!root) return;
 
         const feedContentElement = document.getElementById('feed-content');
-        const feedContent = feedContentElement ? JSON.parse(feedContentElement.innerHTML || '{}') : {};
+        const feedContent = feedContentElement ? JSON.parse(
+          decodeURIComponent(
+            feedContentElement.innerHTML.replace(/&quot;/g, '"')
+              .replace(/&#39;/g, "'")
+              .replace(/&amp;/g, '&')
+          ) || '{}'
+        ) : {};
         
         if (feedContent.hasNoItems) {
           root.innerHTML = '<div class="lh-page-card grid grid-cols-1 gap-4">' +

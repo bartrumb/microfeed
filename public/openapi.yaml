@@ -81,3 +81,83 @@ paths:
               schema:
                 type: string
                 description: "Not Found"
+
+components:
+  schemas:
+    FeedJson:
+      type: object
+      required:
+        - version
+        - title
+        - items
+      properties:
+        version:
+          type: string
+          example: "https://jsonfeed.org/version/1.1"
+        title:
+          type: string
+          example: "My Feed"
+        description:
+          type: string
+          example: "A description of my feed"
+        home_page_url:
+          type: string
+          format: uri
+          example: "https://example.com"
+        feed_url:
+          type: string
+          format: uri
+          example: "https://example.com/feed.json"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeedItem"
+        _microfeed:
+          type: object
+          properties:
+            items_next_cursor:
+              type: integer
+              example: 1672707197212
+            items_sort_order:
+              type: string
+              enum: ["newest_first", "oldest_first"]
+              example: "newest_first"
+
+    FeedItem:
+      type: object
+      required:
+        - id
+        - title
+        - content_html
+        - date_published
+      properties:
+        id:
+          type: string
+          example: "2"
+        url:
+          type: string
+          format: uri
+          example: "https://example.com/post/2"
+        title:
+          type: string
+          example: "My Second Post"
+        content_html:
+          type: string
+          example: "<p>This is my second post.</p>"
+        date_published:
+          type: string
+          format: date-time
+          example: "2023-01-02T15:00:00Z"
+        date_modified:
+          type: string
+          format: date-time
+          example: "2023-01-02T15:00:00Z"
+        image:
+          type: string
+          format: uri
+          example: "https://example.com/images/post2.jpg"
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["news", "tech"]
