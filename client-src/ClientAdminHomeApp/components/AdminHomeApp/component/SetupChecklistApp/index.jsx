@@ -26,7 +26,7 @@ function CheckListItem({title, onboardState, children}) {
 }
 
 function SetupPublicBucketUrl({onboardState, webGlobalSettings, cloudflareUrls}) {
-  const publicBucketUrl = webGlobalSettings.publicBucketUrl || '';
+  const publicBucketUrl = webGlobalSettings?.publicBucketUrl || '';
   const [url, setUrl] = useState(publicBucketUrl);
   const [submitStatus, setSubmitStatus] = useState(null);
   const submitting = submitStatus === SUBMIT_STATUS__START;
@@ -274,14 +274,12 @@ function CustomDomain({onboardState, cloudflareUrls}) {
 export default class SetupChecklistApp extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-    };
+    this.state = {};
   }
 
   render() {
-    const {feed, onboardingResult} = this.props;
-    const {settings} = feed;
+    const {feed = {}, onboardingResult = {}} = this.props;
+    const {settings = {}} = feed;
     const webGlobalSettings = settings[SETTINGS_CATEGORIES.WEB_GLOBAL_SETTINGS] || {};
 
     return (<div className="lh-page-card">
@@ -296,17 +294,17 @@ export default class SetupChecklistApp extends React.Component {
       </div>}
       <div className="mt-8">
         <SetupPublicBucketUrl
-          onboardState={onboardingResult.result[ONBOARDING_TYPES.VALID_PUBLIC_BUCKET_URL]}
+          onboardState={onboardingResult.result?.[ONBOARDING_TYPES.VALID_PUBLIC_BUCKET_URL] || {}}
           webGlobalSettings={webGlobalSettings}
-          cloudflareUrls={onboardingResult.cloudflareUrls}
+          cloudflareUrls={onboardingResult.cloudflareUrls || {}}
         />
         <ProtectedAdminDashboard
-          onboardState={onboardingResult.result[ONBOARDING_TYPES.PROTECTED_ADMIN_DASHBOARD]}
-          cloudflareUrls={onboardingResult.cloudflareUrls}
+          onboardState={onboardingResult.result?.[ONBOARDING_TYPES.PROTECTED_ADMIN_DASHBOARD] || {}}
+          cloudflareUrls={onboardingResult.cloudflareUrls || {}}
         />
         <CustomDomain
-          onboardState={onboardingResult.result[ONBOARDING_TYPES.CUSTOM_DOMAIN]}
-          cloudflareUrls={onboardingResult.cloudflareUrls}
+          onboardState={onboardingResult.result?.[ONBOARDING_TYPES.CUSTOM_DOMAIN] || {}}
+          cloudflareUrls={onboardingResult.cloudflareUrls || {}}
         />
       </div>
       <div className="text-right mt-4 text-sm text-helper-color">

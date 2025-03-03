@@ -1,16 +1,6 @@
-import React from "react";
-import ReactQuill, {Quill} from "react-quill";
-import BlotFormatter from "quill-blot-formatter";
+import React, { useState, useRef, useImperativeHandle, forwardRef, useEffect } from "react";
+import ReactQuill from "react-quill";
 import RichEditorMediaDialog from "../RichEditorMediaDialog";
-
-// Only register if not already registered
-if (!Quill.imports['modules/blotFormatter']) {
-  try {
-    Quill.register('modules/blotFormatter', BlotFormatter);
-  } catch (e) {
-    console.warn('Failed to register blotFormatter:', e);
-  }
-}
 
 const toolbarOptions = [
   [{'header': [2, 3, false]}],
@@ -23,17 +13,7 @@ const toolbarOptions = [
 const modules = {
   toolbar: {
     container: toolbarOptions,
-    // handlers: {
-    //   image: imageHandler,
-    //   video: videoHandler,
-    // },
-  },
-  blotFormatter: {
-    // see config options below
-    overlay: {
-      style: { border: '2px solid #06c' }
-    }
-  },
+  }
 };
 
 const formats = [
@@ -44,72 +24,62 @@ const formats = [
   'image', 'video',
 ];
 
-export default class RichEditorQuill extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-      mediaType: 'image',
-      quillSelection: null,
-    };
-  }
+const RichEditorQuill = forwardRef((props, ref) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [mediaType, setMediaType] = useState('image');
+  const [quillSelection, setQuillSelection] = useState(null);
+  const editorRef = useRef(null);
+  const reactQuillRef = useRef(null);
 
-  componentDidMount() {
-    this.attachQuillRefs();
-    // Initialize modules after mount
-    if (this.quillRef) {
-      try {
-        const formatter = this.quillRef.getModule('blotFormatter');
-        if (!formatter) {
-          console.warn('BlotFormatter module not initialized');
-        }
-      } catch (e) {
-        console.warn('Error checking blotFormatter:', e);
+  useImperativeHandle(ref, () => ({
+    getEditor: () => editorRef.current
+?.getEditor()
+  }));
+
+  useEffect(() => {
+    if (reactQuillRef.current) {
+      const editor = reactQuillRef.current.getEditor();
+      if (editor) {
+        editorRef.current = reactQuillRef.current;
+        const toolbar = editor.getModule('toolbar');
+        toolbar.addHandler('image', () => {
+          setIsOpen(true);
+          setMediaType('image');
+          setQuillSelection(editor.getSelection());
+        });
+        toolbar.addHandler('video', () => {
+          setIsOpen(true);
+          setMediaType('video');
+          setQuillSelection(editor.getSelection());
+        });
       }
     }
-  }
+  }, []);
 
-  componentDidUpdate() {
-    this.attachQuillRefs();
-  }
+  const {value, onChange, extra} = props;
 
-  attachQuillRefs() {
-    if (typeof this.reactQuillRef.getEditor !== 'function') return;
-    this.quillRef = this.reactQuillRef.getEditor();
-  }
+  return (
+    <div>
+      <ReactQuill
+        theme="snow"
+        value={value || ''}
+        onChange={onChange}
+        modules={modules}
+        formats={formats}
+        ref={reactQuillRef}
+      />
+      <RichEditorMediaDialog
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        mediaType={mediaType}
+        quill={editorRef.current?.getEditor()}
+        quillSelection={quillSelection}
+        extra={extra}
+      />
+    </div>
+  );
+});
 
-  render() {
-    const {value, onChange, extra} = this.props;
-    const {isOpen, mediaType, quillSelection} = this.state;
-    return <div>
-    <ReactQuill
-      theme="snow"
-      value={value || ''}
-      onChange={onChange}
-      modules={modules}
-      formats={formats}
-      ref={(ref) => {
-        if (ref) {
-          this.reactQuillRef = ref;
-          this.quillRef = ref.getEditor();
-          const toolbar = this.quillRef.getModule('toolbar');
-          toolbar.addHandler('image', () => {
-            this.setState({isOpen: true, mediaType: 'image', quillSelection: this.quillRef.getSelection()});
-          });
-          toolbar.addHandler('video', () => {
-            this.setState({isOpen: true, mediaType: 'video', quillSelection: this.quillRef.getSelection()});
-          });
-        }
-      }}
-    />
-    <RichEditorMediaDialog
-      isOpen={isOpen}
-      setIsOpen={(isOpen) => this.setState({isOpen})}
-      mediaType={mediaType}
-      quill={this.quillRef}
-      quillSelection={quillSelection}
-      extra={extra}
-    />
-  </div>
-  }
-}
+RichEditorQuill.displayName = 'RichEditorQuill';
+
+export default RichEditorQuill;

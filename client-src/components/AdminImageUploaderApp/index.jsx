@@ -57,8 +57,8 @@ export default class AdminImageUploaderApp extends React.Component {
     this.onFileUpload = this.onFileUpload.bind(this);
     this.onFileUploadToR2 = this.onFileUploadToR2.bind(this);
 
-    const webGlobalSettings = props.feed.settings.webGlobalSettings || {};
-    const publicBucketUrl = webGlobalSettings.publicBucketUrl || '';
+    const webGlobalSettings = props.feed?.settings?.webGlobalSettings || {};
+    const publicBucketUrl = webGlobalSettings?.publicBucketUrl || '';
 
     this.initState = {
       currentImageUrl: props.currentImageUrl,
@@ -210,11 +210,6 @@ export default class AdminImageUploaderApp extends React.Component {
                   cropper.setCropBoxData({width: size, height: size});
                 }
               };
-              // if (clientWidth === clientHeight) {
-              //   options.minCropBoxHeight = size;
-              //   options.minCropBoxWidth = size;
-              //   options.cropBoxResizable = false;
-              // }
               const cropper = new Cropper(e.target, options);
               this.setState({cropper});
             }}

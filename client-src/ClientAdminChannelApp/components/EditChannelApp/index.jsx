@@ -59,10 +59,22 @@ export default class EditChannelApp extends React.Component {
     this.onUpdateChannelMetaToFeed = this.onUpdateChannelMetaToFeed.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
-    const feed = JSON.parse(unescapeHtml(document.getElementById('feed-content').innerHTML));
-    const onboardingResult = JSON.parse(unescapeHtml(document.getElementById('onboarding-result').innerHTML));
+    let feed = { channel: {}, settings: { webGlobalSettings: {} } };
+    let onboardingResult = {};
+    
+    try {
+      const feedContent = document.getElementById('feed-content')?.innerHTML;
+  
+    const onboardingContent = document.getElementById('onboarding-result')?.innerHTML;
+      
+      if (feedContent) feed = JSON.parse(unescapeHtml(feedContent));
+      if (onboardingContent) onboardingResult = JSON.parse(unescapeHtml(onboardingContent));
+    } catch (error) {
+      console.error('Error parsing feed or onboarding content:', error);
+    }
 
-    const channel = feed.channel;
+    const channel = feed.channel || {};
+
     this.state = {
       feed,
       onboardingResult,
