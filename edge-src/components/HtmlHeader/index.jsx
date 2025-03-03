@@ -1,5 +1,5 @@
 import React from 'react';
-import { isDev, getAssetPath } from '../../common/ManifestUtils';
+import { isDev, getAssetPath, getDevPath } from '../../common/ManifestUtils';
 
 // Critical chunks that should be preloaded
 const CRITICAL_CHUNKS = [
@@ -30,20 +30,10 @@ export default class HtmlHeader extends React.Component {
       getAssetPath(manifestData, name, 'js', true)
     ).filter(Boolean);
 
-    // Generate critical chunk paths - these are NOT entry points
+    
+    // Generate critical chunk paths (they should ONLY be loaded as chunks, not as entries)
     const criticalPaths = CRITICAL_CHUNKS.map(name => 
-      getAssetPath(manifestData, name, 'js', false)
-    ).filter(Boolean);
-
-    // Get additional chunks from manifest dependencies
-    const dependencyPaths = Object.values(manifestData)
-      .filter(entry => 
-        entry.file && 
-        entry.file.includes('chunks/') && 
-        !criticalPaths.includes('/' + entry.file) &&
-        !entry.isEntry
-      )
-      .map(entry => entry.file);
+      isDev ? getDevPath(name, 'js', false) : getAssetPath(manifestData, name, 'js', false)).filter(Boolean);
 
     // Generate style paths
     const stylePaths = styles.map(name => 
@@ -73,12 +63,6 @@ export default class HtmlHeader extends React.Component {
           <script key={path} type="module" src={path} crossOrigin="anonymous" />
         ))}
 
-        {/* Then load entry points */}
-        {scriptPaths.map(path => (
-          <script key={path} type="module" src={path} crossOrigin="anonymous"/>
-        ))}
-
-        {/* Load styles */}
         {stylePaths.map(path => (
           <link
             key={path} 
@@ -89,10 +73,11 @@ export default class HtmlHeader extends React.Component {
           />
         ))}
 
-        {/* Load additional chunks */}
-        {dependencyPaths.map(path => (
-          <script key={path} type="module" src={`/${path}`} crossOrigin="anonymous" />
+        {/* Then load entry points */}
+        {scriptPaths.map(path => (
+          <script key={path} type="module" src={path} crossOrigin="anonymous"/>
         ))}
+
 
         {/* Admin styles */}
         {adminStylesPath && (

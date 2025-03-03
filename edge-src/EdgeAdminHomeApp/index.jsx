@@ -17,6 +17,7 @@ class EdgeAdminHomeApp extends React.Component {
         description=""
         scripts={[
           'adminhome'
+ // Only include actual entry points, not chunks
         ]}
         styles={['index', 'admin-styles']}
         feedContent={feedContent}
