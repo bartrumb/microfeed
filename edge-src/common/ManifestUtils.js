@@ -1,13 +1,22 @@
 // Environment detection for Cloudflare Pages
 export const isDev = typeof process !== 'undefined' && 
   process.env.NODE_ENV === 'development' &&
-  !process.env.REBUILD_WITH_MANIFEST &&  // Allow using production paths in rebuild
-  !process.env.PREVIEW &&
-  !process.env.CF_PAGES;
+  !process.env.REBUILD_WITH_MANIFEST;  // Allow using production paths in rebuild
+
 
 // Special flag for preview deployments with disabled hashing
 export const isPreviewMode = typeof process !== 'undefined' && 
-  process.env.VITE_DISABLE_HASH === 'true';
+(
+  process.env.VITE_DISABLE_HASH === 'true' ||
+  (process.env.CF_PAGES && process.env.CF_PAGES_BRANCH !== 'main') ||
+  process.env.PREVIEW === 'true'
+);
+
+// Detect Cloudflare Pages environment
+export const isCloudflarePages = typeof process !== 'undefined' && 
+  process.env.CF_PAGES === 'true';
+
+const BASE_PATH = '/_app/immutable';
 
 /**
  * Get the file path from the manifest
@@ -20,6 +29,11 @@ export const isPreviewMode = typeof process !== 'undefined' &&
 export function getManifestPath(manifest, name, type = 'js', isEntry = true) {
   if (!manifest) {
     return null;
+  }
+
+  // In preview mode with disabled hashing, use development paths
+  if (isPreviewMode) {
+    return getDevPath(name, type, isEntry);
   }
 
   // Direct lookup first - this handles our fallback manifest format
@@ -63,14 +77,13 @@ export function getManifestPath(manifest, name, type = 'js', isEntry = true) {
  * @returns {string} The development path
  */
 export function getDevPath(name, type = 'js', isEntry = true) {
-  const BASE_PATH = '/_app/immutable';
-  
   if (type === 'js') {
     return isEntry 
       ? `${BASE_PATH}/entry-${name}.js`
       : `${BASE_PATH}/chunks/${name}.js`;
   }
-  return `${BASE_PATH}/assets/${name}.css`;
+  // CSS files are always in assets directory
+  return `${BASE_PATH}/assets/${name === 'admin-styles' ? name : 'index'}.css`;
 }
 
 // Critical chunks that should only be loaded as chunks, not as entries
@@ -85,7 +98,7 @@ const CRITICAL_CHUNKS = ['react-vendor', 'utils', 'ui-components', 'constants'];
  * @returns {string} The resolved path
  */
 export function getAssetPath(manifest, name, type = 'js', isEntry = true) {
-  // In preview mode with disabled hashing, always use development paths
+  // In preview mode or development, use non-hashed paths
   if (isPreviewMode) {
     // Special handling for critical chunks - never load them as entry points in preview mode
     if (CRITICAL_CHUNKS.includes(name) && isEntry) {
@@ -94,7 +107,7 @@ export function getAssetPath(manifest, name, type = 'js', isEntry = true) {
     }
     return getDevPath(name, type, isEntry);
   }
-  
+
   // Normal development mode
   if (isDev) {
     return getDevPath(name, type, isEntry);
@@ -104,7 +117,7 @@ export function getAssetPath(manifest, name, type = 'js', isEntry = true) {
   const clientManifest = typeof window !== 'undefined' ? window.__MANIFEST__ : null;
   let manifestData = manifest || clientManifest || {};
 
-  // In Cloudflare Pages, try to load manifest from virtual module
+  // In Cloudflare Pages production, try to load manifest from virtual module
   if (process.env.CF_PAGES && !Object.keys(manifestData).length) {
     try {
       const { manifestData: virtualManifest } = require('./manifest-virtual');
@@ -116,7 +129,7 @@ export function getAssetPath(manifest, name, type = 'js', isEntry = true) {
 
   const manifestPath = getManifestPath(manifestData, name, type, isEntry);
   if (!manifestPath) {
-    console.warn(`Could not find ${name} in manifest, using fallback path`);
+    console.warn(`Could not find ${name} in manifest for ${type}, using fallback path`);
     return getDevPath(name, type, isEntry);
   }
 

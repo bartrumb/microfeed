@@ -1,5 +1,5 @@
 import React from 'react';
-import { isDev, isPreviewMode } from './ManifestUtils';
+import { isDev, isPreviewMode, isCloudflarePages } from './ManifestUtils';
 import { manifestData as virtualManifest } from './manifest-virtual';
 
 // Define types for manifest data
@@ -47,17 +47,20 @@ export function withManifest<P extends WithManifestProps>(
     render(): React.ReactNode {
       let manifest: Manifest;
 
-      // In development or preview mode, use non-hashed paths
-      if (isDev || isPreviewMode) {
+      // Try to get manifest from props first
+      manifest = (this.props as P).manifest || {};
+
+      // If no manifest in props and in development/preview, use critical chunks
+      if ((isDev || isPreviewMode) && Object.keys(manifest).length === 0) {
+        console.log('Using development paths for assets');
+        // Create manifest with non-hashed paths for development/preview
+        // This ensures consistent asset loading across environments
         manifest = createManifestFromCriticalChunks();
         return <WrappedComponent {...(this.props as P)} manifest={manifest} />;
       }
 
-      // Try to get manifest from props first
-      manifest = (this.props as P).manifest || {};
-
-      // If no manifest in props, try virtual module in Cloudflare Pages
-      if (Object.keys(manifest).length === 0 && process.env.CF_PAGES) {
+      // If no manifest in props and in Cloudflare Pages, try virtual module
+      if (Object.keys(manifest).length === 0 && isCloudflarePages) {
         manifest = virtualManifest as Manifest;
       }
 
@@ -67,7 +70,7 @@ export function withManifest<P extends WithManifestProps>(
         manifest = createManifestFromCriticalChunks();
       }
 
-      // In production, pass the manifest through
+      // Pass the resolved manifest to the wrapped component
       return <WrappedComponent {...(this.props as P)} manifest={manifest} />;
     }
   };
@@ -88,13 +91,10 @@ export function withRouteManifest(
   handler: (context: RouteContext) => Promise<Response>
 ): (context: RouteContext) => Promise<Response> {
   return async function(context: RouteContext): Promise<Response> {
-    let manifest: Manifest;
+    let manifest: Manifest = createManifestFromCriticalChunks();
 
-    // Pass through in development or preview mode
+    // In development or preview mode, use critical chunks manifest
     if (isDev || isPreviewMode) {
-      // In preview mode, add critical chunks manifest
-      manifest = createManifestFromCriticalChunks();
-      
       const { data, ...rest } = context;
       return handler({
         ...rest,
@@ -114,8 +114,6 @@ export function withRouteManifest(
         // Use critical chunks as fallback
         manifest = createManifestFromCriticalChunks();
       }
-    } else {
-      manifest = createManifestFromCriticalChunks();
     }
 
     // Add manifest to the data

@@ -87,36 +87,52 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
  * This is needed because we have publicDir: false in vite.config.js
  */
 async function copyStaticAssets() {
-  // Define asset directories to copy
-  const assetDirs = [
-    ['public/assets/favicon', 'dist/assets/favicon'],
-    ['public/assets/brands', 'dist/assets/brands'],
-    ['public/assets/howto', 'dist/assets/howto'],
-    ['public/assets/default', 'dist/assets/default'],
-    ['public/_app/immutable/assets', 'dist/_app/immutable/assets'],
-    ['public/_app/immutable/chunks', 'dist/_app/immutable/chunks']
+  // Static assets from public directory
+  const publicAssetDirs = [
+    ['public/assets/favicon', 'assets/favicon'],
+    ['public/assets/brands', 'assets/brands'],
+    ['public/assets/howto', 'assets/howto'],
+    ['public/assets/default', 'assets/default']
   ];
 
-  // Copy each directory
-  assetDirs.forEach(([src, dest]) => {
+  // Copy public assets to dist
+  publicAssetDirs.forEach(([src, dest]) => {
+    const destPath = path.join('dist', dest);
     if (fs.existsSync(src)) {
-      fs.mkdirSync(dest, { recursive: true });
-      copyRecursive(src, dest);
+      fs.mkdirSync(destPath, { recursive: true });
+      copyRecursive(src, destPath);
+      console.log(`Copied ${src} to ${destPath}`);
     }
   });
 
-  // Copy individual files
+  // Copy individual static files
   const filesToCopy = [
     ['public/robots.txt', 'dist/robots.txt'],
     ['public/humans.txt', 'dist/humans.txt'],
     ['public/openapi.yaml', 'dist/openapi.yaml']
   ];
 
+  // Copy each static file
   filesToCopy.forEach(([src, dest]) => {
     if (fs.existsSync(src)) {
       fs.copyFileSync(src, dest);
+      console.log(`Copied ${src} to ${dest}`);
     }
   });
+
+  // Verify built assets exist
+  const requiredAssets = [
+    'dist/_app/immutable/assets/admin-styles.css',
+    'dist/_app/immutable/chunks/constants.js',
+    'dist/_app/immutable/chunks/ui-components.js',
+    'dist/_app/immutable/chunks/react-vendor.js',
+    'dist/_app/immutable/chunks/utils.js'
+  ];
+
+  const missingAssets = requiredAssets.filter(asset => !fs.existsSync(asset));
+  if (missingAssets.length > 0) {
+    throw new Error(`Missing required assets:\n${missingAssets.join('\n')}`);
+  }
 
   console.log('Copied static assets to dist directory');
 }
