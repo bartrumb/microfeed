@@ -26,19 +26,16 @@ const manualChunks = {
     '@common/StringUtils',
     '@common/TimeUtils'
   ],
-  'ui-components': [
-    '@client/components/AdminCodeEditor',
-    '@client/components/AdminDialog',
-    '@client/components/AdminInput',
-    '@client/components/AdminSelect',
-    '@client/components/AdminSwitch'
-  ],
-  'admin-styles': [
-    'client-src/common/admin_styles.css'
-  ],
-  'constants': [
-    '@common/Constants'
-  ]
+  'ui-components': {
+    include: [
+      'client-src/components/AdminCodeEditor',
+      '@client/components/AdminDialog',
+      '@client/components/AdminInput',
+      '@client/components/AdminSelect',
+      '@client/components/AdminSwitch'
+    ],
+    enforce: true
+  },
 };
 
 // Add functions entry points
@@ -91,11 +88,11 @@ export default defineConfig(({ mode }) => ({
     modulePreload: false,
     manifest: true,
     outDir: 'dist',
-    emptyOutDir: true,
+    emptyOutDir: false, // Don't empty the output directory to preserve assets
     ssrManifest: true,
     cssCodeSplit: false, // Disable CSS code splitting to ensure all styles are in one file
     assetsDir: '_app/immutable',
-    terserOptions: mode === 'development' ? { 
+    terserOptions: mode === 'development' || process.env.PREVIEW ? { 
       mangle: false,
       keep_fnames: true,
       keep_classnames: true,
@@ -137,22 +134,31 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `_app/immutable/assets/${name}.css`;
+            return `_app/immutable/assets/style.css`; // Use consistent name for all CSS
           }
           return `assets/[name][extname]`;
         },
         format: 'esm',
         manualChunks: (id) => {
           for (const [name, modules] of Object.entries(manualChunks)) {
-            if (modules.some(pattern => {
-              if (typeof pattern === 'string' && pattern.endsWith('.ts')) {
-                // For explicit TypeScript files, do exact path matching
-                return id === pattern;
+            // Handle enforced chunks
+            if (modules.enforce && modules.include) {
+              if (modules.include.some(pattern => id.includes(pattern))) {
+                return name;
               }
-              // For other patterns, use includes matching
-              return id.includes(pattern);
-            })) {
-              return name;
+            }
+            // Handle regular array patterns
+            else if (Array.isArray(modules)) {
+              if (modules.some(pattern => {
+                if (typeof pattern === 'string' && pattern.endsWith('.ts')) {
+                  // For explicit TypeScript files, do exact path matching
+                  return id === pattern;
+                }
+                // For other patterns, use includes matching
+                return id.includes(pattern);
+              })) {
+                return name;
+              }
             }
           }
           return null;
@@ -184,10 +190,11 @@ export default defineConfig(({ mode }) => ({
       localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:5]',
       hashPrefix: 'microfeed'
+,
     },
     // Ensure CSS is extracted to a single file
     extract: {
-      filename: '_app/immutable/assets/[name].css'
+      filename: '_app/immutable/assets/admin-styles.css'
     }
   }
 }));

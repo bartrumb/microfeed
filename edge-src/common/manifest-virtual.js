@@ -9,7 +9,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_ToastUtils.js",
       "_StringUtils.js",
-      "_index6.js"
+      "_index5.js"
     ]
   },
   "_Constants.js": {
@@ -64,21 +64,28 @@ export const manifestData = {
     "file": "_app/immutable/chunks/index5.js",
     "name": "index",
     "imports": [
-      "_react-vendor.js"
+      "_react-vendor.js",
+      "_StringUtils.js",
+      "_Constants.js"
     ]
   },
   "_index6.js": {
     "file": "_app/immutable/chunks/index6.js",
     "name": "index",
     "imports": [
-      "_react-vendor.js",
-      "_StringUtils.js",
-      "_Constants.js"
+      "_react-vendor.js"
     ]
   },
   "_react-vendor.js": {
     "file": "_app/immutable/chunks/react-vendor.js",
     "name": "react-vendor"
+  },
+  "_ui-components.js": {
+    "file": "_app/immutable/chunks/ui-components.js",
+    "name": "ui-components",
+    "imports": [
+      "_react-vendor.js"
+    ]
   },
   "_utils.js": {
     "file": "_app/immutable/chunks/utils.js",
@@ -103,9 +110,9 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_ToastUtils.js",
-      "_index6.js",
-      "_BrowserUtils.js",
       "_index5.js",
+      "_BrowserUtils.js",
+      "_index6.js",
       "_index2.js",
       "_StringUtils.js",
       "_Constants.js",
@@ -119,9 +126,10 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index6.js",
+      "_index5.js",
       "_StringUtils.js",
       "_ToastUtils.js",
+      "_ui-components.js",
       "_Constants.js",
       "_index.js"
     ]
@@ -134,9 +142,9 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_Constants.js",
-      "_index6.js",
-      "_StringUtils.js",
       "_index5.js",
+      "_StringUtils.js",
+      "_index6.js",
       "_ToastUtils.js"
     ]
   },
@@ -147,7 +155,7 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index6.js",
+      "_index5.js",
       "_StringUtils.js",
       "_Constants.js",
       "_index2.js"
@@ -160,11 +168,11 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index6.js",
+      "_index5.js",
       "_BrowserUtils.js",
       "_StringUtils.js",
       "_Constants.js",
-      "_index5.js",
+      "_index6.js",
       "_index.js",
       "_index2.js",
       "_ToastUtils.js"
