@@ -1,5 +1,32 @@
 # Active Context - 2025-03-03
 
+## Current Focus: TypeScript Migration Cleanup
+
+We are currently in the process of migrating the Microfeed project from JavaScript/JSX to TypeScript. Several components have been successfully converted to TypeScript (.tsx), but the original JSX files still remain in the codebase. Our immediate focus is to clean up these redundant files.
+
+### Identified Issues
+
+1. **Redundant JSX Files**
+   - Several components now have both .jsx and .tsx versions
+   - This creates confusion about which file is actually being used
+   - May lead to inconsistencies if changes are made to one file but not the other
+
+2. **File Structure Documentation**
+   - Need to maintain clear documentation of the migration progress
+   - Track which components have been migrated and which still need conversion
+
+### Action Items
+
+1. **Remove Redundant JSX Files**
+   - Identified 10 .jsx files that need to be removed (see progress.md for the list)
+   - Need to verify application builds and runs correctly after removal
+
+2. **Update Documentation**
+   - Created fileStructureUpdate.md to track migration progress
+   - Updated progress.md with current tasks
+
+## Previous Focus: Resolving Cloudflare Pages Deployment Issues
+
 ## Current Focus: Resolving Cloudflare Pages Deployment Issues
 
 We are currently addressing persistent asset loading issues in the Cloudflare Pages preview deployment that are causing 404 errors and React warnings.

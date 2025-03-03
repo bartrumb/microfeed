@@ -38,6 +38,25 @@
 
 ## Type Checking Implementation
 
+### Current Tasks
+
+1. **Clean Up Redundant JSX Files**
+   - ✅ Remove redundant .jsx files that have been replaced by .tsx files:
+     - ✅ client-src/components/ExternalLink/index.jsx
+     - ✅ client-src/components/ExplainText/index.jsx
+     - ✅ client-src/components/AdminRichEditor/component/RichEditorQuill/index.jsx
+     - ✅ client-src/ClientAdminChannelApp/components/EditChannelApp/index.jsx
+     - ✅ client-src/components/AdminInput/index.jsx
+     - ✅ client-src/components/AdminRadio/index.jsx
+     - ✅ client-src/components/AdminTextarea/index.jsx
+     - ✅ client-src/components/AdminRichEditor/index.jsx
+     - ✅ client-src/components/AdminRichEditor/component/RichEditorMediaDialog/index.jsx
+     - ✅ client-src/components/AdminSelect/index.jsx
+   - [ ] Verify application builds and runs correctly after removal
+   - [ ] Update import statements in any files that still reference .jsx files
+   - [ ] Update file structure documentation
+
+
 ### Completed Tasks
 
 1. **Core Type Definitions**
@@ -60,7 +79,7 @@
    - ✅ Set up proper JSX handling
    - ✅ Added type definitions for manifest data
 
-### Current Tasks
+### In Progress
 
 1. **Component Migration**
    - Converting AdminWholeHtml component to TypeScript

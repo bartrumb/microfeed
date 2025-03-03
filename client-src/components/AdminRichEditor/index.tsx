@@ -6,13 +6,10 @@ import RichEditorQuill from "./component/RichEditorQuill";
 
 interface AdminRichEditorProps {
   label?: string;
-  value?: string;
+  value: string;
   onChange: (value: string) => void;
-  extra?: {
-    publicBucketUrl?: string;
-    folderName?: string;
-  };
-  labelComponent?: React.ReactNode;
+  extra?: Record<string, any>;
+  labelComponent?: React.ReactNode | null | undefined;
 }
 
 interface AdminRichEditorState {
@@ -29,10 +26,10 @@ export default class AdminRichEditor extends React.Component<AdminRichEditorProp
     };
   }
 
-  render() {
+  render(): JSX.Element {
     const {mode} = this.state;
     const {label, value, onChange, extra, labelComponent} = this.props;
-
+    
     return (
       <div>
         {label && <div className="lh-page-subtitle">
@@ -46,7 +43,7 @@ export default class AdminRichEditor extends React.Component<AdminRichEditorProp
               {value: 'rich', name: 'visual editor', checked: mode === 'rich'},
               {value: 'html', name: 'html source', checked: mode !== 'rich'},
             ]}
-            onChange={(e) => this.setState({mode: e.target.value as 'rich' | 'html'})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({mode: e.target.value as 'rich' | 'html'})}
             customClass="text-sm text-helper-color"
           />
         </div>
@@ -58,10 +55,11 @@ export default class AdminRichEditor extends React.Component<AdminRichEditorProp
           />
         ) : (
           <AdminTextarea 
-            value={value || ''} 
+            value={value}
             minRows={8} 
             maxRows={20} 
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)} 
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
+            customCss="text-sm"
             label=""
           />
         )}
@@ -69,5 +67,3 @@ export default class AdminRichEditor extends React.Component<AdminRichEditorProp
     );
   }
 }
-
-export type { AdminRichEditorProps };

@@ -5,7 +5,7 @@ import AdminDialog from "../AdminDialog";
 import ExternalLink from "../ExternalLink";
 import {PUBLIC_URLS} from "../../../common-src/StringUtils";
 
-interface ExplainBundle {
+export interface ExplainBundle {
   linkName: string;
   modalTitle?: string;
   text: string;
@@ -18,16 +18,16 @@ interface ExplainTextProps {
   customClass?: string;
 }
 
-const ExplainText: React.FC<ExplainTextProps> = ({bundle, customClass}) => {
+export default function ExplainText({bundle, customClass}: ExplainTextProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const Icon = isOpen ? ArrowUpCircleIcon : ArrowRightCircleIcon;
-
+  
   return (
     <div className="flex">
       <a
         href="#"
         className={clsx(customClass || 'lh-page-subtitle')}
-        onClick={(e: React.MouseEvent) => {
+        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
           e.preventDefault();
           setIsOpen(true);
         }}
@@ -50,8 +50,8 @@ const ExplainText: React.FC<ExplainTextProps> = ({bundle, customClass}) => {
                 <ExternalLink 
                   text='in rss' 
                   url={PUBLIC_URLS.rssFeed()} 
-                  iconClass="w-4 h-4"
                   linkClass="text-helper-color"
+                  iconClass="w-4"
                 />
               </div>
               <code className="m-code">{bundle.rss}</code>
@@ -64,8 +64,8 @@ const ExplainText: React.FC<ExplainTextProps> = ({bundle, customClass}) => {
                 <ExternalLink 
                   text='in json' 
                   url={PUBLIC_URLS.jsonFeed()} 
-                  iconClass="w-4 h-4"
                   linkClass="text-helper-color"
+                  iconClass="w-4"
                 />
               </div>
               <code className="m-code">{bundle.json}</code>
@@ -80,9 +80,4 @@ const ExplainText: React.FC<ExplainTextProps> = ({bundle, customClass}) => {
       </AdminDialog>
     </div>
   );
-};
-
-ExplainText.displayName = 'ExplainText';
-
-export default ExplainText;
-export type { ExplainBundle, ExplainTextProps };
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Requests from '../../../common/requests';
 import AdminNavApp from '../../../components/AdminNavApp';
 import AdminImageUploaderApp from '../../../components/AdminImageUploaderApp';
@@ -12,63 +12,12 @@ import AdminSelect from "../../../components/AdminSelect";
 import {LANGUAGE_CODES_LIST, ITUNES_CATEGORIES_DICT, NAV_ITEMS} from "../../../../common-src/Constants";
 import ExplainText, { ExplainBundle } from "../../../components/ExplainText";
 import {CHANNEL_CONTROLS, CONTROLS_TEXTS_DICT} from "./FormExplainTexts";
+import { LabelRenderer } from "../../../components/types";
+import LabelWrapper from "../../../components/LabelWrapper";
 import {preventCloseWhenChanged} from "../../../common/BrowserUtils";
+import { EditChannelAppState, LanguageCode, CategoryOption, Channel } from './types';
 
 const SUBMIT_STATUS__START = 1;
-
-interface LanguageCode {
-  code: string;
-  name: string;
-  value: string;
-  label: React.ReactNode;
-}
-
-interface CategoryOption {
-  value: string;
-  label: string;
-}
-
-interface Channel {
-  id?: string;
-  image?: string;
-  title?: string;
-  publisher?: string;
-  link?: string;
-  categories?: string[];
-  language?: string;
-  description?: string;
-  copyright?: string;
-  'itunes:explicit'?: boolean;
-  'itunes:title'?: string;
-  'itunes:type'?: 'episodic' | 'serial';
-  'itunes:email'?: string;
-  'itunes:new-feed-url'?: string;
-  'itunes:block'?: boolean;
-  'itunes:complete'?: boolean;
-}
-
-interface WebGlobalSettings {
-  publicBucketUrl?: string;
-}
-
-interface Feed {
-  channel: Channel;
-  settings: {
-    webGlobalSettings: WebGlobalSettings;
-  };
-}
-
-interface OnboardingResult {
-  [key: string]: any;
-}
-
-interface EditChannelAppState {
-  feed: Feed;
-  onboardingResult: OnboardingResult;
-  channel: Channel;
-  submitStatus: number | null;
-  changed: boolean;
-}
 
 const LANGUAGE_CODES_DICT: { [key: string]: LanguageCode } = {};
 const LANGUAGE_CODES_SELECT_OPTIONS: LanguageCode[] = [];
@@ -108,16 +57,25 @@ Object.keys(ITUNES_CATEGORIES_DICT as Record<string, string[]>).forEach((topLeve
 });
 
 export default class EditChannelApp extends React.Component<{}, EditChannelAppState> {
+  private renderLabel = (bundle: ExplainBundle | null): ReactNode => {
+    if (!bundle) return null;
+    return (
+      <div className="lh-page-subtitle">
+        <LabelWrapper bundle={bundle} />
+      </div>
+    );
+  }
+
   constructor(props: {}) {
     super(props);
 
-    let feed: Feed = { 
+    let feed = { 
       channel: {}, 
       settings: { 
         webGlobalSettings: {} 
       } 
     };
-    let onboardingResult: OnboardingResult = {};
+    let onboardingResult = {};
     
     try {
       const feedContent = document.getElementById('feed-content')?.innerHTML;
@@ -207,7 +165,7 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
             <div className="lh-page-card">
               <div className="flex">
                 <div className="flex-none">
-                  <div>
+                  <div className="lh-page-subtitle">
                     <ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.IMAGE]} customClass="lh-page-subtitle" />
                   </div>
                   <AdminImageUploaderApp
@@ -220,20 +178,20 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
                 <div className="flex-1 ml-8 grid grid-cols-1 gap-3">
                   <AdminInput
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.TITLE]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.TITLE])}
                     value={channel.title || ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('title', e.target.value)}
                   />
                   <div className="grid grid-cols-2 gap-4">
                     <AdminInput
                       label=""
-                      labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.PUBLISHER]} customClass="lh-page-subtitle" /></div>}
+                      labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.PUBLISHER])}
                       value={channel.publisher || ''}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('publisher', e.target.value)}
                     />
                     <AdminInput
                       label=""
-                      labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.WEBSITE]} customClass="lh-page-subtitle" /></div>}
+                      labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.WEBSITE])}
                       value={channel.link || ''}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('link', e.target.value)}
                     />
@@ -241,7 +199,7 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
                   <div className="grid grid-cols-2 gap-4">
                     <AdminSelect
                       label=""
-                      labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.CATEGORIES]} customClass="lh-page-subtitle" /></div>}
+                      labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.CATEGORIES])}
                       value={categories.map((c) => (CATEGORIES_DICT[c]))}
                       options={CATEGORIES_SELECT_OPTIONS}
                       onChange={(selectedOptions: CategoryOption[]) => {
@@ -254,7 +212,7 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
                     />
                     <AdminSelect
                       label=""
-                      labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.LANGUAGE]} customClass="lh-page-subtitle" /></div>}
+                      labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.LANGUAGE])}
                       value={LANGUAGE_CODES_DICT[channel.language || '']}
                       options={LANGUAGE_CODES_SELECT_OPTIONS}
                       onChange={(selected: LanguageCode) => {
@@ -266,7 +224,7 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
               </div>
               <div className="mt-8 pt-8 border-t">
                 <AdminRichEditor
-                  labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.DESCRIPTION]} customClass="lh-page-subtitle" /></div>}
+                  labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.DESCRIPTION])}
                   value={channel.description || ''}
                   onChange={(value: string) => {
                     this.onUpdateChannelMeta('description', value);
@@ -286,26 +244,26 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
                 <div className="grid grid-cols-3 gap-4">
                   <AdminRadio
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_EXPLICIT]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_EXPLICIT])}
                     groupName="lh-explicit"
                     buttons={[{
                       name: 'yes',
-                      checked: channel['itunes:explicit'],
+                      checked: Boolean(channel['itunes:explicit']),
                     }, {
                       name: 'no',
-                      checked: !channel['itunes:explicit'],
+                      checked: !Boolean(channel['itunes:explicit']),
                     }]}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('itunes:explicit', e.target.value === 'yes')}
                   />
                   <AdminInput
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.COPYRIGHT]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.COPYRIGHT])}
                     value={channel.copyright || ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('copyright', e.target.value)}
                   />
                   <AdminInput
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_TITLE]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_TITLE])}
                     value={channel['itunes:title'] || ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('itunes:title', e.target.value)}
                   />
@@ -313,7 +271,7 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
                 <div className="grid grid-cols-3 gap-4">
                   <AdminRadio
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_TYPE]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_TYPE])}
                     groupName="feed-itunes-type"
                     buttons={[{
                       name: 'episodic',
@@ -326,14 +284,14 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
                   />
                   <AdminInput
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_EMAIL]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_EMAIL])}
                     type="email"
                     value={channel['itunes:email'] || ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('itunes:email', e.target.value)}
                   />
                   <AdminInput
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_NEW_RSS_URL]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_NEW_RSS_URL])}
                     type="url"
                     value={channel['itunes:new-feed-url'] || ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('itunes:new-feed-url', e.target.value)}
@@ -342,27 +300,27 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
                 <div className="grid grid-cols-3 gap-4">
                   <AdminRadio
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_BLOCK]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_BLOCK])}
                     groupName="feed-itunes-block"
                     buttons={[{
                       name: 'yes',
-                      checked: channel['itunes:block'] || false,
+                      checked: Boolean(channel['itunes:block']),
                     }, {
                       name: 'no',
-                      checked: !channel['itunes:block'],
+                      checked: !Boolean(channel['itunes:block']),
                     }]}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('itunes:block', e.target.value === 'yes')}
                   />
                   <AdminRadio
                     label=""
-                    labelComponent={<div><ExplainText bundle={CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_COMPLETE]} customClass="lh-page-subtitle" /></div>}
+                    labelComponent={this.renderLabel(CONTROLS_TEXTS_DICT[CHANNEL_CONTROLS.ITUNES_COMPLETE])}
                     groupName="feed-itunes-complete"
                     buttons={[{
                       name: 'yes',
-                      checked: channel['itunes:complete'] || false,
+                      checked: Boolean(channel['itunes:complete']),
                     }, {
                       name: 'no',
-                      checked: !channel['itunes:complete'],
+                      checked: !Boolean(channel['itunes:complete']),
                     }]}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.onUpdateChannelMeta('itunes:complete', e.target.value === 'yes')}
                   />

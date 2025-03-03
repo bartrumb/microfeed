@@ -10,10 +10,10 @@ interface AdminTextareaProps {
   maxRows?: number;
   customCss?: string;
   placeholder?: string;
-  labelComponent?: React.ReactNode;
+  labelComponent?: React.ReactNode | null | undefined;
 }
 
-export default function AdminTextarea({ 
+export default function AdminTextarea({
   label,
   value,
   onChange,
@@ -21,8 +21,8 @@ export default function AdminTextarea({
   maxRows = 10,
   customCss = '',
   placeholder = '',
-  labelComponent
-}: AdminTextareaProps) {
+  labelComponent = null
+}: AdminTextareaProps): JSX.Element {
   return (
     <label className="">
       {label && <div className="lh-page-subtitle">{label}</div>}
@@ -40,5 +40,3 @@ export default function AdminTextarea({
     </label>
   );
 }
-
-export type { AdminTextareaProps };

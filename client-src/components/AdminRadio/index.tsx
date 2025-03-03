@@ -4,7 +4,7 @@ import clsx from "clsx";
 interface RadioButton {
   name: string;
   value?: string;
-  checked: boolean | undefined;
+  checked: boolean;
 }
 
 interface AdminRadioProps {
@@ -12,22 +12,22 @@ interface AdminRadioProps {
   groupName: string;
   buttons: RadioButton[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  labelComponent?: JSX.Element;
+  labelComponent?: React.ReactNode | null | undefined;
   disabled?: boolean;
   customLabelClass?: string;
   customClass?: string;
 }
 
-const AdminRadio: React.FC<AdminRadioProps> = ({
+export default function AdminRadio({
   label,
   groupName,
   buttons,
   onChange,
-  labelComponent,
+  labelComponent = null,
   disabled = false,
   customLabelClass = '',
-  customClass = '',
-}) => {
+  customClass = ''
+}: AdminRadioProps): JSX.Element {
   return (
     <fieldset className={clsx("flex flex-col justify-start", customClass)}>
       {label && <legend className={clsx(customLabelClass || 'lh-page-subtitle')}>{label}</legend>}
@@ -39,7 +39,7 @@ const AdminRadio: React.FC<AdminRadioProps> = ({
               type="radio"
               name={groupName}
               value={b.value || b.name}
-              checked={!!b.checked}
+              checked={b.checked}
               onChange={(e) => {
                 onChange(e);
               }}
@@ -52,7 +52,4 @@ const AdminRadio: React.FC<AdminRadioProps> = ({
       </div>
     </fieldset>
   );
-};
-
-export default AdminRadio;
-export type { AdminRadioProps, RadioButton };
+}

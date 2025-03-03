@@ -2,25 +2,6 @@ import React, { useState, useRef, useImperativeHandle, forwardRef, useEffect } f
 import ReactQuill from "react-quill";
 import RichEditorMediaDialog from "../RichEditorMediaDialog";
 
-interface QuillEditor {
-  getModule(name: string): any;
-  getSelection(): { index: number; length: number } | null;
-}
-
-interface ReactQuillRef {
-  getEditor(): QuillEditor;
-}
-
-interface RichEditorQuillProps {
-  value?: string;
-  onChange: (value: string) => void;
-  extra?: Record<string, unknown>;
-}
-
-interface RichEditorQuillRef {
-  getEditor: () => QuillEditor | undefined;
-}
-
 const toolbarOptions = [
   [{'header': [2, 3, false]}],
   ['bold', 'italic', 'underline', 'blockquote', 'code-block'],
@@ -43,12 +24,22 @@ const formats = [
   'image', 'video',
 ];
 
+interface RichEditorQuillProps {
+  value: string;
+  onChange: (value: string) => void;
+  extra?: Record<string, any>;
+}
+
+interface RichEditorQuillRef {
+  getEditor: () => any;
+}
+
 const RichEditorQuill = forwardRef<RichEditorQuillRef, RichEditorQuillProps>((props, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
-  const [quillSelection, setQuillSelection] = useState<{ index: number; length: number } | null>(null);
-  const editorRef = useRef<ReactQuillRef | null>(null);
-  const reactQuillRef = useRef<ReactQuillRef | null>(null);
+  const [quillSelection, setQuillSelection] = useState<any>(null);
+  const editorRef = useRef<any>(null);
+  const reactQuillRef = useRef<any>(null);
 
   useImperativeHandle(ref, () => ({
     getEditor: () => editorRef.current?.getEditor()
@@ -84,7 +75,7 @@ const RichEditorQuill = forwardRef<RichEditorQuillRef, RichEditorQuillProps>((pr
         onChange={onChange}
         modules={modules}
         formats={formats}
-        ref={reactQuillRef as React.Ref<ReactQuill>}
+        ref={reactQuillRef}
       />
       <RichEditorMediaDialog
         isOpen={isOpen}

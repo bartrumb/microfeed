@@ -1,35 +1,24 @@
-import React, { InputHTMLAttributes } from "react";
+import React from "react";
 import clsx from "clsx";
 import { enhanceFieldAccessibility } from "../../common/AccessibilityUtils";
+import { BaseInputProps } from "../types";
 
-interface AdminInputProps {
-  label?: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  labelComponent?: JSX.Element;
+interface AdminInputProps extends Omit<BaseInputProps, 'labelComponent'> {
   placeholder?: string;
   disabled?: boolean;
-  setRef?: () => void;
+  setRef?: (ref: HTMLInputElement) => void;
   customLabelClass?: string;
   customClass?: string;
   type?: string;
-  extraParams?: Record<string, unknown>;
+  extraParams?: Record<string, any>;
+  labelComponent?: React.ReactNode | null | undefined;
 }
 
-interface EnhancedInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  type: string;
-  placeholder: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className: string;
-  disabled: boolean;
-}
-
-const AdminInput: React.FC<AdminInputProps> = ({
+export default function AdminInput({
   label,
   value,
   onChange,
-  labelComponent,
+  labelComponent = null,
   placeholder = '',
   disabled = false,
   setRef = () => {},
@@ -37,31 +26,29 @@ const AdminInput: React.FC<AdminInputProps> = ({
   customClass = '',
   type = 'text',
   extraParams = {}
-}) => {
-  const inputProps = enhanceFieldAccessibility({
-    type,
-    placeholder,
-    value: value || '',
-    onChange,
-    className: clsx(
-      'w-full rounded',
-      customClass || 'text-sm',
-      disabled && 'bg-gray-100'
-    ),
-    disabled,
-    ...extraParams
-  }, 'input') as EnhancedInputProps;
-
+}: AdminInputProps): JSX.Element {
   return (
     <label className="w-full">
       {label && <div className={clsx(customLabelClass || "lh-page-subtitle")}>{label}</div>}
       {labelComponent}
       <div className="w-full relative">
-        <input {...inputProps} />
+        <input
+          {...enhanceFieldAccessibility({
+            type,
+            placeholder,
+            value: value || '',
+            onChange,
+            className: clsx(
+              'w-full rounded',
+              customClass || 'text-sm',
+              disabled && 'bg-gray-100'
+            ),
+            disabled,
+            ...extraParams
+          }, 'input')}
+          ref={setRef}
+        />
       </div>
     </label>
   );
-};
-
-export default AdminInput;
-export type { AdminInputProps };
+}
