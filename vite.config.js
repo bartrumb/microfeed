@@ -135,13 +135,8 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            // Use specific names for CSS files
-            if (name.includes('admin')) {
-              return `_app/immutable/assets/admin-styles.css`;
-            } else {
-              return `_app/immutable/assets/index.css`;
-            }
-          }
+            return `_app/immutable/assets/${name.includes('admin') ? 'admin-styles' : 'index'}.css`;
+           }
           return `assets/[name][extname]`;
         },
         format: 'esm',

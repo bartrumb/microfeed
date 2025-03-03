@@ -9,7 +9,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_ToastUtils.js",
       "_StringUtils.js",
-      "_index5.js"
+      "_admin_styles.js"
     ]
   },
   "_Constants.js": {
@@ -28,6 +28,15 @@ export const manifestData = {
     "name": "ToastUtils",
     "imports": [
       "_react-vendor.js"
+    ]
+  },
+  "_admin_styles.js": {
+    "file": "_app/immutable/chunks/admin_styles.js",
+    "name": "admin_styles",
+    "imports": [
+      "_react-vendor.js",
+      "_StringUtils.js",
+      "_Constants.js"
     ]
   },
   "_index.js": {
@@ -62,15 +71,6 @@ export const manifestData = {
   },
   "_index5.js": {
     "file": "_app/immutable/chunks/index5.js",
-    "name": "index",
-    "imports": [
-      "_react-vendor.js",
-      "_StringUtils.js",
-      "_Constants.js"
-    ]
-  },
-  "_index6.js": {
-    "file": "_app/immutable/chunks/index6.js",
     "name": "index",
     "imports": [
       "_react-vendor.js"
@@ -110,9 +110,9 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_ToastUtils.js",
-      "_index5.js",
+      "_admin_styles.js",
       "_BrowserUtils.js",
-      "_index6.js",
+      "_index5.js",
       "_index2.js",
       "_StringUtils.js",
       "_Constants.js",
@@ -126,7 +126,7 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index5.js",
+      "_admin_styles.js",
       "_StringUtils.js",
       "_ToastUtils.js",
       "_ui-components.js",
@@ -142,9 +142,9 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_Constants.js",
-      "_index5.js",
+      "_admin_styles.js",
       "_StringUtils.js",
-      "_index6.js",
+      "_index5.js",
       "_ToastUtils.js"
     ]
   },
@@ -155,7 +155,7 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index5.js",
+      "_admin_styles.js",
       "_StringUtils.js",
       "_Constants.js",
       "_index2.js"
@@ -168,11 +168,11 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index5.js",
+      "_admin_styles.js",
       "_BrowserUtils.js",
       "_StringUtils.js",
       "_Constants.js",
-      "_index6.js",
+      "_index5.js",
       "_index.js",
       "_index2.js",
       "_ToastUtils.js"
@@ -519,7 +519,7 @@ export const manifestData = {
     ]
   },
   "style.css": {
-    "file": "_app/immutable/assets/style.css",
+    "file": "_app/immutable/assets/index.css",
     "src": "style.css"
   }
 };

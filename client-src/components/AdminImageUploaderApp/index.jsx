@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.min.css';
-import FileUploaderWrapper from "../FileUploaderWrapper";
+import {FileUploader} from "react-drag-drop-files";
 import Requests from '../../common/requests';
 import {randomHex, urlJoinWithRelative} from '../../../common-src/StringUtils';
 import AdminDialog from "../AdminDialog";

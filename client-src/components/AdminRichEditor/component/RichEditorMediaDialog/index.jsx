@@ -93,7 +93,6 @@ export default class RichEditorMediaDialog extends React.Component {
     Requests.upload(file, cdnFilename, (percentage) => {
       this.setState({progressText: `${parseFloat(percentage * 100.0).toFixed(2)}%`});
     }, (cdnUrl) => {
-        // updateState(cdnUrl, 0);
       const url = urlJoinWithRelative(publicBucketUrl, cdnUrl);
       this.setState({
         url,

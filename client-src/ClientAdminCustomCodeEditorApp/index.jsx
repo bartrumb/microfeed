@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import CustomCodeEditorApp from "./components/CustomCodeEditorApp";
+import '../common/admin_styles.css';
 
 document.addEventListener('DOMContentLoaded', () => {
   const $rootDom = document.getElementById('client-side-root');
