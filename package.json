@@ -4,7 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "vite build --mode development",
+    "build": "node -r dotenv/config ./node_modules/vite/bin/vite.js build --mode development",
     "dev:worker": "wrangler pages dev dist --compatibility-date=2024-02-28 --d1 FEED_DB --ip 0.0.0.0 --port 8788",
     "preview": "vite preview",
     "deploy:preview": "node ops/deploy.js preview",

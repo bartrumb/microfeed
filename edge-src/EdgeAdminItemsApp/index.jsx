@@ -4,12 +4,13 @@ import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
 import { isDev } from '../common/ManifestUtils';
 import { withManifest } from '../common/withManifest';
 
-// Critical chunks that should be loaded first
+// Critical chunks that must be loaded before rendering
+// This informs withManifest + HtmlHeader about required dependencies
 const CRITICAL_CHUNKS = [
   'react-vendor',
   'utils',
   'ui-components',
-  'constants'
+  'constants'  // Contains NAV_ITEMS_DICT needed by render()
 ];
 
 class EdgeAdminItemsApp extends React.Component {
@@ -20,15 +21,8 @@ class EdgeAdminItemsApp extends React.Component {
   render() {
     const {feedContent, onboardingResult, manifest} = this.props;
 
-    // In development, we only need the entry point 
-    // In production/preview, we need both entry points and critical chunks
-    const scripts = isDev ? [
-      'adminitems'
-    ] : [
-      'react-vendor',
-      'utils',
-      'ui-components',
-      'constants',
+    // Only specify the entry point - HtmlHeader will combine with CRITICAL_CHUNKS
+    const scripts = [
       'adminitems'
     ];
 
@@ -46,4 +40,5 @@ class EdgeAdminItemsApp extends React.Component {
   }
 }
 
+// withManifest HOC uses CRITICAL_CHUNKS to ensure dependencies are loaded
 export default withManifest(EdgeAdminItemsApp);

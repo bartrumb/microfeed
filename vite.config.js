@@ -4,13 +4,6 @@ import path from 'path';
 import fs from 'fs';
 import { createRequire } from 'module';
 
-// Check if hash is disabled (for preview deployment)
-const disableHash = process.env.VITE_DISABLE_HASH === 'true';
-// Check if optimizations should be disabled
-const disableOptimizations = process.env.VITE_DISABLE_OPTIMIZATIONS === 'true';
-// Check if exports should be preserved
-const preserveExports = process.env.VITE_PRESERVE_EXPORTS === 'true';
-
 // Entry points configuration
 const entryPoints = {
   'adminhome': 'client-src/ClientAdminHomeApp/index.jsx',
@@ -45,8 +38,6 @@ const manualChunks = {
   'constants': [
     '@common/Constants'
   ]
-  // Note: withManifest should not be its own chunk - it should be imported inline
-  // where needed to prevent 404 errors
 };
 
 // Add functions entry points
@@ -93,28 +84,23 @@ export default defineConfig({
     strictPort: true
   },
   build: {
-    // Environment-specific build options to prevent export name mangling
-    minify: !disableHash && !disableOptimizations,
-    target: (disableHash || disableOptimizations) ? 'esnext' : 'es2019',
-    sourcemap: true, // Always enable source maps for better debugging
-    modulePreload: !(disableHash || disableOptimizations),
+    minify: false,
+    target: 'esnext',
+    sourcemap: true,
+    modulePreload: false,
     manifest: true,
     outDir: 'dist',
     emptyOutDir: true,
     ssrManifest: true,
     cssCodeSplit: true,
     terserOptions: { 
-      mangle: !(disableHash || preserveExports),
-      // Preserve export names in preview mode
-      keep_fnames: disableHash || preserveExports,
-      keep_classnames: true, // Preserve class names for better error traces
-      compress: !(disableHash || disableOptimizations) ? {
-        passes: 2
-      } : false,
+      mangle: false,
+      keep_fnames: true,
+      keep_classnames: true,
+      compress: false,
       format: {
-        // Keep comments in preview mode
-        comments: disableHash ? 'all' : false,
-        beautify: disableHash
+        comments: true,
+        beautify: true
       }
     },
     chunkSizeWarningLimit: 1000,
@@ -124,49 +110,25 @@ export default defineConfig({
         entryFileNames: (chunkInfo) => {
           if (chunkInfo.name.startsWith('functions/')) {
             return `${chunkInfo.name}.js`;
-          } else if (disableHash) {
-            // For manual chunks in preview environment, force them to chunks directory
-            if (Object.keys(manualChunks).includes(chunkInfo.name)) {
-              return `_app/immutable/chunks/${chunkInfo.name}.js`;
-            }
-            return `_app/immutable/entry-${chunkInfo.name}.js`;
           } else {
-            // Use hash in production
-            return `_app/immutable/entry-${chunkInfo.name}-[hash:8].js`;
+            return `_app/immutable/entry-${chunkInfo.name}.js`;
           }
         },
         chunkFileNames: (chunkInfo) => {
-          // In preview, don't use hashes at all
-          if (disableHash) {
-            return `_app/immutable/chunks/${chunkInfo.name}.js`;
-          }
-          
-          // For manual chunks, use the chunk name directly
           if (Object.keys(manualChunks).includes(chunkInfo.name)) {
             return `_app/immutable/chunks/${chunkInfo.name}.js`;
           }
-          
-          // For dynamic chunks, use a generic name with hash
-          return `_app/immutable/chunks/${chunkInfo.name}-[hash:8].js`;
+          return `_app/immutable/chunks/${chunkInfo.name}.js`;
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            if (disableHash) {
-              return `_app/immutable/assets/${name}.css`;
-            }
-            return `_app/immutable/assets/${name}-[hash:8].css`;
+            return `_app/immutable/assets/${name}.css`;
           }
-          
-          if (disableHash) {
-            return `assets/[name][extname]`;
-          }
-          return `assets/[name]-[hash:8][extname]`;
+          return `assets/[name][extname]`;
         },
-        
         format: 'esm',
         manualChunks: (id) => {
-          // Check if this module is part of a manual chunk
           for (const [name, modules] of Object.entries(manualChunks)) {
             if (modules.some(pattern => id.includes(pattern))) {
               return name;
@@ -181,7 +143,9 @@ export default defineConfig({
     alias: {
       '@client': path.resolve(__dirname, './client-src'),
       '@edge': path.resolve(__dirname, './edge-src'),
-      '@common': path.resolve(__dirname, './common-src')
+      '@common': path.resolve(__dirname, './common-src'),
+      // Only alias our app's utils, not node_modules
+      '@client/common/utils.js': path.resolve(__dirname, './client-src/common/utils-dev.js')
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
