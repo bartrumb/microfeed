@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.min.css';
-import {FileUploader} from "react-drag-drop-files";
+import FileUploaderWrapper from "../FileUploaderWrapper";
 import Requests from '../../common/requests';
 import {randomHex, urlJoinWithRelative} from '../../../common-src/StringUtils';
 import AdminDialog from "../AdminDialog";
@@ -171,7 +171,7 @@ export default class AdminImageUploaderApp extends React.Component {
       `Image too small: ${parseInt(imageWidth)} x ${parseInt(imageHeight)} pixels. ` +
       "If it's for a podcast image, Apple Podcasts requires the image to have 1400 x 1400 to 3000 x 3000 pixels.";
     return (<div className="lh-upload-wrapper">
-      <FileUploader
+      <FileUploaderWrapper
         handleChange={this.onFileUpload}
         name="imageUploader"
         types={fileTypes}
@@ -182,7 +182,7 @@ export default class AdminImageUploaderApp extends React.Component {
           {absoluteImageUrl ? <PreviewImage url={absoluteImageUrl}/> :
             <EmptyImage fileTypes={fileTypes} />}
         </div>
-      </FileUploader>
+      </FileUploaderWrapper>
       {absoluteImageUrl && <div className="text-sm flex justify-center mt-1">
         <ExternalLink linkClass="text-helper-color text-xs" text="preview image" url={absoluteImageUrl} />
       </div>}

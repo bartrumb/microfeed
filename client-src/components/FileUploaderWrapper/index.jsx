@@ -1,33 +1,14 @@
 import React from 'react';
-import { FileUploader } from "react-drag-drop-files";
+import { FileUploader as BaseFileUploader } from "react-drag-drop-files";
 
-/**
- * Wrapper for FileUploader that handles prop filtering and styling
- * This prevents the overRide prop warning by properly handling props
- */
+// Wrapper component to handle the overRide prop correctly
 export default function FileUploaderWrapper(props) {
-  // Filter out any props that might cause DOM warnings
-  const {
-    handleChange,
-    name,
-    types,
-    disabled,
-    classes,
-    children,
-    ...otherProps
-  } = props;
-
-  // Only pass valid props to FileUploader
+  // Convert overRide to lowercase override
+  const { overRide, ...rest } = props;
   return (
-    <FileUploader
-      handleChange={handleChange}
-      name={name}
-      types={types}
-      disabled={disabled}
-      classes={classes}
-      {...otherProps}
-    >
-      {children}
-    </FileUploader>
+    <BaseFileUploader
+      {...rest}
+      override={overRide}
+    />
   );
 }

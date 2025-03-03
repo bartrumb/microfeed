@@ -6,7 +6,7 @@ import RichEditorMediaDialog from "../RichEditorMediaDialog";
 // Only register if not already registered
 if (!Quill.imports['modules/blotFormatter']) {
   try {
-    Quill.register('modules/blotFormatter', BlotFormatter.default || BlotFormatter);
+    Quill.register('modules/blotFormatter', BlotFormatter);
   } catch (e) {
     console.warn('Failed to register blotFormatter:', e);
   }

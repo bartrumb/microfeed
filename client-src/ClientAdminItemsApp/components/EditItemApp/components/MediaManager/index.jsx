@@ -14,7 +14,7 @@ import {
 } from "../../../../../../common-src/Constants";
 import AdminRadio from "../../../../../components/AdminRadio";
 import AdminInput from "../../../../../components/AdminInput";
-import {FileUploader} from "react-drag-drop-files";
+import FileUploaderWrapper from "../../../../../components/FileUploaderWrapper";
 import {CloudArrowUpIcon} from "@heroicons/react/24/outline";
 import {getPublicBaseUrl} from "../../../../../common/ClientUrlUtils";
 import {showToast} from "../../../../../common/ToastUtils";
@@ -82,7 +82,7 @@ function MediaUploader(
       <summary className="m-page-summary mt-4 text-sm">
         {headerTitle}
       </summary>
-      <FileUploader
+      <FileUploaderWrapper
         handleChange={onFileUpload}
         name="audioUploader"
         types={fileTypes}
@@ -101,7 +101,7 @@ function MediaUploader(
             <div className="text-sm">{fileTypes.join(', ')}</div>
           </div>}
         </div>
-      </FileUploader>
+      </FileUploaderWrapper>
     </details>
   </div>);
 }
