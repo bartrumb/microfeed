@@ -6,7 +6,7 @@ import AdminInput from "../../../components/AdminInput";
 import AdminRadio from "../../../components/AdminRadio";
 import {unescapeHtml} from '../../../../common-src/StringUtils';
 import {showToast} from "../../../common/ToastUtils";
-import {AdminSideQuickLinks} from "../../../components/AdminSideQuickLinks";
+import * as AdminSideQuickLinksModule from "../../../components/AdminSideQuickLinks";
 import AdminRichEditor from "../../../components/AdminRichEditor";
 import AdminSelect from "../../../components/AdminSelect";
 import {LANGUAGE_CODES_LIST, ITUNES_CATEGORIES_DICT, NAV_ITEMS} from "../../../../common-src/Constants";
@@ -304,7 +304,7 @@ export default class EditChannelApp extends React.Component {
                 {submitting ? 'Updating...' : 'Update'}
               </button>
             </div>
-            <AdminSideQuickLinks />
+            <AdminSideQuickLinksModule.AdminSideQuickLinks />
           </div>
         </div>
       </form>

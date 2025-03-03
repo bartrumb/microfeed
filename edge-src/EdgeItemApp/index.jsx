@@ -2,6 +2,11 @@ import React from 'react';
 import HtmlHeader from "../components/HtmlHeader";
 import {htmlMetaDescription} from "../../common-src/StringUtils";
 
+// Use same environment detection as ViteUtils
+const isDev = typeof process !== 'undefined' && 
+  process.env.NODE_ENV === 'development' && 
+  !process.env.CF_PAGES;
+
 export default class EdgeItemApp extends React.Component {
   render() {
     const {item, theme, jsonData, canonicalUrl} = this.props;
@@ -11,8 +16,8 @@ export default class EdgeItemApp extends React.Component {
       <HtmlHeader
         title={item.title}
         description={htmlMetaDescription(item.content_text, false)}
-        webpackJsList={[]}
-        webpackCssList={[]}
+        scripts={isDev ? [] : []}
+        styles={[]}
         canonicalUrl={canonicalUrl}
         favicon={{
           // 'apple-touch-icon': '/assets/apple-touch-icon.png',

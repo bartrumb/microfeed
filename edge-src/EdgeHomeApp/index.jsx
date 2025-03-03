@@ -2,6 +2,11 @@ import React from 'react';
 import HtmlHeader from "../components/HtmlHeader";
 import {htmlMetaDescription} from "../../common-src/StringUtils";
 
+// Use same environment detection as ViteUtils
+const isDev = typeof process !== 'undefined' && 
+  process.env.NODE_ENV === 'development' && 
+  !process.env.CF_PAGES;
+
 export default class EdgeHomeApp extends React.Component {
   render() {
     const {jsonData, theme} = this.props;
@@ -11,8 +16,8 @@ export default class EdgeHomeApp extends React.Component {
       <HtmlHeader
         title={jsonData.title}
         description={htmlMetaDescription(jsonData._microfeed.description_text, false)}
-        webpackJsList={[]}
-        webpackCssList={[]}
+        scripts={isDev ? [] : []}
+        styles={[]}
         favicon={{
           // 'apple-touch-icon': '/assets/apple-touch-icon.png',
           // '32x32': '/assets/favicon-32x32.png',

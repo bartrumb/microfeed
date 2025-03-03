@@ -1,5 +1,38 @@
 # Decision Log
 
+## 2025-03-02: Prop Name Standardization for Vite Migration
+
+### Context
+The migration from Webpack to Vite required updating component props from `webpackJsList` and `webpackCssList` to `scripts` and `styles` to align with the new build system's asset handling approach.
+
+### Decision
+1. Verify all Edge components have been updated to use the new Vite-compatible props
+2. Confirm consistent environment detection with `isDev` constant
+3. Validate chunk naming strategy across components
+
+### Rationale
+- Consistent prop naming is essential for proper asset loading in the Vite build system
+- Environment-specific script loading optimizes performance in development and production
+- Standardized chunk naming improves caching and maintenance
+
+### Consequences
+- Positive: Unified asset loading approach across all components
+- Positive: Clearer separation between development and production environments
+- Positive: More maintainable component structure
+- Neutral: Requires careful coordination between component references and Vite configuration
+
+### Implementation Notes
+- All Edge components now use `scripts` and `styles` props
+- Environment detection uses the same `isDev` constant across components
+- Chunk naming follows a consistent pattern for better predictability
+
+### Status
+✅ Verified
+
+### Related Decisions
+- Cloudflare Workers Asset Loading Fix (2025-03-02)
+- Asset Path Standardization (2025-03-02)
+
 ## 2025-03-02: Cloudflare Workers Asset Loading Fix
 
 ### Context

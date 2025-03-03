@@ -22,6 +22,13 @@
 
 ## Completed Tasks
 
+### Prop Name Updates Verification (2025-03-02)
+- ✅ Verified all Edge components have been updated to use the new Vite-compatible props:
+  - Confirmed `scripts` and `styles` props are used instead of `webpackJsList` and `webpackCssList`
+  - Verified correct environment detection with `isDev` constant
+  - Confirmed proper chunk naming strategy across components
+  - Validated consistent script loading patterns in all components
+
 ### Cloudflare Workers Asset Loading Fix (2025-03-02)
 - ✅ Fixed dynamic require error in Cloudflare Workers:
   - Replaced dynamic manifest.json require with static path generation

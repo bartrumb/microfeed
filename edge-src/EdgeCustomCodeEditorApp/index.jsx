@@ -3,6 +3,11 @@ import AdminWholeHtml from "../components/AdminWholeHtml";
 import {escapeHtml} from "../../common-src/StringUtils";
 import {OUR_BRAND} from "../../common-src/Constants";
 
+// Use same environment detection as ViteUtils
+const isDev = typeof process !== 'undefined' && 
+  process.env.NODE_ENV === 'development' && 
+  !process.env.CF_PAGES;
+
 export default class EdgeCustomCodeEditorApp extends React.Component {
   constructor(props) {
     super(props);
@@ -23,8 +28,16 @@ export default class EdgeCustomCodeEditorApp extends React.Component {
       <AdminWholeHtml
         title={`Code Editor | ${OUR_BRAND.domain}`}
         description=""
-        webpackJsList={['custom_code_editor_js']}
-        webpackCssList={['admin_styles_css']}
+        scripts={isDev ? [
+          'admincustomcode'
+        ] : [
+          'react-vendor',
+          'utils',
+          'ui-components',
+          'constants',
+          'admincustomcode'
+        ]}
+        styles={['index', 'admin-styles']}
         feedContent={feedContent}
         onboardingResult={onboardingResult}
       >
