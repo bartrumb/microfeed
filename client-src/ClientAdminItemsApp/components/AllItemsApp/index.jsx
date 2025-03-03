@@ -1,5 +1,6 @@
 import React from 'react';
 import AdminNavApp from '../../../components/AdminNavApp';
+import ErrorBoundary from '../../../components/ErrorBoundary';
 import {
   unescapeHtml,
   ADMIN_URLS,
@@ -13,7 +14,8 @@ import {
   STATUSES,
   ITEM_STATUSES_DICT,
   NAV_ITEMS,
-  NAV_ITEMS_DICT, ITEMS_SORT_ORDERS
+  NAV_ITEMS_DICT,
+  ITEMS_SORT_ORDERS
 } from "../../../../common-src/Constants";
 import {msToDatetimeLocalString} from '../../../../common-src/TimeUtils';
 import {
@@ -36,7 +38,7 @@ const columns = [
   columnHelper.accessor('status', {
     header: 'Status',
     cell: info => <div className={clsx('text-center font-semibold', info.getValue() === STATUSES.PUBLISHED ? 'text-brand-light' : '')}>
-      {ITEM_STATUSES_DICT[info.getValue()].name}</div>,
+      {ITEM_STATUSES_DICT[info.getValue()]?.name || 'Unknown'}</div>,
   }),
   columnHelper.accessor('pubDateMs', {
     header: 'Published date',
@@ -127,10 +129,22 @@ export default class AllItemsApp extends React.Component {
   constructor(props) {
     super(props);
 
-    const feed = JSON.parse(unescapeHtml(document.getElementById('feed-content').innerHTML));
-    const onboardingResult = JSON.parse(unescapeHtml(document.getElementById('onboarding-result').innerHTML));
+    let feed;
+    let onboardingResult;
+    try {
+      feed = JSON.parse(unescapeHtml(document.getElementById('feed-content')?.innerHTML || '{}'));
+      onboardingResult = JSON.parse(unescapeHtml(document.getElementById('onboarding-result')?.innerHTML || '{}'));
+    } catch (error) {
+      console.error('Error parsing feed content or onboarding result:', error);
+      feed = { items: [], settings: { webGlobalSettings: {} } };
+      onboardingResult = {};
+    }
 
+    // Ensure required objects exist
+    feed.settings = feed.settings || {};
+    feed.settings.webGlobalSettings = feed.settings.webGlobalSettings || {};
     const items = feed.items || [];
+
     this.state = {
       feed,
       onboardingResult,
@@ -138,14 +152,12 @@ export default class AllItemsApp extends React.Component {
     };
   }
 
-  componentDidMount() {
-  }
-
   render() {
     const {items, feed, onboardingResult} = this.state;
-    const {settings} = feed;
-    const {webGlobalSettings} = settings;
+    const settings = feed.settings || {};
+    const webGlobalSettings = settings.webGlobalSettings || {};
     const publicBucketUrl = webGlobalSettings.publicBucketUrl || '/';
+
     const data = items.map((item) => ({
       status: item.status || STATUSES.PUBLISHED,
       pubDateMs: item.pubDateMs,
@@ -171,7 +183,7 @@ export default class AllItemsApp extends React.Component {
           <ExternalLink
             url={item.mediaFile.category === ENCLOSURE_CATEGORIES.EXTERNAL_URL ? item.mediaFile.url:
               urlJoinWithRelative(publicBucketUrl, item.mediaFile.url)}
-            text={ENCLOSURE_CATEGORIES_DICT[item.mediaFile.category].name}
+            text={ENCLOSURE_CATEGORIES_DICT[item.mediaFile.category]?.name || 'Unknown'}
           />
           {[ENCLOSURE_CATEGORIES.AUDIO, ENCLOSURE_CATEGORIES.VIDEO].includes(item.mediaFile.category) &&
             <div className="text-xs mt-1">
@@ -181,23 +193,27 @@ export default class AllItemsApp extends React.Component {
       </div>
     }));
 
-    return (<AdminNavApp
-      currentPage={NAV_ITEMS.ALL_ITEMS}
-      onboardingResult={onboardingResult}
-    >
-      <form className="lh-page-card grid grid-cols-1 gap-4">
-        <div className="lh-page-title">
-          {NAV_ITEMS_DICT[NAV_ITEMS.ALL_ITEMS].name}
-        </div>
-        <div>
-          {data.length > 0 ? <ItemListTable data={data} feed={feed} /> : <div>
-            <div className="mb-8">
-              No items yet.
+    return (
+      <ErrorBoundary fallback="There was an error loading the items list. Please try refreshing the page.">
+        <AdminNavApp
+          currentPage={NAV_ITEMS.ALL_ITEMS}
+          onboardingResult={onboardingResult}
+        >
+          <form className="lh-page-card grid grid-cols-1 gap-4">
+            <div className="lh-page-title">
+              {NAV_ITEMS_DICT[NAV_ITEMS.ALL_ITEMS].name}
             </div>
-            <a href={ADMIN_URLS.newItem()}>Add a new item now <span className="lh-icon-arrow-right" /></a>
-          </div>}
-        </div>
-      </form>
-    </AdminNavApp>);
+            <div>
+              {data.length > 0 ? <ItemListTable data={data} feed={feed} /> : <div>
+                <div className="mb-8">
+                  No items yet.
+                </div>
+                <a href={ADMIN_URLS.newItem()}>Add a new item now <span className="lh-icon-arrow-right" /></a>
+              </div>}
+            </div>
+          </form>
+        </AdminNavApp>
+      </ErrorBoundary>
+    );
   }
 }

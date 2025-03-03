@@ -115,8 +115,7 @@ export const manifestData = {
       "_index2.js",
       "_StringUtils.js",
       "_Constants.js",
-      "_index.js",
-      "_utils.js"
+      "_index.js"
     ]
   },
   "client-src/ClientAdminCustomCodeEditorApp/index.jsx": {
@@ -130,8 +129,7 @@ export const manifestData = {
       "_StringUtils.js",
       "_ToastUtils.js",
       "_Constants.js",
-      "_index.js",
-      "_utils.js"
+      "_index.js"
     ]
   },
   "client-src/ClientAdminHomeApp/index.jsx": {
@@ -145,8 +143,7 @@ export const manifestData = {
       "_index6.js",
       "_StringUtils.js",
       "_index5.js",
-      "_ToastUtils.js",
-      "_utils.js"
+      "_ToastUtils.js"
     ]
   },
   "client-src/ClientAdminItemsApp/index.jsx": {
@@ -159,8 +156,7 @@ export const manifestData = {
       "_index6.js",
       "_StringUtils.js",
       "_Constants.js",
-      "_index2.js",
-      "_utils.js"
+      "_index2.js"
     ]
   },
   "client-src/ClientAdminSettingsApp/index.jsx": {
@@ -177,8 +173,7 @@ export const manifestData = {
       "_index5.js",
       "_index.js",
       "_index2.js",
-      "_ToastUtils.js",
-      "_utils.js"
+      "_ToastUtils.js"
     ]
   },
   "functions/admin/_middleware.js": {
@@ -188,8 +183,7 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_utils.js",
-      "functions/admin/ajax/feed.js",
-      "_react-vendor.js"
+      "functions/admin/ajax/feed.js"
     ]
   },
   "functions/admin/ajax/feed.js": {
@@ -198,8 +192,7 @@ export const manifestData = {
     "src": "functions/admin/ajax/feed.js",
     "isEntry": true,
     "imports": [
-      "_utils.js",
-      "_react-vendor.js"
+      "_utils.js"
     ]
   },
   "functions/admin/ajax/r2-ops.js": {
@@ -221,8 +214,7 @@ export const manifestData = {
     "src": "functions/admin/channels/index.jsx",
     "isEntry": true,
     "imports": [
-      "_utils.js",
-      "_react-vendor.js"
+      "_utils.js"
     ]
   },
   "functions/admin/channels/primary/index.jsx": {
@@ -238,9 +230,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index4.js",
-      "_StringUtils.js"
+      "functions/sitemap.xml.jsx"
     ]
   },
   "functions/admin/feed/json.jsx": {
@@ -262,9 +252,7 @@ export const manifestData = {
       "functions/sitemap.xml.jsx",
       "_index3.js",
       "_Constants.js",
-      "_withManifest.js",
-      "_index4.js",
-      "_StringUtils.js"
+      "_withManifest.js"
     ]
   },
   "functions/admin/items/[itemId]/index.jsx": {
@@ -279,9 +267,7 @@ export const manifestData = {
       "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/rss/stylesheet.jsx",
-      "functions/sitemap.xml.jsx",
-      "_index4.js",
-      "_StringUtils.js"
+      "functions/sitemap.xml.jsx"
     ]
   },
   "functions/admin/items/index.jsx": {
@@ -290,8 +276,7 @@ export const manifestData = {
     "src": "functions/admin/items/index.jsx",
     "isEntry": true,
     "imports": [
-      "_utils.js",
-      "_react-vendor.js"
+      "_utils.js"
     ]
   },
   "functions/admin/items/list/index.jsx": {
@@ -307,9 +292,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index4.js",
-      "_StringUtils.js"
+      "functions/sitemap.xml.jsx"
     ]
   },
   "functions/admin/items/new/index.jsx": {
@@ -325,9 +308,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index4.js",
-      "_StringUtils.js"
+      "functions/sitemap.xml.jsx"
     ]
   },
   "functions/admin/settings/code-editor/index.jsx": {
@@ -343,9 +324,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index4.js",
-      "_StringUtils.js"
+      "functions/sitemap.xml.jsx"
     ]
   },
   "functions/admin/settings/index.jsx": {
@@ -361,9 +340,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index4.js",
-      "_StringUtils.js"
+      "functions/sitemap.xml.jsx"
     ]
   },
   "functions/api/_middleware.js": {
@@ -374,8 +351,7 @@ export const manifestData = {
     "imports": [
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "_Constants.js",
-      "_react-vendor.js"
+      "_Constants.js"
     ]
   },
   "functions/api/channels/[channelId]/index.jsx": {
@@ -487,9 +463,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index4.js",
-      "_StringUtils.js"
+      "functions/sitemap.xml.jsx"
     ]
   },
   "functions/json/index.jsx": {
@@ -527,8 +501,7 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_utils.js",
-      "functions/admin/ajax/feed.js",
-      "_react-vendor.js"
+      "functions/admin/ajax/feed.js"
     ]
   },
   "functions/sitemap.xml.jsx": {

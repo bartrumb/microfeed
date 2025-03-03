@@ -2,21 +2,36 @@ import React from 'react';
 import { isDev, isPreviewMode } from './ManifestUtils';
 import { manifestData as virtualManifest } from './manifest-virtual';
 
+// Define types for manifest data
+export interface ManifestEntry {
+  file: string;
+}
+
+export interface Manifest {
+  [key: string]: ManifestEntry;
+}
+
+export interface WithManifestProps {
+  manifest?: Manifest;
+}
+
 /**
  * Higher-order component that handles manifest loading for Edge components
- * @param {React.ComponentType} WrappedComponent - The component to wrap
- * @returns {React.ComponentType} The wrapped component with manifest handling
+ * @param WrappedComponent - The component to wrap
+ * @returns The wrapped component with manifest handling
  */
-export function withManifest(WrappedComponent) {
-  return class WithManifest extends React.Component {
-    render() {
+export function withManifest<P extends WithManifestProps>(
+  WrappedComponent: React.ComponentType<P>
+): React.ComponentType<Omit<P, keyof WithManifestProps>> {
+  return class WithManifest extends React.Component<Omit<P, keyof WithManifestProps>> {
+    render(): React.ReactNode {
       // In development or preview mode, we want to use non-hashed paths
       if (isDev || isPreviewMode) {
-        return <WrappedComponent {...this.props} manifest={{}} />;
+        return <WrappedComponent {...(this.props as P)} manifest={{}} />;
       }
 
       // Try to get manifest from props first
-      let manifest = this.props.manifest;
+      let manifest = (this.props as P).manifest;
 
       // If no manifest in props, try virtual module in Cloudflare Pages
       if (!manifest && process.env.CF_PAGES) {
@@ -38,18 +53,26 @@ export function withManifest(WrappedComponent) {
       }
 
       // In production, pass the manifest through
-      return <WrappedComponent {...this.props} manifest={manifest} />;
+      return <WrappedComponent {...(this.props as P)} manifest={manifest} />;
     }
   };
 }
 
+// Define types for route handler context
+export interface RouteContext {
+  data: Record<string, any>;
+  [key: string]: any;
+}
+
 /**
  * Higher-order component that handles manifest loading for Edge route handlers
- * @param {Function} handler - The route handler function
- * @returns {Function} The wrapped handler with manifest loading
+ * @param handler - The route handler function
+ * @returns The wrapped handler with manifest loading
  */
-export function withRouteManifest(handler) {
-  return async function(context) {
+export function withRouteManifest(
+  handler: (context: RouteContext) => Promise<Response>
+): (context: RouteContext) => Promise<Response> {
+  return async function(context: RouteContext): Promise<Response> {
     // Pass through in development or preview mode
     if (isDev || isPreviewMode) {
       // In preview mode, add an empty manifest to prevent the HTML generator

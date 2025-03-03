@@ -19,6 +19,7 @@ const manualChunks = {
   'utils': [
     'slugify',
     'html-to-text',
+    '@client/common/utils',  // Updated to use the base path, will resolve to .ts
     '@client/common/BrowserUtils',
     '@client/common/ClientUrlUtils',
     '@client/common/ToastUtils',
@@ -73,7 +74,7 @@ if (isDev) {
 export default defineConfig({
   plugins: [
     react({
-      include: '**/*.{jsx,js}',
+      include: '**/*.{jsx,js,tsx,ts}',  // Added TypeScript extensions
     })
   ],
   base: '/',
@@ -135,7 +136,9 @@ export default defineConfig({
             }
           }
           return null;
-        }
+        },
+        preserveModules: false,  // Disable module preservation to ensure proper chunking
+        hoistTransitiveImports: false  // Prevent hoisting to ensure exports are preserved
       }
     }
   },
@@ -143,11 +146,9 @@ export default defineConfig({
     alias: {
       '@client': path.resolve(__dirname, './client-src'),
       '@edge': path.resolve(__dirname, './edge-src'),
-      '@common': path.resolve(__dirname, './common-src'),
-      // Only alias our app's utils, not node_modules
-      '@client/common/utils.js': path.resolve(__dirname, './client-src/common/utils-dev.js')
+      '@common': path.resolve(__dirname, './common-src')
     },
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx']  // Prioritize TypeScript files
   },
   optimizeDeps: {
     include: [
