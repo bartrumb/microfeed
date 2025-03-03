@@ -1,37 +1,116 @@
 import ReactDOMServer from "react-dom/server";
+import type { D1Database } from '@cloudflare/workers-types';
 import Theme from "../models/Theme";
 import FeedDb, {getFetchItemsParams} from "../models/FeedDb";
 import {CODE_TYPES} from "../../common-src/Constants";
 import {ADMIN_URLS, escapeHtml, urlJoinWithRelative} from "../../common-src/StringUtils";
 import OnboardingChecker from "../../common-src/OnboardingUtils";
 import { getViteAssetPath } from "./ViteUtils";
+import { FeedContent } from "../../common-src/types/FeedContent";
 
-export function renderReactToHtml(Component) {
-  return ReactDOMServer.renderToString(Component);
+interface ChannelData {
+  id: string;
+  status: number;
+  is_primary: boolean;
+  image: string;
+  link: string;
+  language: string;
+  categories: string[];
+  'itunes:explicit': boolean;
+  'itunes:type': string;
+  'itunes:complete': boolean;
+  'itunes:block': boolean;
+  copyright: string;
+}
+
+interface ResponseBuilderProps {
+  buildXmlFunc?: (data: any) => string;
+  checkIsAllowed?: boolean;
+  isValid?: (data: any) => boolean;
+  getComponent?: (content: FeedContent, jsonData: any, theme: Theme) => React.ReactElement;
+}
+
+interface FetchItemsObject {
+  queryKwargs?: Record<string, any>;
+  limit?: number;
+}
+
+interface Settings {
+  access?: {
+    currentPolicy: string;
+  };
+  subscribeMethods?: {
+    methods: Array<{
+      type: string;
+      editable: boolean;
+      enabled: boolean;
+    }>;
+  };
+  webGlobalSettings?: {
+    favicon?: {
+      url: string;
+      contentType: string;
+    };
+    publicBucketUrl?: string;
+  };
+}
+
+interface ThemeCode {
+  html: string;
+}
+
+interface ElementHandler {
+  tagName: string;
+  append: (content: string, options: { html: boolean }) => void;
+  prepend: (content: string, options: { html: boolean }) => void;
+}
+
+interface Env {
+  FEED_DB: D1Database;
+}
+
+export function renderReactToHtml(
+  Component: React.ReactElement
+): string {
+  return ReactDOMServer.renderToString(
+    Component
+  );
 }
 
 class ResponseBuilder {
-  constructor(env, request, fetchItemsObj = null) {
+  protected feed: FeedDb;
+  protected request: Request;
+  protected fetchItemsObj: FetchItemsObject;
+  protected env: Env;
+  protected content!: FeedContent;
+  protected settings!: Settings;
+  protected jsonData!: any;
+
+  constructor(
+    env: Env,
+    request: Request,
+    fetchItemsObj: FetchItemsObject | null = null
+  ) {
     this.feed = new FeedDb(env, request);
     this.request = request;
     this.fetchItemsObj = fetchItemsObj || {};
     this.env = env;
   }
 
-  async fetchFeed() {
-    this.content = await this.feed.getContent(this._fetchItems);
+  protected async fetchFeed(): Promise<void> {
+    this.content = (await this.feed.getContent(this._fetchItems)) as FeedContent;
     this.settings = this.content.settings || {};
     const queryKwargs = this.fetchItemsObj.queryKwargs || {};
     const forOneItem = !!queryKwargs.id;
     this.jsonData = await this.feed.getPublicJsonData(this.content, forOneItem);
   }
 
-  _verifyPasscode() {
+  protected _verifyPasscode(): boolean {
     // TODO: check passcord in query string / cookie
     return true;
   }
 
-  async getResponse(props) {
+  async getResponse(props: ResponseBuilderProps): Promise<Response> {
     await this.fetchFeed();
     if (this.settings.access) {
       const {currentPolicy} = this.settings.access;
@@ -49,7 +128,7 @@ class ResponseBuilder {
     }
 
     const onboardingChecker = new OnboardingChecker(this.content, this.request, this.env);
-    const onboardingResult = onboardingChecker.getResult()
+    const onboardingResult = onboardingChecker.getResult();
     if (!onboardingResult.requiredOk) {
       const urlObj = new URL(this.request.url);
       return Response.redirect(ADMIN_URLS.home(urlObj.origin), 302);
@@ -58,14 +137,14 @@ class ResponseBuilder {
     return this._getResponse(props);
   }
 
-  static Response404(text = 'Not Found') {
+  static Response404(text = 'Not Found'): Response {
     return new Response(text, {
       status: 404,
       statusText: text,
     });
   }
 
-  static notEnabledResponse(subscribeMethods, type) {
+  static notEnabledResponse(subscribeMethods: Settings['subscribeMethods'], type: string): Response | null {
     let notFoundRes = null;
     if (subscribeMethods && subscribeMethods.methods && subscribeMethods.methods.length > 0) {
       subscribeMethods.methods.forEach((method) => {
@@ -77,16 +156,12 @@ class ResponseBuilder {
     return notFoundRes;
   }
 
-  //
-  // Override these two methods
-  //
-
-  get _contentType() {
+  protected get _contentType(): string {
     return 'text/html; charset=utf-8';
   }
 
-  get _fetchItems() {
-    const queryKwargs  = this.fetchItemsObj.queryKwargs || {};
+  protected get _fetchItems(): Record<string, any> {
+    const queryKwargs = this.fetchItemsObj.queryKwargs || {};
     return getFetchItemsParams(
       this.request,
       {
@@ -94,7 +169,7 @@ class ResponseBuilder {
       }, this.fetchItemsObj.limit);
   }
 
-  _getResponse(/* props */) {
+  protected _getResponse(props?: ResponseBuilderProps): Response {
     return new Response('ok', {
       headers: {
         'content-type': this._contentType,
@@ -104,18 +179,18 @@ class ResponseBuilder {
 }
 
 export class RssResponseBuilder extends ResponseBuilder {
-  get _contentType() {
+  protected get _contentType(): string {
     return 'application/xml';
   }
 
-  _getResponse(props) {
+  protected _getResponse(props: ResponseBuilderProps): Response {
     const res = super._getResponse(props);
     const {subscribeMethods} = this.settings;
     let notFoundRes = ResponseBuilder.notEnabledResponse(subscribeMethods, 'rss');
     if (notFoundRes) {
       return notFoundRes;
     }
-    const rssRes = props.buildXmlFunc(this.jsonData);
+    const rssRes = props.buildXmlFunc ? props.buildXmlFunc(this.jsonData) : null;
     if (!rssRes) {
       return ResponseBuilder.Response404();
     }
@@ -124,11 +199,11 @@ export class RssResponseBuilder extends ResponseBuilder {
 }
 
 export class JsonResponseBuilder extends ResponseBuilder {
-  get _contentType() {
+  protected get _contentType(): string {
     return 'application/json;charset=UTF-8';
   }
 
-  _getResponse(props) {
+  protected _getResponse(props: ResponseBuilderProps): Response {
     const res = super._getResponse(props);
 
     if (props) {
@@ -152,50 +227,55 @@ export class JsonResponseBuilder extends ResponseBuilder {
 }
 
 export class SitemapResponseBuilder extends ResponseBuilder {
-  get _contentType() {
+  protected get _contentType(): string {
     return 'text/xml';
   }
 
-  _getResponse(props) {
+  protected _getResponse(props: ResponseBuilderProps): Response {
     const res = super._getResponse(props);
-    let xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">'
+    let xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">';
     xml += `<url><loc>${this.jsonData.home_page_url}</loc><image:image><image:loc>${this.jsonData.icon}</image:loc></image:image></url>`;
-    this.jsonData.items.map((item) => {
-      xml += `<url><loc>${item._microfeed.web_url}</loc><lastmod>${item.date_published}</lastmod>`
+    this.jsonData.items.map((item: any) => {
+      xml += `<url><loc>${item._microfeed.web_url}</loc><lastmod>${item.date_published}</lastmod>`;
       if (item.attachments) {
-        item.attachments.forEach((attachment) => {
+        item.attachments.forEach((attachment: any) => {
           if (attachment.mime_type.startsWith('image/')) {
-            xml += `<image:image><image:loc>${attachment.url}</image:loc></image:image>`
+            xml += `<image:image><image:loc>${attachment.url}</image:loc></image:image>`;
           } else if (attachment.mime_type.startsWith('video/')) {
-            xml += `<video:video><video:title>${escapeHtml(item.title)}</video:title><video:publication_date>${item.date_published}</video:publication_date><video:content_loc>${attachment.url}</video:content_loc></video:video>`
+            xml += `<video:video><video:title>${escapeHtml(item.title)}</video:title><video:publication_date>${item.date_published}</video:publication_date><video:content_loc>${attachment.url}</video:content_loc></video:video>`;
           }
-        })
+        });
       }
-      xml += `</url>`
-    })
+      xml += `</url>`;
+    });
     xml += '</urlset>';
     return new Response(xml, res);
   }
 
-  get _fetchItems() {
-    const queryKwargs  = this.fetchItemsObj.queryKwargs || {};
+  protected get _fetchItems(): Record<string, any> {
+    const queryKwargs = this.fetchItemsObj.queryKwargs || {};
     return getFetchItemsParams(
       this.request,
       {
         ...queryKwargs,
-      }, -1);
+      }, null);
   }
 }
 
 class CodeInjector {
-  constructor(settings, theme, sharedTheme, appName) {
+  private settings: Settings;
+  private theme: Theme;
+  private sharedTheme: Theme;
+  private appName?: string;
+
+  constructor(settings: Settings, theme: Theme, sharedTheme: Theme, appName?: string) {
     this.settings = settings;
     this.theme = theme;
     this.sharedTheme = sharedTheme;
     this.appName = appName;
   }
 
-  element(element) {
+  element(element: ElementHandler): void {
     if (!this.settings) {
       return;
     }
@@ -232,26 +312,26 @@ class CodeInjector {
 }
 
 export class WebResponseBuilder extends ResponseBuilder {
-  get _contentType() {
+  protected get _contentType(): string {
     return 'text/html; charset=utf-8';
   }
 
-  _getResponse(props) {
+  protected _getResponse(props: ResponseBuilderProps): Response {
     const res = super._getResponse(props);
     const theme = new Theme(this.jsonData, this.settings);
     const sharedTheme = new Theme(this.jsonData, this.settings, CODE_TYPES.SHARED);
-    const component = props.getComponent(this.content, this.jsonData, theme);
+    const component = props.getComponent ? props.getComponent(this.content, this.jsonData, theme) : null;
     if (!component) {
       return ResponseBuilder.Response404();
     }
     const fromReact = `<!DOCTYPE html>${renderReactToHtml(component)}`;
     const newRes = new Response(fromReact, res);
 
-    // Extract app name from component for asset loading
-    const appName = component.type?.name;
+    // Extract app name from component for asset loading if available
+    const appName = typeof component.type === 'function' ? component.type.name : undefined;
 
-    return new HTMLRewriter()
-      .on('head', new CodeInjector(this.settings, theme, sharedTheme, appName))
+    return new (globalThis as any).HTMLRewriter()
+      .on('head', new CodeInjector(this.settings || {}, theme, sharedTheme, appName))
       .on('body', new CodeInjector(this.settings, theme, sharedTheme, appName))
       .transform(newRes);
   }

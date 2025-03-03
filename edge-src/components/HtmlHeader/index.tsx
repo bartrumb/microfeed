@@ -1,8 +1,41 @@
 import React from 'react';
 import { isDev, getAssetPath, getDevPath } from '../../common/ManifestUtils';
 
+interface FaviconConfig {
+  'apple-touch-icon'?: string;
+  '32x32'?: string;
+  '16x16'?: string;
+  'manifest'?: string;
+  'theme-color'?: string;
+  'msapplication-TileColor'?: string;
+  'mask-icon'?: {
+    href: string;
+    color: string;
+  };
+}
+
+interface HtmlHeaderProps {
+  title: string;
+  description?: string;
+  scripts: string[];
+  styles: string[];
+  favicon?: FaviconConfig;
+  canonicalUrl?: string;
+  manifest?: Record<string, any>;
+  lang?: string;
+}
+
+type CriticalChunksType = {
+  'react-vendor': string;
+  'utils': string;
+  'ui-components': string;
+  'constants': string;
+  'withManifest': string;
+  'admin-styles': string;
+};
+
 // Critical chunks that should be preloaded
-const CRITICAL_CHUNKS = {
+const CRITICAL_CHUNKS: CriticalChunksType = {
   'react-vendor': '_app/immutable/chunks/react-vendor.js',
   'utils': '_app/immutable/chunks/utils.js',
   'ui-components': '_app/immutable/chunks/ui-components.js',
@@ -11,7 +44,7 @@ const CRITICAL_CHUNKS = {
   'admin-styles': '_app/immutable/assets/admin-styles.css'
 };
 
-export default class HtmlHeader extends React.Component {
+export default class HtmlHeader extends React.Component<HtmlHeaderProps> {
   render() {
     const {
       title,

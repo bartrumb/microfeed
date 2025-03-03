@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import EditChannelApp from './components/EditChannelApp';
+import AllItemsApp from './components/AllItemsApp';
 import '../common/admin_styles.css';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const $rootDom = document.getElementById('client-side-root');
+document.addEventListener('DOMContentLoaded', (): void => {
+  const $rootDom: HTMLElement | null = document.getElementById('client-side-root');
   if ($rootDom) {
     const root = ReactDOM.createRoot($rootDom);
     root.render(
       <React.StrictMode>
-        <EditChannelApp/>
+        <AllItemsApp/>
       </React.StrictMode>
     );
   }

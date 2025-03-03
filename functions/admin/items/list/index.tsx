@@ -1,11 +1,23 @@
 import React from "react";
 import EdgeAdminItemsApp from '../../../../edge-src/EdgeAdminItemsApp';
-import {renderReactToHtml} from "../../../../edge-src/common/PageUtils";
+import { renderReactToHtml } from "../../../../edge-src/common/PageUtils";
 import { withRouteManifest } from "../../../../edge-src/common/withManifest";
+import { FeedContent, OnboardingResult } from "../../../../common-src/types/FeedContent";
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
 
 // Add error boundary component for graceful error handling
-class ErrorBoundary extends React.Component {
-  constructor(props) {
+class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
@@ -42,7 +54,17 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-async function handleItemsListRequest({data}) {
+interface RequestData {
+  feedContent: FeedContent;
+  onboardingResult: OnboardingResult;
+  manifest: Record<string, any>;
+}
+
+interface RequestProps {
+  data: RequestData;
+}
+
+async function handleItemsListRequest({ data }: RequestProps) {
   const {feedContent, onboardingResult} = data;
   
   // Ensure items array always exists and add empty state flag

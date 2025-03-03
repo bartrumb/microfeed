@@ -1,14 +1,30 @@
 import React from 'react';
 import HtmlHeader from "../components/HtmlHeader";
 import {htmlMetaDescription} from "../../common-src/StringUtils";
+import { FeedContent } from '../../common-src/types/FeedContent';
+import Theme from '../models/Theme';
 
 // Use same environment detection as ViteUtils
 const isDev = typeof process !== 'undefined' && 
   process.env.NODE_ENV === 'development' && 
   !process.env.CF_PAGES;
 
-export default class EdgeItemApp extends React.Component {
-  render() {
+interface FeedItem {
+  title: string;
+  content_text: string;
+}
+
+interface EdgeItemAppProps {
+  item: FeedItem;
+  theme: Theme;
+  jsonData: {
+    language?: string;
+  };
+  canonicalUrl?: string;
+}
+
+export default class EdgeItemApp extends React.Component<EdgeItemAppProps> {
+  render(): React.ReactNode {
     const {item, theme, jsonData, canonicalUrl} = this.props;
     const {html} = theme.getWebItem(item);
     return (

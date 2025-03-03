@@ -1,4 +1,4 @@
-import React from 'react';
+mport React from 'react';
 import AdminWholeHtml from "../components/AdminWholeHtml";
 import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
 import { isDev } from '../common/ManifestUtils';
@@ -49,7 +49,7 @@ class EdgeAdminItemsApp extends React.Component<EdgeAdminItemsAppProps & WithMan
             '</div>' +
             '<div>' +
             '<div class="mb-8">No items yet.</div>' +
-            '<a href="/admin/items/new/">Add a new item now <span class="lh-icon-arrow-right"></span></a>' +
+            '<a href="/admin/items/new/" class="lh-button lh-button-primary">Add a new item now <span class="lh-icon-arrow-right"></span></a>' +
             '</div>' +
             '</div>';
         }

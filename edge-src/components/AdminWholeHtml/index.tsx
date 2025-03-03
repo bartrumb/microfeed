@@ -1,8 +1,23 @@
 import React from 'react';
 import HtmlHeader from "../HtmlHeader";
 import {escapeHtml} from "../../../common-src/StringUtils";
+import { FeedContent, OnboardingResult } from "../../../common-src/types/FeedContent";
 
-export default class AdminWholeHtml extends React.Component {
+interface AdminWholeHtmlProps {
+  title: string;
+  description?: string;
+  scripts: string[];
+  styles: string[];
+  feedContent?: FeedContent;
+  onboardingResult?: OnboardingResult;
+  manifest?: Record<string, any>;
+  themeTemplate?: Record<string, any>;
+  children?: React.ReactNode;
+}
+
+export default class AdminWholeHtml extends React.Component<
+  AdminWholeHtmlProps
+> {
   render() {
     const {
       title,

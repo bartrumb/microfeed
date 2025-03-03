@@ -2,7 +2,8 @@ import React from 'react';
 import AdminWholeHtml from "../components/AdminWholeHtml";
 import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
 import { isDev } from '../common/ManifestUtils';
-import { withManifest } from '../common/withManifest';
+import { withManifest, WithManifestProps } from '../common/withManifest';
+import { FeedContent, OnboardingResult } from '../../common-src/types/FeedContent';
 
 // Critical chunks that should be loaded first
 const CRITICAL_CHUNKS = [
@@ -12,12 +13,20 @@ const CRITICAL_CHUNKS = [
   'constants'
 ];
 
-class EdgeCustomCodeEditorApp extends React.Component {
-  constructor(props) {
+interface EdgeCustomCodeEditorAppProps {
+  feedContent: FeedContent;
+  onboardingResult: OnboardingResult;
+  themeTemplate: Record<string, any>;
+}
+
+class EdgeCustomCodeEditorApp extends React.Component<
+  EdgeCustomCodeEditorAppProps & WithManifestProps
+> {
+  constructor(props: EdgeCustomCodeEditorAppProps & WithManifestProps) {
     super(props);
   }
 
-  render() {
+  render(): React.ReactNode {
     const {feedContent, onboardingResult, manifest, themeTemplate} = this.props;
 
     // In development, we only need the entry point

@@ -2,14 +2,23 @@ import React from 'react';
 import AdminWholeHtml from "../components/AdminWholeHtml";
 import {NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND} from "../../common-src/Constants";
 import { isDev } from '../common/ManifestUtils';
-import { withManifest } from '../common/withManifest';
+import { withManifest, WithManifestProps } from '../common/withManifest';
 
-class EdgeAdminHomeApp extends React.Component {
-  constructor(props) {
+import { FeedContent, OnboardingResult } from '../../common-src/types/FeedContent';
+
+interface EdgeAdminHomeAppProps {
+  feedContent: FeedContent;
+  onboardingResult: OnboardingResult;
+}
+
+class EdgeAdminHomeApp extends React.Component<
+  EdgeAdminHomeAppProps & WithManifestProps
+> {
+  constructor(props: EdgeAdminHomeAppProps & WithManifestProps) {
     super(props);
   }
 
-  render() {
+  render(): React.ReactNode {
     const {feedContent, onboardingResult, manifest} = this.props;
     return (
       <AdminWholeHtml
