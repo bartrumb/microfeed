@@ -20,9 +20,15 @@ class EdgeAdminItemsApp extends React.Component {
   render() {
     const {feedContent, onboardingResult, manifest} = this.props;
 
-    // In development, we only need the entry point
-    // In production, we need both entry points and critical chunks
-    const scripts = [
+    // In development, we only need the entry point 
+    // In production/preview, we need both entry points and critical chunks
+    const scripts = isDev ? [
+      'adminitems'
+    ] : [
+      'react-vendor',
+      'utils',
+      'ui-components',
+      'constants',
       'adminitems'
     ];
 

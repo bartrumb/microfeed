@@ -22,6 +22,11 @@ export function getManifestPath(manifest, name, type = 'js', isEntry = true) {
     return null;
   }
 
+  // Direct lookup first - this handles our fallback manifest format
+  if (manifest[name] && manifest[name].file) {
+    return manifest[name].file;
+  }
+
   // For entry points, look for entry-name pattern
   if (isEntry) {
     const pattern = type === 'js' ? 
@@ -98,7 +103,6 @@ export function getAssetPath(manifest, name, type = 'js', isEntry = true) {
   // Try to get manifest from window if available
   const clientManifest = typeof window !== 'undefined' ? window.__MANIFEST__ : null;
   let manifestData = manifest || clientManifest || {};
-
 
   // In Cloudflare Pages, try to load manifest from virtual module
   if (process.env.CF_PAGES && !Object.keys(manifestData).length) {

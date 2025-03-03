@@ -27,13 +27,14 @@ export function withManifest(WrappedComponent) {
       if (!manifest) {
         console.warn('No manifest data available');
         manifest = {
-          // Add critical fallback entries
-          '_app/immutable/chunks/utils.js': 'utils.js',
-          '_app/immutable/chunks/react-vendor.js': 'react-vendor.js',
-          '_app/immutable/chunks/ui-components.js': 'ui-components.js',
-          '_app/immutable/chunks/constants.js': 'constants.js',
-          '_app/immutable/assets/admin-styles.css': 'admin-styles.css'
+          // Add critical fallback entries with proper file structure
+          'utils': { file: '_app/immutable/chunks/utils.js' },
+          'react-vendor': { file: '_app/immutable/chunks/react-vendor.js' },
+          'ui-components': { file: '_app/immutable/chunks/ui-components.js' },
+          'constants': { file: '_app/immutable/chunks/constants.js' },
+          'admin-styles': { file: '_app/immutable/assets/admin-styles.css' }
         };
+        console.log('Using fallback manifest:', manifest);
       }
 
       // In production, pass the manifest through

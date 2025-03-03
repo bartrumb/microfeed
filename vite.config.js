@@ -121,32 +121,6 @@ export default defineConfig({
     rollupOptions: {
       input: entryPoints,
       output: {
-        manualChunks: (id, { getModuleInfo }) => {
-          // Vendor chunks
-          if (id.includes('node_modules')) {
-            if (id.includes('react/') || id.includes('react-dom/')) {
-              return 'react-vendor';
-            }
-            if (id.includes('quill') || id.includes('blot-formatter')) {
-              return 'quill-vendor';
-            }
-            if (id.includes('@heroicons') || id.includes('@headlessui')) {
-              return 'ui-vendor';
-            }
-            return 'vendor';
-          }
-          
-          // App chunks
-          if (id.includes('/common/')) {
-            return 'utils';
-          }
-          if (id.includes('/components/')) {
-            return 'ui-components';
-          }
-          
-          // Let Rollup handle other chunks
-          return null;
-        },
         entryFileNames: (chunkInfo) => {
           if (chunkInfo.name.startsWith('functions/')) {
             return `${chunkInfo.name}.js`;
@@ -191,14 +165,13 @@ export default defineConfig({
         },
         
         format: 'esm',
-        manualChunks: (id, { getModuleInfo }) => {
+        manualChunks: (id) => {
           // Check if this module is part of a manual chunk
-          for (const [name, modules] of Object.entries(manualChunks || {})) {
+          for (const [name, modules] of Object.entries(manualChunks)) {
             if (modules.some(pattern => id.includes(pattern))) {
               return name;
             }
           }
-          // Let Rollup handle dynamic chunks
           return null;
         }
       }
