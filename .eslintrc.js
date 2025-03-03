@@ -18,7 +18,9 @@ module.exports = {
   },
   "rules": {
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    // Suppress warning for overRide prop from react-drag-drop-files
+    "react/no-unknown-property": ["error", { "ignore": ["overRide"] }]
   },
   "plugins": ["react"],
   "overrides": [
