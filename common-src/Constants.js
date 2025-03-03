@@ -178,6 +178,7 @@ export const NAV_ITEMS = {
   NEW_ITEM: 'new_item',
   ALL_ITEMS: 'all_items',
   SETTINGS: 'settings',
+  CUSTOM_CODE: 'custom_code',
 };
 
 export const NAV_ITEMS_DICT = {
@@ -195,6 +196,9 @@ export const NAV_ITEMS_DICT = {
   },
   [NAV_ITEMS.SETTINGS]: {
     name: 'Settings',
+  },
+  [NAV_ITEMS.CUSTOM_CODE]: {
+    name: 'Custom Code',
   },
 };
 

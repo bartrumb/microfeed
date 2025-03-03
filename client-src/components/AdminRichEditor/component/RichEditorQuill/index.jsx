@@ -3,9 +3,14 @@ import ReactQuill, {Quill} from "react-quill";
 import BlotFormatter from "quill-blot-formatter";
 import RichEditorMediaDialog from "../RichEditorMediaDialog";
 
-Quill.register({
-  'modules/blotFormatter': BlotFormatter,
-});
+// Only register if not already registered
+if (!Quill.imports['modules/blotFormatter']) {
+  try {
+    Quill.register('modules/blotFormatter', BlotFormatter.default || BlotFormatter);
+  } catch (e) {
+    console.warn('Failed to register blotFormatter:', e);
+  }
+}
 
 const toolbarOptions = [
   [{'header': [2, 3, false]}],
@@ -25,6 +30,9 @@ const modules = {
   },
   blotFormatter: {
     // see config options below
+    overlay: {
+      style: { border: '2px solid #06c' }
+    }
   },
 };
 
@@ -48,6 +56,17 @@ export default class RichEditorQuill extends React.Component {
 
   componentDidMount() {
     this.attachQuillRefs();
+    // Initialize modules after mount
+    if (this.quillRef) {
+      try {
+        const formatter = this.quillRef.getModule('blotFormatter');
+        if (!formatter) {
+          console.warn('BlotFormatter module not initialized');
+        }
+      } catch (e) {
+        console.warn('Error checking blotFormatter:', e);
+      }
+    }
   }
 
   componentDidUpdate() {

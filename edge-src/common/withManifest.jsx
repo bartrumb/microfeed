@@ -1,5 +1,5 @@
 import React from 'react';
-import { isDev } from './ManifestUtils';
+import { isDev, isPreviewMode } from './ManifestUtils';
 import { manifestData as virtualManifest } from './manifest-virtual';
 
 /**
@@ -10,9 +10,9 @@ import { manifestData as virtualManifest } from './manifest-virtual';
 export function withManifest(WrappedComponent) {
   return class WithManifest extends React.Component {
     render() {
-      // In development, we don't need the manifest
-      if (isDev) {
-        return <WrappedComponent {...this.props} />;
+      // In development or preview mode, we want to use non-hashed paths
+      if (isDev || isPreviewMode) {
+        return <WrappedComponent {...this.props} manifest={{}} />;
       }
 
       // Try to get manifest from props first
@@ -26,7 +26,14 @@ export function withManifest(WrappedComponent) {
       // If still no manifest, use empty object but log warning
       if (!manifest) {
         console.warn('No manifest data available');
-        manifest = {};
+        manifest = {
+          // Add critical fallback entries
+          '_app/immutable/chunks/utils.js': 'utils.js',
+          '_app/immutable/chunks/react-vendor.js': 'react-vendor.js',
+          '_app/immutable/chunks/ui-components.js': 'ui-components.js',
+          '_app/immutable/chunks/constants.js': 'constants.js',
+          '_app/immutable/assets/admin-styles.css': 'admin-styles.css'
+        };
       }
 
       // In production, pass the manifest through
@@ -42,8 +49,20 @@ export function withManifest(WrappedComponent) {
  */
 export function withRouteManifest(handler) {
   return async function(context) {
-    // Pass through in development
-    if (isDev) {
+    // Pass through in development or preview mode
+    if (isDev || isPreviewMode) {
+      // In preview mode, add an empty manifest to prevent the HTML generator
+      // from trying to use hashed paths which don't exist
+      if (isPreviewMode) {
+        const { data, ...rest } = context;
+        return handler({
+          ...rest,
+          data: {
+            ...data,
+            manifest: {}
+          }
+        });
+      }
       return handler(context);
     }
     

@@ -10,9 +10,11 @@ const ENTRY_POINTS = [
   'adminsettings'
 ];
 
-// More reliable environment detection for Cloudflare Workers
+// Match the same environment detection logic from ManifestUtils.js for consistency
 const isDev = typeof process !== 'undefined' && 
   process.env.NODE_ENV === 'development' && 
+  !process.env.REBUILD_WITH_MANIFEST && // Allow using production paths in rebuild
+  !process.env.PREVIEW &&
   !process.env.CF_PAGES;
 
 // Base path for assets

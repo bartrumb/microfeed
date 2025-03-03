@@ -28,7 +28,7 @@ class EdgeAdminChannelApp extends React.Component {
 
     return (
       <AdminWholeHtml
-        title={`${NAV_ITEMS_DICT[NAV_ITEMS.CHANNEL].name} | ${OUR_BRAND.domain}`}
+        title={`${NAV_ITEMS_DICT[NAV_ITEMS.EDIT_CHANNEL].name} | ${OUR_BRAND.domain}`}
         description=""
         scripts={scripts}
         styles={['index', 'admin-styles']}

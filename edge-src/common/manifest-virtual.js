@@ -2,190 +2,183 @@
 // Do not edit manually
 
 export const manifestData = {
-  "_BrowserUtils-!~{00i}~.js": {
-    "file": "_app/immutable/assets/BrowserUtils-DiAMbZxM.css",
-    "src": "_BrowserUtils-!~{00i}~.js"
-  },
-  "_BrowserUtils-h8lUTrhp.js": {
-    "file": "_app/immutable/chunks/BrowserUtils-h8lUTrhp.js",
+  "_BrowserUtils.js": {
+    "file": "_app/immutable/chunks/BrowserUtils.js",
     "name": "BrowserUtils",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_ToastUtils-Dm0zX5X_.js",
-      "_StringUtils-DKAw_hrk.js",
-      "_index-38XrVj6M.js"
+      "_react-vendor.js",
+      "_ToastUtils.js",
+      "_StringUtils.js",
+      "_index6.js"
     ],
     "css": [
-      "_app/immutable/assets/BrowserUtils-DiAMbZxM.css"
+      "_app/immutable/assets/BrowserUtils.css"
     ]
   },
-  "_Constants-CDOgRppa.js": {
-    "file": "_app/immutable/chunks/Constants-CDOgRppa.js",
+  "_Constants.js": {
+    "file": "_app/immutable/chunks/Constants.js",
     "name": "Constants"
   },
-  "_StringUtils-DKAw_hrk.js": {
-    "file": "_app/immutable/chunks/StringUtils-DKAw_hrk.js",
+  "_StringUtils.js": {
+    "file": "_app/immutable/chunks/StringUtils.js",
     "name": "StringUtils",
     "imports": [
-      "_utils-WvrhU8k7.js"
+      "_utils.js"
     ]
   },
-  "_ToastUtils-Dm0zX5X_.js": {
-    "file": "_app/immutable/chunks/ToastUtils-Dm0zX5X_.js",
+  "_ToastUtils.js": {
+    "file": "_app/immutable/chunks/ToastUtils.js",
     "name": "ToastUtils",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js"
     ]
   },
-  "_index-38XrVj6M.js": {
-    "file": "_app/immutable/chunks/index-38XrVj6M.js",
+  "_index.js": {
+    "file": "_app/immutable/chunks/index.js",
     "name": "index",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_StringUtils-DKAw_hrk.js",
-      "_Constants-CDOgRppa.js"
+      "_react-vendor.js"
     ]
   },
-  "_index-C1LINwbJ.js": {
-    "file": "_app/immutable/chunks/index-C1LINwbJ.js",
+  "_index2.js": {
+    "file": "_app/immutable/chunks/index2.js",
     "name": "index",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js"
     ]
   },
-  "_index-C5AsDUWl.js": {
-    "file": "_app/immutable/chunks/index-C5AsDUWl.js",
+  "_index3.js": {
+    "file": "_app/immutable/chunks/index3.js",
     "name": "index",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js",
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
-  "_index-DhNjt0rX.js": {
-    "file": "_app/immutable/chunks/index-DhNjt0rX.js",
+  "_index4.js": {
+    "file": "_app/immutable/chunks/index4.js",
     "name": "index",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js"
     ]
   },
-  "_index-FfyfZlVU.js": {
-    "file": "_app/immutable/chunks/index-FfyfZlVU.js",
+  "_index5.js": {
+    "file": "_app/immutable/chunks/index5.js",
     "name": "index",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js"
     ]
   },
-  "_index-aze2Uw0F.js": {
-    "file": "_app/immutable/chunks/index-aze2Uw0F.js",
+  "_index6.js": {
+    "file": "_app/immutable/chunks/index6.js",
     "name": "index",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_react-vendor.js",
+      "_StringUtils.js",
+      "_Constants.js"
     ]
   },
-  "_react-vendor-!~{006}~.js": {
-    "file": "_app/immutable/assets/react-vendor-Cxtptc5c.css",
-    "src": "_react-vendor-!~{006}~.js"
-  },
-  "_react-vendor-Cr0PL_zx.js": {
-    "file": "_app/immutable/chunks/react-vendor-Cr0PL_zx.js",
+  "_react-vendor.js": {
+    "file": "_app/immutable/chunks/react-vendor.js",
     "name": "react-vendor",
     "css": [
-      "_app/immutable/assets/react-vendor-Cxtptc5c.css"
+      "_app/immutable/assets/react-vendor.css"
     ]
   },
-  "_utils-WvrhU8k7.js": {
-    "file": "_app/immutable/chunks/utils-WvrhU8k7.js",
+  "_utils.js": {
+    "file": "_app/immutable/chunks/utils.js",
     "name": "utils",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js"
     ]
   },
-  "_withManifest-BFCeKEs0.js": {
-    "file": "_app/immutable/chunks/withManifest-BFCeKEs0.js",
+  "_withManifest.js": {
+    "file": "_app/immutable/chunks/withManifest.js",
     "name": "withManifest",
     "imports": [
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js",
+      "_index4.js"
     ]
   },
   "client-src/ClientAdminChannelApp/index.jsx": {
-    "file": "_app/immutable/entry-adminchannel-DJPZ_ucY.js",
+    "file": "_app/immutable/entry-adminchannel.js",
     "name": "adminchannel",
     "src": "client-src/ClientAdminChannelApp/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_ToastUtils-Dm0zX5X_.js",
-      "_index-38XrVj6M.js",
-      "_BrowserUtils-h8lUTrhp.js",
-      "_index-DhNjt0rX.js",
-      "_index-FfyfZlVU.js",
-      "_StringUtils-DKAw_hrk.js",
-      "_Constants-CDOgRppa.js",
-      "_index-C5AsDUWl.js",
-      "_utils-WvrhU8k7.js"
+      "_react-vendor.js",
+      "_ToastUtils.js",
+      "_index6.js",
+      "_BrowserUtils.js",
+      "_index5.js",
+      "_index2.js",
+      "_StringUtils.js",
+      "_Constants.js",
+      "_index.js",
+      "_utils.js"
     ]
   },
   "client-src/ClientAdminCustomCodeEditorApp/index.jsx": {
-    "file": "_app/immutable/entry-admincustomcode-DrvW0yLj.js",
+    "file": "_app/immutable/entry-admincustomcode.js",
     "name": "admincustomcode",
     "src": "client-src/ClientAdminCustomCodeEditorApp/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-38XrVj6M.js",
-      "_StringUtils-DKAw_hrk.js",
-      "_ToastUtils-Dm0zX5X_.js",
-      "_Constants-CDOgRppa.js",
-      "_index-C5AsDUWl.js",
-      "_utils-WvrhU8k7.js"
+      "_react-vendor.js",
+      "_index6.js",
+      "_StringUtils.js",
+      "_ToastUtils.js",
+      "_Constants.js",
+      "_index.js",
+      "_utils.js"
     ]
   },
   "client-src/ClientAdminHomeApp/index.jsx": {
-    "file": "_app/immutable/entry-adminhome-CYrLfAEM.js",
+    "file": "_app/immutable/entry-adminhome.js",
     "name": "adminhome",
     "src": "client-src/ClientAdminHomeApp/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_Constants-CDOgRppa.js",
-      "_index-38XrVj6M.js",
-      "_StringUtils-DKAw_hrk.js",
-      "_index-DhNjt0rX.js",
-      "_ToastUtils-Dm0zX5X_.js",
-      "_utils-WvrhU8k7.js"
+      "_react-vendor.js",
+      "_Constants.js",
+      "_index6.js",
+      "_StringUtils.js",
+      "_index5.js",
+      "_ToastUtils.js",
+      "_utils.js"
     ]
   },
   "client-src/ClientAdminItemsApp/index.jsx": {
-    "file": "_app/immutable/entry-adminitems-DiCNxtbY.js",
+    "file": "_app/immutable/entry-adminitems.js",
     "name": "adminitems",
     "src": "client-src/ClientAdminItemsApp/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-38XrVj6M.js",
-      "_StringUtils-DKAw_hrk.js",
-      "_Constants-CDOgRppa.js",
-      "_index-FfyfZlVU.js",
-      "_utils-WvrhU8k7.js"
+      "_react-vendor.js",
+      "_index6.js",
+      "_StringUtils.js",
+      "_Constants.js",
+      "_index2.js",
+      "_utils.js"
     ]
   },
   "client-src/ClientAdminSettingsApp/index.jsx": {
-    "file": "_app/immutable/entry-adminsettings-BwQwJ2xh.js",
+    "file": "_app/immutable/entry-adminsettings.js",
     "name": "adminsettings",
     "src": "client-src/ClientAdminSettingsApp/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-38XrVj6M.js",
-      "_BrowserUtils-h8lUTrhp.js",
-      "_StringUtils-DKAw_hrk.js",
-      "_Constants-CDOgRppa.js",
-      "_index-DhNjt0rX.js",
-      "_index-C5AsDUWl.js",
-      "_index-FfyfZlVU.js",
-      "_ToastUtils-Dm0zX5X_.js",
-      "_utils-WvrhU8k7.js"
+      "_react-vendor.js",
+      "_index6.js",
+      "_BrowserUtils.js",
+      "_StringUtils.js",
+      "_Constants.js",
+      "_index5.js",
+      "_index.js",
+      "_index2.js",
+      "_ToastUtils.js",
+      "_utils.js"
     ]
   },
   "functions/admin/_middleware.js": {
@@ -194,9 +187,9 @@ export const manifestData = {
     "src": "functions/admin/_middleware.js",
     "isEntry": true,
     "imports": [
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js"
     ]
   },
   "functions/admin/ajax/feed.js": {
@@ -205,8 +198,8 @@ export const manifestData = {
     "src": "functions/admin/ajax/feed.js",
     "isEntry": true,
     "imports": [
-      "_utils-WvrhU8k7.js",
-      "_react-vendor-Cr0PL_zx.js"
+      "_utils.js",
+      "_react-vendor.js"
     ]
   },
   "functions/admin/ajax/r2-ops.js": {
@@ -215,9 +208,9 @@ export const manifestData = {
     "src": "functions/admin/ajax/r2-ops.js",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx"
     ]
@@ -228,8 +221,8 @@ export const manifestData = {
     "src": "functions/admin/channels/index.jsx",
     "isEntry": true,
     "imports": [
-      "_utils-WvrhU8k7.js",
-      "_react-vendor-Cr0PL_zx.js"
+      "_utils.js",
+      "_react-vendor.js"
     ]
   },
   "functions/admin/channels/primary/index.jsx": {
@@ -238,16 +231,16 @@ export const manifestData = {
     "src": "functions/admin/channels/primary/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_withManifest-BFCeKEs0.js",
+      "_react-vendor.js",
+      "_index3.js",
+      "_Constants.js",
+      "_withManifest.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/admin/feed/json.jsx": {
@@ -262,16 +255,16 @@ export const manifestData = {
     "src": "functions/admin/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_withManifest-BFCeKEs0.js",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index3.js",
+      "_Constants.js",
+      "_withManifest.js",
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/admin/items/[itemId]/index.jsx": {
@@ -280,15 +273,15 @@ export const manifestData = {
     "src": "functions/admin/items/[itemId]/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_utils-WvrhU8k7.js",
+      "_react-vendor.js",
+      "_index3.js",
+      "_Constants.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/rss/stylesheet.jsx",
       "functions/sitemap.xml.jsx",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/admin/items/index.jsx": {
@@ -297,8 +290,8 @@ export const manifestData = {
     "src": "functions/admin/items/index.jsx",
     "isEntry": true,
     "imports": [
-      "_utils-WvrhU8k7.js",
-      "_react-vendor-Cr0PL_zx.js"
+      "_utils.js",
+      "_react-vendor.js"
     ]
   },
   "functions/admin/items/list/index.jsx": {
@@ -307,16 +300,16 @@ export const manifestData = {
     "src": "functions/admin/items/list/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_withManifest-BFCeKEs0.js",
+      "_react-vendor.js",
+      "_index3.js",
+      "_Constants.js",
+      "_withManifest.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/admin/items/new/index.jsx": {
@@ -325,16 +318,16 @@ export const manifestData = {
     "src": "functions/admin/items/new/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_withManifest-BFCeKEs0.js",
+      "_react-vendor.js",
+      "_index3.js",
+      "_Constants.js",
+      "_withManifest.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/admin/settings/code-editor/index.jsx": {
@@ -343,16 +336,16 @@ export const manifestData = {
     "src": "functions/admin/settings/code-editor/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_withManifest-BFCeKEs0.js",
+      "_react-vendor.js",
+      "_index3.js",
+      "_Constants.js",
+      "_withManifest.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/admin/settings/index.jsx": {
@@ -361,16 +354,16 @@ export const manifestData = {
     "src": "functions/admin/settings/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_withManifest-BFCeKEs0.js",
+      "_react-vendor.js",
+      "_index3.js",
+      "_Constants.js",
+      "_withManifest.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/api/_middleware.js": {
@@ -379,10 +372,10 @@ export const manifestData = {
     "src": "functions/api/_middleware.js",
     "isEntry": true,
     "imports": [
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
-      "_Constants-CDOgRppa.js",
-      "_react-vendor-Cr0PL_zx.js"
+      "_Constants.js",
+      "_react-vendor.js"
     ]
   },
   "functions/api/channels/[channelId]/index.jsx": {
@@ -397,9 +390,9 @@ export const manifestData = {
     "src": "functions/api/feed/index.js",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
       "functions/admin/ajax/r2-ops.js"
@@ -411,8 +404,8 @@ export const manifestData = {
     "src": "functions/api/items/[itemId]/index.jsx",
     "isEntry": true,
     "imports": [
-      "_utils-WvrhU8k7.js",
-      "_react-vendor-Cr0PL_zx.js",
+      "_utils.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
@@ -431,9 +424,9 @@ export const manifestData = {
     "src": "functions/api/media_files/presigned_urls/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
       "functions/admin/ajax/r2-ops.js"
@@ -445,11 +438,11 @@ export const manifestData = {
     "src": "functions/i/[slug]/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js",
+      "_react-vendor.js",
+      "_index4.js",
+      "_StringUtils.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx"
     ]
@@ -460,9 +453,9 @@ export const manifestData = {
     "src": "functions/i/[slug]/json/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
       "functions/admin/ajax/r2-ops.js"
@@ -474,9 +467,9 @@ export const manifestData = {
     "src": "functions/i/[slug]/rss/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx"
     ]
@@ -487,16 +480,16 @@ export const manifestData = {
     "src": "functions/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
-      "_index-aze2Uw0F.js",
-      "_Constants-CDOgRppa.js",
-      "_withManifest-BFCeKEs0.js",
+      "_react-vendor.js",
+      "_index3.js",
+      "_Constants.js",
+      "_withManifest.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
-      "_index-C1LINwbJ.js",
-      "_StringUtils-DKAw_hrk.js"
+      "_index4.js",
+      "_StringUtils.js"
     ]
   },
   "functions/json/index.jsx": {
@@ -505,9 +498,9 @@ export const manifestData = {
     "src": "functions/json/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
       "functions/admin/ajax/r2-ops.js"
@@ -519,9 +512,9 @@ export const manifestData = {
     "src": "functions/rss/index.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.jsx",
       "functions/i/[slug]/rss/index.jsx"
@@ -533,9 +526,9 @@ export const manifestData = {
     "src": "functions/rss/stylesheet.jsx",
     "isEntry": true,
     "imports": [
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js",
-      "_react-vendor-Cr0PL_zx.js"
+      "_react-vendor.js"
     ]
   },
   "functions/sitemap.xml.jsx": {
@@ -544,9 +537,9 @@ export const manifestData = {
     "src": "functions/sitemap.xml.jsx",
     "isEntry": true,
     "imports": [
-      "_react-vendor-Cr0PL_zx.js",
+      "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
-      "_utils-WvrhU8k7.js",
+      "_utils.js",
       "functions/admin/ajax/feed.js"
     ]
   }

@@ -22,18 +22,23 @@ export default class HtmlHeader extends React.Component {
       lang = 'en',
     } = this.props;
 
+    
     // Get manifest data
-    const manifestData = manifest || {};
+    const manifestData = typeof manifest === 'object' && manifest !== null ? manifest : {};
+
+    // Make sure we only include scripts that aren't critical chunks
+    // This prevents duplicate loading of the same JS file
+    const filteredScripts = scripts.filter(name => !CRITICAL_CHUNKS.includes(name));
 
     // Generate script paths for entry points
-    const scriptPaths = scripts.map(name => 
+    const scriptPaths = filteredScripts.map(name => 
       getAssetPath(manifestData, name, 'js', true)
     ).filter(Boolean);
 
-    
     // Generate critical chunk paths (they should ONLY be loaded as chunks, not as entries)
     const criticalPaths = CRITICAL_CHUNKS.map(name => 
-      isDev ? getDevPath(name, 'js', false) : getAssetPath(manifestData, name, 'js', false)).filter(Boolean);
+      getAssetPath(manifestData, name, 'js', false)
+    ).filter(Boolean);
 
     // Generate style paths
     const stylePaths = styles.map(name => 
@@ -42,6 +47,7 @@ export default class HtmlHeader extends React.Component {
 
     // Get admin styles path if needed
     const adminStylesPath = getAssetPath(manifest, 'admin-styles', 'css', false);
+    
 
     return (
       <head>
@@ -52,15 +58,22 @@ export default class HtmlHeader extends React.Component {
         {description && <meta name="description" content={description}/>}
 
         {/* Inject manifest data for client-side use */}
-        {!isDev && (
-          <script dangerouslySetInnerHTML={{
-            __html: `window.__MANIFEST__ = ${JSON.stringify(manifestData)};`
-          }} />
-        )}
+        <script dangerouslySetInnerHTML={{
+          __html: `window.__MANIFEST__ = ${JSON.stringify(manifestData)};`
+        }} />
 
-        {/* Load critical chunks first */}
+        {/* 
+          Only load critical chunks - don't try to load them as entry points
+          The entry point versions don't exist in the build output
+          They exist only as chunks
+        */}
         {criticalPaths.map(path => (
           <script key={path} type="module" src={path} crossOrigin="anonymous" />
+        ))}
+
+        {/* Then load entry points */}
+        {scriptPaths.map(path => (
+          <script key={path} type="module" src={path} crossOrigin="anonymous"/>
         ))}
 
         {stylePaths.map(path => (
@@ -73,10 +86,6 @@ export default class HtmlHeader extends React.Component {
           />
         ))}
 
-        {/* Then load entry points */}
-        {scriptPaths.map(path => (
-          <script key={path} type="module" src={path} crossOrigin="anonymous"/>
-        ))}
 
 
         {/* Admin styles */}

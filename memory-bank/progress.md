@@ -1,86 +1,61 @@
-# Progress Tracking
+# Project Progress
 
-## Current Status (2025-03-02)
+## Microfeed Preview Deployment Fix
 
-### ✅ Completed
-1. Fixed manifest handling and asset loading issues:
-   - Enhanced environment detection for Cloudflare Pages
-   - Improved manifest data management
-   - Updated asset loading strategy
-   - Enhanced build process
-   - Fixed 404 errors for JavaScript files
+### Completed Tasks
 
-2. Updated core components:
-   - ManifestUtils.js: Enhanced environment detection and manifest handling
-   - HtmlHeader: Improved script loading and dependency management
-   - withManifest HOC: Better manifest data injection
-   - manifest-virtual.js: Proper manifest data loading
-   - deploy.js: Enhanced build process
-    - Edge components: Fixed script loading and prevented duplicate script references
+1. **Initial Investigation**
+   - ✅ Identified 404 errors for JavaScript files in preview environment
+   - ✅ Analyzed build output vs. HTML references
+   - ✅ Identified issues with manifest handling and environment detection
 
-### 🚧 In Progress
-1. Testing and validation:
-   - Verify asset loading in preview environment
-   - Test CSS application
-   - Validate bundling
-   - Monitor build output consistency
+2. **Manifest Handling Improvements**
+   - ✅ Updated environment detection in ManifestUtils.js
+   - ✅ Enhanced withManifest HOC to properly load manifest data
+   - ✅ Updated manifest-virtual.js for better data handling
+   - ✅ Fixed manifest path resolution for production vs. preview environments
 
-### 📋 Next Steps
-1. Immediate:
-   - Deploy latest changes to preview environment
-   - Verify all assets load correctly
-   - Test all critical functionality
-   - Monitor performance metrics
+3. **Edge Component Updates**
+   - ✅ Fixed script loading in all Edge components
+   - ✅ Removed duplicate script references
+   - ✅ Fixed critical chunk handling to prevent 404 errors
 
-2. Short-term:
-   - Implement automated tests for build output
-   - Add build output validation
-   - Review and optimize chunk naming strategy
-   - Consider implementing asset loading monitoring
+4. **Build Process Enhancements**
+   - ✅ Updated deploy.js script to handle manifest data properly
+   - ✅ Improved asset path generation in Vite configuration
+   - ✅ Disabled minification in preview environment to prevent export name mangling
+   - ✅ Added proper terserOptions to preserve function names in preview builds
 
-3. Long-term:
-   - Evaluate caching strategy
-   - Consider implementing progressive loading
-   - Review performance optimization opportunities
-   - Plan for scalability improvements
+5. **Deployment Verification**
+   - ✅ Successfully deployed to preview environment
+   - ✅ Fixed deploy script to work with Cloudflare Pages
 
-### 🎯 Goals
-1. Primary:
-   - Ensure reliable asset loading in all environments
-   - Maintain consistent build output
-   - Optimize performance and caching
-    - Prevent script 404 errors across all deployment environments
+### Current Issues
 
-2. Secondary:
-   - Improve developer experience
-   - Enhance monitoring capabilities
-   - Strengthen testing infrastructure
+We're still seeing module loading errors in the preview environment:
+- Error: `SyntaxError: The requested module './utils.js' does not provide an export named 'c'`
+- Error: `TypeError: Cannot read properties of undefined (reading 'webGlobalSettings')`
 
-### 📊 Metrics
-- Build output size
-- Asset loading times
-- Cache hit rates
-- Error rates
+The first error indicates that despite our changes to prevent minification, JavaScript is still being mangled in the preview environment. The second error suggests that feed settings data isn't being properly loaded.
 
-### 🔍 Areas Needing Attention
-1. Performance:
-   - Asset loading optimization
-   - Build output size
-   - Caching strategy
-    - Script loading and execution order
+### Next Steps
 
-2. Testing:
-   - Build output validation
-   - Asset loading tests
-   - Environment detection tests
+1. **Further Optimization of Preview Build**
+   - Implement a more comprehensive approach to preventing export name mangling
+   - Consider using `preserveModules: true` in the Vite configuration for preview environment
+   - Test with different Vite plugins for ES module preservation
 
-3. Monitoring:
-   - Asset loading metrics
-   - Error tracking
-   - Performance monitoring
+2. **Feed Settings Data Loading**
+   - Investigate why feed settings data isn't properly loaded
+   - Add error handling to prevent undefined property access
+   - Ensure initialization order is correct
 
-### 📝 Notes
-- Keep monitoring for any asset loading issues
-- Consider implementing automated performance testing
-- Review caching strategy periodically
-- Keep documentation updated with any changes
+3. **Testing and Verification**
+   - Deploy to preview environment with new changes
+   - Verify all JavaScript modules load correctly
+   - Create automated tests for build output validation
+
+4. **Documentation**
+   - Update technical documentation with build process changes
+   - Document environment-specific configuration options
+   - Add troubleshooting guide for deployment issues
