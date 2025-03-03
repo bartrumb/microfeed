@@ -17,6 +17,7 @@ const entryPoints = {
 const manualChunks = {
   'react-vendor': ['react', 'react-dom'],
   'utils': [
+    '@common/Constants',
     'slugify',
     'html-to-text',
     path.resolve(__dirname, './client-src/common/utils.ts'),
@@ -134,7 +135,12 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
-            return `_app/immutable/assets/style.css`; // Use consistent name for all CSS
+            // Use specific names for CSS files
+            if (name.includes('admin')) {
+              return `_app/immutable/assets/admin-styles.css`;
+            } else {
+              return `_app/immutable/assets/index.css`;
+            }
           }
           return `assets/[name][extname]`;
         },
@@ -194,7 +200,7 @@ export default defineConfig(({ mode }) => ({
     },
     // Ensure CSS is extracted to a single file
     extract: {
-      filename: '_app/immutable/assets/admin-styles.css'
+      filename: '_app/immutable/assets/[name].css'
     }
   }
 }));

@@ -122,11 +122,13 @@ async function copyStaticAssets() {
 
   // Verify built assets exist
   const requiredAssets = [
-    'dist/_app/immutable/assets/style.css',
+    'dist/_app/immutable/assets/admin-styles.css',
+    'dist/_app/immutable/assets/index.css',
     'dist/_app/immutable/chunks/constants.js',
     'dist/_app/immutable/chunks/ui-components.js',
     'dist/_app/immutable/chunks/react-vendor.js',
     'dist/_app/immutable/chunks/utils.js'
+,
   ];
 
   const missingAssets = requiredAssets.filter(asset => !fs.existsSync(asset));

@@ -1,69 +1,58 @@
 # Active Context - 2025-03-03
 
-## Current Focus: Implementing Type Checking in Microfeed
+## Current Focus: Resolving Cloudflare Pages Deployment Issues
 
-We are implementing a comprehensive type checking system for the Microfeed application to prevent runtime errors and improve code quality.
+We are currently addressing persistent asset loading issues in the Cloudflare Pages preview deployment that are causing 404 errors and React warnings.
 
-### Completed Tasks
+### Detailed Diagnosis
 
-1. **Core Type Definitions**
-   - ✅ Created common-src/types/FeedContent.ts
-   - ✅ Defined interfaces for main data structures (FeedContent, Item, Channel, Settings)
-   - ✅ Added type guards for safer data access
-   - ✅ Implemented utility types for common patterns
+1. **CSS Asset Naming Inconsistency**
+   - Vite outputs all CSS to `_app/immutable/assets/style.css` (vite.config.js line 137)
+   - Application requests `admin-styles.css` and `index.css`
+   - CSS extract config specifies `admin-styles.css` (line 197)
+   - ManifestUtils.js expects either `admin-styles.css` or `index.css` (line 86)
 
-2. **Critical Component Migration**
-   - ✅ Converted ErrorBoundary component to TypeScript
-   - ✅ Added proper error and props typing to ErrorBoundary
-   - ✅ Converted withManifest HOC to TypeScript with generic types
-   - ✅ Converted EdgeAdminItemsApp to TypeScript
-   - ✅ Added proper null checks in client-side scripts
+2. **Missing constants.js File**
+   - Referenced as critical chunk in ManifestUtils.js and withManifest.tsx
+   - No entry for 'constants' in manualChunks configuration in vite.config.js
+   - Results in 404 error for this resource
 
-3. **Type System Improvements**
-   - ✅ Added proper interface for manifest data
-   - ✅ Enhanced error handling with TypeScript
-   - ✅ Added type safety to HOC implementations
-   - ✅ Implemented proper generic constraints
+3. **React Property Case Warning**
+   - Improper case for 'overRide' prop in AdminImageUploaderApp component
+   - React requires lowercase 'override' to follow DOM attribute naming conventions
 
-### Current Status
-We've successfully implemented the initial phase of type checking, focusing on core data structures and critical components. The type system is now providing better error detection and IDE support.
+4. **Asset Validation Mismatch**
+   - deploy.js validates `style.css` but app requests `admin-styles.css`
+   - Allows deployment to succeed but fails at runtime
 
-### Next Steps
+### Recommended Solutions
 
-1. **Continue Component Migration**
-   - Convert AdminWholeHtml component to TypeScript
-   - Convert remaining Edge components
-   - Add type annotations to server-side handlers
+1. **Fix CSS Naming Consistency**
+   - Align vite.config.js asset naming with ManifestUtils.js expectations
+   - Use consistent CSS output filenames between build and runtime
 
-2. **Utility Functions Migration**
-   - Convert StringUtils.js to TypeScript
-   - Convert TimeUtils.js to TypeScript
-   - Convert ManifestUtils.js to TypeScript
-   - Add type guards for safer data access
+2. **Add Constants Chunk Configuration**
+   - Add 'constants' entry to manualChunks including Common-src/Constants.js
+   - Ensure it outputs to the path expected by withManifest.tsx
 
-3. **Testing and Verification**
-   - Add tests for type guards
-   - Verify type checking catches potential errors
-   - Monitor error logs to ensure fixes are working
-   - Test edge cases with optional properties
+3. **Fix React Prop Warning**
+   - Locate use of `overRide` prop
+   - Change to lowercase `override` to follow React naming conventions
 
-4. **Documentation**
-   - Update JSDoc comments for better IDE integration
-   - Document type guard usage
-   - Add examples for common patterns
-   - Create migration guide for remaining components
+4. **Update Asset Validation**
+   - Align deploy.js asset validation with actual filenames used at runtime
+   - Add checks for all required CSS files
 
 ### Dependencies
+- Vite configuration
 - React components
-- TypeScript configuration
-- Error handling system
 - Build pipeline
+- Cloudflare Pages deployment
 
 ### Open Questions
 - Should we implement retry logic for failed asset loads?
 - Do we need additional monitoring for error states?
 - Should we implement automated tests for these scenarios?
-- What is the priority order for converting remaining components?
 
-## Previous Focus: Fixing Items List Page Error and Client-Side Issues
+## Previous Focus: Type Checking Implementation
 *[Previous content preserved]*

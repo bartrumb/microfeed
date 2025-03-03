@@ -12,6 +12,7 @@ import AdminRadio from "../../../components/AdminRadio";
 import {showToast} from "../../../common/ToastUtils";
 import ExplainText from "../../../components/ExplainText";
 import {CONTROLS_TEXTS_DICT, SETTINGS_CONTROLS} from "../FormExplainTexts";
+import FileUploaderTest from "../../../components/FileUploaderTest";
 import {isValidUrl} from "../../../../common-src/StringUtils";
 
 export default class WebGlobalSettingsApp extends React.Component {
@@ -128,6 +129,7 @@ export default class WebGlobalSettingsApp extends React.Component {
         <details>
           <summary className="lh-page-subtitle cursor-pointer">Favicon</summary>
           <div className="flex">
+            <FileUploaderTest />
             <AdminImageUploaderApp
               feed={feed}
               mediaType="favicon"
