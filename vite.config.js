@@ -12,6 +12,35 @@ const entryPoints = {
   'adminsettings': 'client-src/ClientAdminSettingsApp/index.jsx'
 };
 
+// Manual chunks configuration
+const manualChunks = {
+  'react-vendor': ['react', 'react-dom'],
+  'utils': [
+    'slugify',
+    'html-to-text',
+    '@client/common/BrowserUtils',
+    '@client/common/ClientUrlUtils',
+    '@client/common/ToastUtils',
+    '@common/StringUtils',
+    '@common/TimeUtils'
+  ],
+  'ui-components': [
+    '@client/components/AdminCodeEditor',
+    '@client/components/AdminDialog',
+    '@client/components/AdminInput',
+    '@client/components/AdminSelect',
+    '@client/components/AdminSwitch'
+  ],
+  'admin-styles': [
+    'client-src/common/admin_styles.css'
+  ],
+  'constants': [
+    '@common/Constants'
+  ]
+  // Note: withManifest should not be its own chunk - it should be imported inline
+  // where needed to prevent 404 errors
+};
+
 // Add functions entry points
 const functionsDir = './functions';
 if (fs.existsSync(functionsDir)) {
@@ -46,23 +75,7 @@ export default defineConfig({
   plugins: [
     react({
       include: '**/*.{jsx,js}',
-    }),
-    {
-      name: 'copy-manifest',
-      writeBundle: {
-        sequential: true,
-        order: 'post',
-        handler: async (options, bundle) => {
-          // Copy manifest to dist directory
-          const manifestPath = path.resolve(__dirname, '.vite/manifest.json');
-          const destPath = path.resolve(__dirname, 'dist/.vite');
-          if (!fs.existsSync(destPath)) {
-            fs.mkdirSync(destPath, { recursive: true });
-          }
-          fs.copyFileSync(manifestPath, path.join(destPath, 'manifest.json'));
-        }
-      }
-    }
+    })
   ],
   base: '/',
   publicDir: false,
@@ -84,10 +97,19 @@ export default defineConfig({
         entryFileNames: (chunkInfo) => {
           if (chunkInfo.name.startsWith('functions/')) {
             return `${chunkInfo.name}.js`;
+          } else if (chunkInfo.isEntry) {
+            return `_app/immutable/entry-${chunkInfo.name}-[hash:8].js`;
           }
-          return `_app/immutable/entry-${chunkInfo.name}-[hash:8].js`;
+          return `_app/immutable/chunks/${chunkInfo.name}-[hash:8].js`;
         },
-        chunkFileNames: `_app/immutable/chunks/[name]-[hash:8].js`,
+        chunkFileNames: (chunkInfo) => {
+          // For manual chunks, use the chunk name directly
+          if (Object.keys(manualChunks).includes(chunkInfo.name)) {
+            return `_app/immutable/chunks/${chunkInfo.name}-[hash:8].js`;
+          }
+          // For dynamic chunks, use a generic name
+          return `_app/immutable/chunks/${chunkInfo.name}-[hash:8].js`;
+        },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
@@ -96,30 +118,15 @@ export default defineConfig({
           return `_app/immutable/assets/[name]-[hash:8][extname]`;
         },
         format: 'esm',
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'utils': [
-            'slugify',
-            'html-to-text',
-            '@client/common/BrowserUtils',
-            '@client/common/ClientUrlUtils',
-            '@client/common/ToastUtils',
-            '@common/StringUtils',
-            '@common/TimeUtils'
-          ],
-          'ui-components': [
-            '@client/components/AdminCodeEditor',
-            '@client/components/AdminDialog',
-            '@client/components/AdminInput',
-            '@client/components/AdminSelect',
-            '@client/components/AdminSwitch'
-          ],
-          'admin-styles': [
-            'client-src/common/admin_styles.css'
-          ],
-          'constants': [
-            '@common/Constants'
-          ]
+        manualChunks: (id, { getModuleInfo }) => {
+          // Check if this module is part of a manual chunk
+          for (const [name, modules] of Object.entries(manualChunks || {})) {
+            if (modules.some(pattern => id.includes(pattern))) {
+              return name;
+            }
+          }
+          // Let Rollup handle dynamic chunks
+          return null;
         }
       }
     }

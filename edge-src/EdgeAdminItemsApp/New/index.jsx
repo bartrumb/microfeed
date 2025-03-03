@@ -1,14 +1,12 @@
 import React from 'react';
 import AdminWholeHtml from "../../components/AdminWholeHtml";
 import {NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND} from "../../../common-src/Constants";
-import { isDev, loadManifest } from '../../common/ManifestUtils';
+import { isDev } from '../../common/ManifestUtils';
+import { withManifest } from '../../common/withManifest';
 
-// Load manifest data
-const manifest = loadManifest('../../../dist/.vite/manifest.json');
-
-export default class AdminItemsNewApp extends React.Component {
+class AdminItemsNewApp extends React.Component {
   render() {
-    const {feedContent, onboardingResult} = this.props;
+    const {feedContent, onboardingResult, manifest} = this.props;
     return (
       <AdminWholeHtml
         title={`${NAV_ITEMS_DICT[NAV_ITEMS.NEW_ITEM].name} | ${OUR_BRAND.domain}`}
@@ -30,3 +28,5 @@ export default class AdminItemsNewApp extends React.Component {
     );
   }
 }
+
+export default withManifest(AdminItemsNewApp);

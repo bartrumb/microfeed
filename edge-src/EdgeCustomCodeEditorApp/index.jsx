@@ -1,52 +1,43 @@
 import React from 'react';
 import AdminWholeHtml from "../components/AdminWholeHtml";
-import {escapeHtml} from "../../common-src/StringUtils";
-import {OUR_BRAND} from "../../common-src/Constants";
+import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
+import { isDev } from '../common/ManifestUtils';
+import { withManifest } from '../common/withManifest';
 
-// Use same environment detection as ViteUtils
-const isDev = typeof process !== 'undefined' && 
-  process.env.NODE_ENV === 'development' && 
-  !process.env.CF_PAGES;
+// Critical chunks that should be loaded first
+const CRITICAL_CHUNKS = [
+  'react-vendor',
+  'utils',
+  'ui-components',
+  'constants'
+];
 
-export default class EdgeCustomCodeEditorApp extends React.Component {
+class EdgeCustomCodeEditorApp extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {feedContent, theme, onboardingResult} = this.props;
-    const currentThemeTmplJson = {
-      themeName: theme.name(),
-      rssStylesheet: theme.getRssStylesheetTmpl(),
-      webItem: theme.getWebItemTmpl(),
-      webFeed: theme.getWebFeedTmpl(),
-      webBodyStart: theme.getWebBodyStartTmpl(),
-      webBodyEnd: theme.getWebBodyEndTmpl(),
-      webHeader: theme.getWebHeaderTmpl(),
-    };
+    const {feedContent, onboardingResult, manifest} = this.props;
+
+    // In development, we only need the entry point
+    // In production, we need both entry points and critical chunks
+    const scripts = [
+      'admincustomcode'
+    ];
+
     return (
       <AdminWholeHtml
-        title={`Code Editor | ${OUR_BRAND.domain}`}
+        title={`${NAV_ITEMS_DICT[NAV_ITEMS.CUSTOM_CODE].name} | ${OUR_BRAND.domain}`}
         description=""
-        scripts={isDev ? [
-          'admincustomcode'
-        ] : [
-          'react-vendor',
-          'utils',
-          'ui-components',
-          'constants',
-          'admincustomcode'
-        ]}
+        scripts={scripts}
         styles={['index', 'admin-styles']}
         feedContent={feedContent}
         onboardingResult={onboardingResult}
-      >
-      <script
-        id="theme-tmpl-json"
-        type="application/json"
-        dangerouslySetInnerHTML={{__html: escapeHtml(JSON.stringify(currentThemeTmplJson))}}
+        manifest={manifest}
       />
-      </AdminWholeHtml>
     );
   }
 }
+
+export default withManifest(EdgeCustomCodeEditorApp);

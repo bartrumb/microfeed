@@ -1,5 +1,5 @@
 import React from 'react';
-import { isDev, getManifestPath } from '../common/ManifestUtils';
+import { isDev, getAssetPath } from '../../common/ManifestUtils';
 
 // Critical chunks that should be preloaded
 const CRITICAL_CHUNKS = [
@@ -18,34 +18,40 @@ export default class HtmlHeader extends React.Component {
       styles,
       favicon,
       canonicalUrl,
-      manifest,
+      manifest = {},
       lang = 'en',
     } = this.props;
 
-    // In production, use the actual filenames from the build
-    const scriptPaths = scripts.map(name => {
-      if (isDev) {
-        return `/_app/immutable/entry-${name}.js`;
-      }
-      const filePath = getManifestPath(manifest, name, 'js');
-      return filePath ? `/${filePath}` : `/_app/immutable/entry-${name}.js`;
-    });
+    // Get manifest data
+    const manifestData = manifest || {};
 
-    const criticalPaths = CRITICAL_CHUNKS.map(name => {
-      if (isDev) {
-        return `/_app/immutable/chunks/${name}.js`;
-      }
-      const filePath = getManifestPath(manifest, name, 'js');
-      return filePath ? `/${filePath}` : `/_app/immutable/chunks/${name}.js`;
-    });
+    // Generate script paths for entry points
+    const scriptPaths = scripts.map(name => 
+      getAssetPath(manifestData, name, 'js', true)
+    ).filter(Boolean);
 
-    const stylePaths = styles.map(name => {
-      if (isDev) {
-        return `/_app/immutable/assets/${name}.css`;
-      }
-      const filePath = getManifestPath(manifest, name, 'css');
-      return filePath ? `/${filePath}` : `/_app/immutable/assets/${name}.css`;
-    });
+    // Generate critical chunk paths - these are NOT entry points
+    const criticalPaths = CRITICAL_CHUNKS.map(name => 
+      getAssetPath(manifestData, name, 'js', false)
+    ).filter(Boolean);
+
+    // Get additional chunks from manifest dependencies
+    const dependencyPaths = Object.values(manifestData)
+      .filter(entry => 
+        entry.file && 
+        entry.file.includes('chunks/') && 
+        !criticalPaths.includes('/' + entry.file) &&
+        !entry.isEntry
+      )
+      .map(entry => entry.file);
+
+    // Generate style paths
+    const stylePaths = styles.map(name => 
+      getAssetPath(manifest, name, 'css', false)
+    ).filter(Boolean);
+
+    // Get admin styles path if needed
+    const adminStylesPath = getAssetPath(manifest, 'admin-styles', 'css', false);
 
     return (
       <head>
@@ -54,10 +60,17 @@ export default class HtmlHeader extends React.Component {
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         {description && <meta name="description" content={description}/>}
-        
+
+        {/* Inject manifest data for client-side use */}
+        {!isDev && (
+          <script dangerouslySetInnerHTML={{
+            __html: `window.__MANIFEST__ = ${JSON.stringify(manifestData)};`
+          }} />
+        )}
+
         {/* Load critical chunks first */}
         {criticalPaths.map(path => (
-          <script key={path} type="module" src={path} crossOrigin="anonymous"/>
+          <script key={path} type="module" src={path} crossOrigin="anonymous" />
         ))}
 
         {/* Then load entry points */}
@@ -76,24 +89,21 @@ export default class HtmlHeader extends React.Component {
           />
         ))}
 
-        {/* Preload critical chunks */}
-        {criticalPaths.map(path => (
-          <link 
-            key={`preload-${path}`}
-            rel="modulepreload"
-            href={path}
-            crossOrigin="anonymous"
-          />
+        {/* Load additional chunks */}
+        {dependencyPaths.map(path => (
+          <script key={path} type="module" src={`/${path}`} crossOrigin="anonymous" />
         ))}
 
         {/* Admin styles */}
-        <link
-          key="admin-styles"
-          rel="stylesheet"
-          type="text/css"
-          href={isDev ? '/_app/immutable/assets/admin-styles.css' : `/${getManifestPath(manifest, 'admin-styles', 'css') || 'admin-styles.css'}`}
-          crossOrigin="anonymous"
-        />
+        {adminStylesPath && (
+          <link
+            key="admin-styles"
+            rel="stylesheet"
+            type="text/css"
+            href={adminStylesPath}
+            crossOrigin="anonymous"
+          />
+        )}
 
         {/* Favicon */}
         {favicon && favicon['apple-touch-icon'] && <link

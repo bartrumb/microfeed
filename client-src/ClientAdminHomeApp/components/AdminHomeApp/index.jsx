@@ -11,8 +11,20 @@ export default class AdminHomeApp extends React.Component {
   constructor(props) {
     super(props);
 
-    const onboardingResult = JSON.parse(unescapeHtml(document.getElementById('onboarding-result').innerHTML));
-    const feed = JSON.parse(unescapeHtml(document.getElementById('feed-content').innerHTML));
+    // Safely parse DOM elements with error handling
+    let onboardingResult = {};
+    let feed = {};
+    
+    try {
+      const onboardingEl = document.getElementById('onboarding-result');
+      const feedEl = document.getElementById('feed-content');
+      
+      if (onboardingEl) onboardingResult = JSON.parse(unescapeHtml(onboardingEl.innerHTML));
+      if (feedEl) feed = JSON.parse(unescapeHtml(feedEl.innerHTML));
+    } catch (err) {
+      console.error('Error parsing page data:', err);
+      // Continue with default empty objects
+    }
 
     this.state = {
       feed,

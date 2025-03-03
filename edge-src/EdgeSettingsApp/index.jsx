@@ -1,31 +1,36 @@
 import React from 'react';
 import AdminWholeHtml from "../components/AdminWholeHtml";
 import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
-import { isDev, loadManifest } from '../common/ManifestUtils';
+import { isDev } from '../common/ManifestUtils';
+import { withManifest } from '../common/withManifest';
 
-// Load manifest data
-const manifest = loadManifest();
+// Critical chunks that should be loaded first
+const CRITICAL_CHUNKS = [
+  'react-vendor',
+  'utils',
+  'ui-components',
+  'constants'
+];
 
-export default class AdminSettingsApp extends React.Component {
+class EdgeSettingsApp extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {feedContent, onboardingResult} = this.props;
+    const {feedContent, onboardingResult, manifest} = this.props;
+
+    // In development, we only need the entry point
+    // In production, we need both entry points and critical chunks
+    const scripts = [
+      'adminsettings'
+    ];
+
     return (
       <AdminWholeHtml
         title={`${NAV_ITEMS_DICT[NAV_ITEMS.SETTINGS].name} | ${OUR_BRAND.domain}`}
         description=""
-        scripts={isDev ? [
-          'adminsettings'
-        ] : [
-          'react-vendor',
-          'utils',
-          'ui-components',
-          'constants',
-          'adminsettings'
-        ]}
+        scripts={scripts}
         styles={['index', 'admin-styles']}
         feedContent={feedContent}
         onboardingResult={onboardingResult}
@@ -34,3 +39,5 @@ export default class AdminSettingsApp extends React.Component {
     );
   }
 }
+
+export default withManifest(EdgeSettingsApp);

@@ -87,3 +87,196 @@ When working with cloudflare workers always read this prompt first: https://deve
 Wrangler configuration best practices can be foud here: https://raw.githubusercontent.com/cloudflare/cloudflare-docs/refs/heads/production/src/content/docs/workers/wrangler/configuration.mdx
 Wrangler commands here: https://raw.githubusercontent.com/cloudflare/cloudflare-docs/refs/heads/production/src/content/docs/workers/wrangler/commands.mdx 
 Examples for all cloudflare products and blogs at: https://developers.cloudflare.com/llms.txt
+
+This tree structure represents how the microfeed project is organized based on the file paths you provided. The project is divided into three main directories:
+
+1. `functions/` - Server-side code, API endpoints, and various function handlers
+2. `client-src/` - Client-side React components and applications
+3. `edge-src/` - Edge runtime specific components and applications
+
+C:\Code\microfeed\
+│
+├── functions\
+│   ├── index.jsx
+│   │
+│   ├── admin\
+│   │   ├── index.jsx
+│   │   │
+│   │   ├── channels\
+│   │   │   ├── index.jsx
+│   │   │   └── primary\
+│   │   │       └── index.jsx
+│   │   │
+│   │   ├── items\
+│   │   │   ├── index.jsx
+│   │   │   ├── [itemId]\
+│   │   │   │   └── index.jsx
+│   │   │   ├── list\
+│   │   │   │   └── index.jsx
+│   │   │   └── new\
+│   │   │       └── index.jsx
+│   │   │
+│   │   └── settings\
+│   │       ├── index.jsx
+│   │       └── code-editor\
+│   │           └── index.jsx
+│   │
+│   ├── api\
+│   │   ├── channels\
+│   │   │   └── [channelId]\
+│   │   │       └── index.jsx
+│   │   │
+│   │   ├── items\
+│   │   │   ├── index.jsx
+│   │   │   └── [itemId]\
+│   │   │       └── index.jsx
+│   │   │
+│   │   └── media_files\
+│   │       └── presigned_urls\
+│   │           └── index.jsx
+│   │
+│   ├── i\
+│   │   └── [slug]\
+│   │       ├── index.jsx
+│   │       ├── json\
+│   │       │   └── index.jsx
+│   │       └── rss\
+│   │           └── index.jsx
+│   │
+│   ├── json\
+│   │   └── index.jsx
+│   │
+│   └── rss\
+│       └── index.jsx
+│
+├── client-src\
+│   ├── components\
+│   │   ├── AdminCodeEditor\
+│   │   │   └── index.jsx
+│   │   ├── AdminDatetimePicker\
+│   │   │   └── index.jsx
+│   │   ├── AdminDialog\
+│   │   │   └── index.jsx
+│   │   ├── AdminImageUploaderApp\
+│   │   │   └── index.jsx
+│   │   ├── AdminInput\
+│   │   │   └── index.jsx
+│   │   ├── AdminNavApp\
+│   │   │   └── index.jsx
+│   │   ├── AdminRadio\
+│   │   │   └── index.jsx
+│   │   ├── AdminRichEditor\
+│   │   │   └── index.jsx
+│   │   │   └── component\
+│   │   │       ├── RichEditorMediaDialog\
+│   │   │       │   └── index.jsx
+│   │   │       └── RichEditorQuill\
+│   │   │           └── index.jsx
+│   │   ├── AdminSelect\
+│   │   │   └── index.jsx
+│   │   ├── AdminSideQuickLinks\
+│   │   │   └── index.jsx
+│   │   ├── AdminSwitch\
+│   │   │   └── index.jsx
+│   │   ├── AdminTextarea\
+│   │   │   └── index.jsx
+│   │   ├── ExplainText\
+│   │   │   └── index.jsx
+│   │   └── ExternalLink\
+│   │       └── index.jsx
+│   │
+│   ├── ClientAdminChannelApp\
+│   │   ├── index.jsx
+│   │   └── components\
+│   │       └── EditChannelApp\
+│   │           └── index.jsx
+│   │
+│   ├── ClientAdminCustomCodeEditorApp\
+│   │   ├── index.jsx
+│   │   └── components\
+│   │       └── CustomCodeEditorApp\
+│   │           └── index.jsx
+│   │
+│   ├── ClientAdminHomeApp\
+│   │   ├── index.jsx
+│   │   └── components\
+│   │       └── AdminHomeApp\
+│   │           ├── index.jsx
+│   │           └── component\
+│   │               ├── DistributionApp\
+│   │               │   └── index.jsx
+│   │               ├── SetupChecklistApp\
+│   │               │   └── index.jsx
+│   │               └── WhatsNewApp\
+│   │                   └── index.jsx
+│   │
+│   ├── ClientAdminItemsApp\
+│   │   ├── index.jsx
+│   │   ├── EditItem\
+│   │   │   └── index.jsx
+│   │   ├── NewItem\
+│   │   │   └── index.jsx
+│   │   └── components\
+│   │       ├── AllItemsApp\
+│   │       │   └── index.jsx
+│   │       └── EditItemApp\
+│   │           ├── index.jsx
+│   │           └── components\
+│   │               └── MediaManager\
+│   │                   └── index.jsx
+│   │
+│   └── ClientAdminSettingsApp\
+│       ├── index.jsx
+│       └── components\
+│           ├── AccessSettingsApp\
+│           │   └── index.jsx
+│           ├── ApiSettingsApp\
+│           │   └── index.jsx
+│           ├── CustomCodeSettingsApp\
+│           │   └── index.jsx
+│           ├── SettingsBase\
+│           │   └── index.jsx
+│           ├── SubscribeSettingsApp\
+│           │   ├── index.jsx
+│           │   └── components\
+│           │       └── NewSubscribeDialog\
+│           │           └── index.jsx
+│           ├── TrackingSettingsApp\
+│           │   └── index.jsx
+│           └── WebGlobalSettingsApp\
+│               └── index.jsx
+│
+└── edge-src\
+    ├── components\
+    │   ├── AdminWholeHtml\
+    │   │   └── index.jsx
+    │   └── HtmlHeader\
+    │       └── index.jsx
+    │
+    ├── EdgeAdminChannelApp\
+    │   └── index.jsx
+    │
+    ├── EdgeAdminHomeApp\
+    │   └── index.jsx
+    │
+    ├── EdgeAdminItemsApp\
+    │   ├── index.jsx
+    │   ├── Edit\
+    │   │   └── index.jsx
+    │   └── New\
+    │       └── index.jsx
+    │
+    ├── EdgeCommonRequests\
+    │   └── index.jsx
+    │
+    ├── EdgeCustomCodeEditorApp\
+    │   └── index.jsx
+    │
+    ├── EdgeHomeApp\
+    │   └── index.jsx
+    │
+    ├── EdgeItemApp\
+    │   └── index.jsx
+    │
+    └── EdgeSettingsApp\
+        └── index.jsx

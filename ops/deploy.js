@@ -1,5 +1,7 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
+import path from 'path';
+
 
 async function updateWranglerConfig(env) {
   const wranglerPath = 'wrangler.json';
@@ -36,6 +38,48 @@ async function updateWranglerConfig(env) {
   console.log(`Updated wrangler.json with database ID for ${env} environment`);
 }
 
+async function updateManifestVirtual() {
+  const manifestPath = path.join('dist', '.vite', 'manifest.json');
+  const virtualPath = path.join('edge-src', 'common', 'manifest-virtual.js');
+  
+  if (!fs.existsSync(manifestPath)) {
+    throw new Error('Manifest file not found. Build must be run first.');
+  }
+  
+  // Read the manifest data
+  const manifestData = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  
+  // Create the virtual module content
+  const virtualContent = `// This file is auto-generated during build
+// Do not edit manually
+
+export const manifestData = ${JSON.stringify(manifestData, null, 2)};
+`;
+  
+  // Write the virtual module
+  fs.writeFileSync(virtualPath, virtualContent);
+  console.log('Updated manifest-virtual.js with build manifest data');
+  
+  // Copy manifest to public directory for client access
+  fs.copyFileSync(manifestPath, path.join('dist', 'manifest.json'));
+}
+
+/**
+ * Copy static assets from public directory to dist directory
+ * This is needed because we have publicDir: false in vite.config.js
+ */
+async function copyStaticAssets() {
+  // Ensure destination directories exist
+  fs.mkdirSync(path.join('dist', 'assets', 'favicon'), { recursive: true });
+  
+  // Copy favicon files
+  const faviconDir = path.join('public', 'assets', 'favicon');
+  fs.readdirSync(faviconDir).forEach(file => {
+    fs.copyFileSync(path.join(faviconDir, file), path.join('dist', 'assets', 'favicon', file));
+  });
+  console.log('Copied static assets to dist directory');
+}
+
 async function deploy() {
   try {
     // Get environment from command line args
@@ -47,6 +91,14 @@ async function deploy() {
     // Run build
     console.log('Building project...');
     execSync('pnpm build', { stdio: 'inherit' });
+    
+    // Update manifest virtual module
+    console.log('Updating manifest data...');
+    await updateManifestVirtual();
+    
+    // Copy static assets
+    console.log('Copying static assets...');
+    await copyStaticAssets();
     
     // Run deployment
     console.log(`Deploying to ${env}...`);

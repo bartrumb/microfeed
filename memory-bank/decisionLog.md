@@ -1,69 +1,89 @@
 # Decision Log
 
-## 2025-03-02: Prop Name Standardization for Vite Migration
+## 2025-03-02: Asset Loading and Manifest Handling Fixes
 
 ### Context
-The migration from Webpack to Vite required updating component props from `webpackJsList` and `webpackCssList` to `scripts` and `styles` to align with the new build system's asset handling approach.
+During preview deployment, we encountered 404 errors for JavaScript files due to mismatches between build output filenames and HTML references. The issue stemmed from improper manifest handling and environment detection.
 
-### Decision
-1. Verify all Edge components have been updated to use the new Vite-compatible props
-2. Confirm consistent environment detection with `isDev` constant
-3. Validate chunk naming strategy across components
+### Decisions Made
 
-### Rationale
-- Consistent prop naming is essential for proper asset loading in the Vite build system
-- Environment-specific script loading optimizes performance in development and production
-- Standardized chunk naming improves caching and maintenance
+1. **Environment Detection Enhancement**
+   - Added `PREVIEW` environment check alongside `CF_PAGES`
+   - Ensures correct path generation in Cloudflare Pages environments
+   - Rationale: More reliable detection of deployment environments
 
-### Consequences
-- Positive: Unified asset loading approach across all components
-- Positive: Clearer separation between development and production environments
-- Positive: More maintainable component structure
-- Neutral: Requires careful coordination between component references and Vite configuration
+2. **Manifest Data Management**
+   - Updated manifest-virtual.js to load production manifest
+   - Enhanced withManifest HOC to properly inject manifest data
+   - Added manifest copying to public directory
+   - Rationale: Ensures consistent manifest data availability across all environments
 
-### Implementation Notes
-- All Edge components now use `scripts` and `styles` props
-- Environment detection uses the same `isDev` constant across components
-- Chunk naming follows a consistent pattern for better predictability
+3. **Asset Loading Strategy**
+   - Implemented proper critical chunk loading
+   - Added support for dynamic chunk dependencies
+   - Removed modulepreload links in favor of direct script loading
+   - Rationale: More reliable asset loading and better dependency management
 
-### Status
-✅ Verified
+4. **Edge Component Script Loading Fix**
+    - Removed duplicate script references from all Edge components
+    - Fixed edge components to only include their own entry points
+    - Let HtmlHeader component handle critical chunks loading
+    - Rationale: Prevents duplicate script loading and 404 errors for non-existent paths
 
-### Related Decisions
-- Cloudflare Workers Asset Loading Fix (2025-03-02)
-- Asset Path Standardization (2025-03-02)
+4. **Build Process Enhancement**
+   - Added manifest data injection during build
+   - Implemented manifest virtual module population
+   - Added manifest copying for client access
+   - Rationale: Ensures build artifacts are properly available in production
 
-## 2025-03-02: Cloudflare Workers Asset Loading Fix
+### Technical Details
 
-### Context
-The application was encountering a "Dynamic require of manifest.json is not supported" error in the Cloudflare Workers environment due to incompatible asset loading approaches between Vite and Workers.
+1. **ManifestUtils.js Changes**
+   - Enhanced environment detection logic
+   - Added Cloudflare Pages-specific manifest loading
+   - Improved fallback handling for missing assets
 
-### Decision
-1. Replace dynamic manifest.json require with static path generation
-2. Implement dedicated chunks for constants and admin-styles
-3. Update HtmlHeader component to handle CSS loading explicitly
+2. **HtmlHeader Component Updates**
+   - Reorganized script loading order
+   - Added support for additional chunk dependencies
+   - Improved manifest data injection
 
-### Rationale
-- Cloudflare Workers don't support dynamic requires, necessitating a static approach
-- Separating constants into their own chunk improves caching and maintenance
-- Explicit CSS handling in HtmlHeader ensures reliable asset loading
+3. **Edge Component Updates**
+    - Fixed script loading in EdgeSettingsApp, EdgeAdminHomeApp, EdgeAdminChannelApp, EdgeAdminItemsApp, 
+      EdgeHomeApp, and EdgeCustomCodeEditorApp components
+    - Removed conditional script inclusion based on environment
+    - Let the HtmlHeader component handle critical chunks loading automatically
+    - Resolved duplicate script loading issue causing 404 errors
 
-### Consequences
-- Positive: Eliminated runtime errors in Workers environment
-- Positive: Improved asset organization and caching
-- Positive: More predictable build output
-- Neutral: Slightly more complex build configuration
-- Neutral: Manual management of chunk configurations
+4. **Deploy Script Enhancements**
+   - Added manifest virtual module population
+   - Implemented manifest copying to public directory
+   - Enhanced error handling
 
-### Implementation Notes
-- Updated ViteUtils.js to use predictable path structure
-- Modified vite.config.js chunk configuration
-- Enhanced HtmlHeader component for explicit CSS handling
-- Verified working in both development and production
+### Impact
+- Resolves 404 errors for JavaScript files in preview environment
+- Improves asset loading reliability
+- Enhances build output consistency
+- Better supports Cloudflare Pages deployments
 
-### Status
-✅ Implemented and Verified
+### Alternatives Considered
+1. Client-side manifest loading only
+   - Rejected due to potential race conditions
+2. Static manifest paths
+   - Rejected due to cache invalidation concerns
+3. Runtime manifest generation
+   - Rejected due to performance impact
 
-### Related Decisions
-- Asset Path Standardization (2025-03-02)
-- Environment Detection Improvements (2025-03-02)
+### Risks and Mitigations
+1. **Risk**: Build-time manifest generation failure
+   - Mitigation: Added fallback to development paths
+2. **Risk**: Environment detection issues
+   - Mitigation: Enhanced detection logic with multiple checks
+3. **Risk**: Missing chunk dependencies
+   - Mitigation: Added dependency scanning in manifest
+
+### Follow-up Tasks
+1. Monitor asset loading performance
+2. Consider implementing automated tests for build output
+3. Evaluate chunk naming strategy for optimal caching
+4. Consider implementing build output validation

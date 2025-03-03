@@ -1,41 +1,43 @@
 import React from 'react';
-import HtmlHeader from "../components/HtmlHeader";
-import {htmlMetaDescription} from "../../common-src/StringUtils";
+import AdminWholeHtml from "../components/AdminWholeHtml";
+import {OUR_BRAND} from "../../common-src/Constants";
+import { isDev } from '../common/ManifestUtils';
+import { withManifest } from '../common/withManifest';
 
-// Use same environment detection as ViteUtils
-const isDev = typeof process !== 'undefined' && 
-  process.env.NODE_ENV === 'development' && 
-  !process.env.CF_PAGES;
+// Critical chunks that should be loaded first
+const CRITICAL_CHUNKS = [
+  'react-vendor',
+  'utils',
+  'ui-components',
+  'constants'
+];
 
-export default class EdgeHomeApp extends React.Component {
+class EdgeHomeApp extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-    const {jsonData, theme} = this.props;
-    const { html } = theme.getWebFeed();
+    const {feedContent, onboardingResult, manifest} = this.props;
+
+    // In development, we only need the entry point
+    // In production, we need both entry points and critical chunks
+    const scripts = [
+      'adminhome'
+    ];
+
     return (
-      <html lang={jsonData.language || 'en'}>
-      <HtmlHeader
-        title={jsonData.title}
-        description={htmlMetaDescription(jsonData._microfeed.description_text, false)}
-        scripts={isDev ? [] : []}
-        styles={[]}
-        favicon={{
-          // 'apple-touch-icon': '/assets/apple-touch-icon.png',
-          // '32x32': '/assets/favicon-32x32.png',
-          // '16x16': '/assets/favicon-16x16.png',
-          // 'manifest': '/assets/site.webmanifest',
-          // 'mask-icon': {
-          //   'href': '/assets/safari-pinned-tab.svg',
-          //   'color': '#b82f00',
-          // },
-          // 'msapplication-TileColor': '#da532c',
-          // 'theme-color': '#ffffff',
-        }}
+      <AdminWholeHtml
+        title={`Home | ${OUR_BRAND.domain}`}
+        description=""
+        scripts={scripts}
+        styles={['index', 'admin-styles']}
+        feedContent={feedContent}
+        onboardingResult={onboardingResult}
+        manifest={manifest}
       />
-      <body>
-      <div dangerouslySetInnerHTML={{__html: html}} />
-      <div id="client-side-root"/>
-      </body>
-      </html>
     );
   }
 }
+
+export default withManifest(EdgeHomeApp);
