@@ -19,7 +19,7 @@ const manualChunks = {
   'utils': [
     'slugify',
     'html-to-text',
-    '@client/common/utils',  // Updated to use the base path, will resolve to .ts
+    path.resolve(__dirname, './client-src/common/utils.ts'),
     '@client/common/BrowserUtils',
     '@client/common/ClientUrlUtils',
     '@client/common/ToastUtils',
@@ -71,7 +71,7 @@ if (isDev) {
   });
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react({
       include: '**/*.{jsx,js,tsx,ts}',  // Added TypeScript extensions
@@ -85,7 +85,7 @@ export default defineConfig({
     strictPort: true
   },
   build: {
-    minify: false,
+    minify: mode === 'development' ? false : 'esbuild',  // Only minify in production
     target: 'esnext',
     sourcemap: true,
     modulePreload: false,
@@ -93,8 +93,9 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     ssrManifest: true,
-    cssCodeSplit: true,
-    terserOptions: { 
+    cssCodeSplit: false, // Disable CSS code splitting to ensure all styles are in one file
+    assetsDir: '_app/immutable',
+    terserOptions: mode === 'development' ? { 
       mangle: false,
       keep_fnames: true,
       keep_classnames: true,
@@ -102,6 +103,18 @@ export default defineConfig({
       format: {
         comments: true,
         beautify: true
+      }
+    } : {
+      // Production terser options
+      mangle: {
+        keep_fnames: true  // Preserve function names in production
+      },
+      compress: {
+        drop_console: false,  // Keep console logs for debugging
+        pure_funcs: []  // Don't remove any functions
+      },
+      format: {
+        comments: false
       }
     },
     chunkSizeWarningLimit: 1000,
@@ -131,14 +144,21 @@ export default defineConfig({
         format: 'esm',
         manualChunks: (id) => {
           for (const [name, modules] of Object.entries(manualChunks)) {
-            if (modules.some(pattern => id.includes(pattern))) {
+            if (modules.some(pattern => {
+              if (typeof pattern === 'string' && pattern.endsWith('.ts')) {
+                // For explicit TypeScript files, do exact path matching
+                return id === pattern;
+              }
+              // For other patterns, use includes matching
+              return id.includes(pattern);
+            })) {
               return name;
             }
           }
           return null;
         },
-        preserveModules: false,  // Disable module preservation to ensure proper chunking
-        hoistTransitiveImports: false  // Prevent hoisting to ensure exports are preserved
+        preserveModules: false,
+        hoistTransitiveImports: false
       }
     }
   },
@@ -148,7 +168,7 @@ export default defineConfig({
       '@edge': path.resolve(__dirname, './edge-src'),
       '@common': path.resolve(__dirname, './common-src')
     },
-    extensions: ['.ts', '.tsx', '.js', '.jsx']  // Prioritize TypeScript files
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css']  // Added .css extension
   },
   optimizeDeps: {
     include: [
@@ -164,6 +184,10 @@ export default defineConfig({
       localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:5]',
       hashPrefix: 'microfeed'
+    },
+    // Ensure CSS is extracted to a single file
+    extract: {
+      filename: '_app/immutable/assets/[name].css'
     }
   }
-});
+}));

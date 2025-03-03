@@ -15,6 +15,26 @@ export interface WithManifestProps {
   manifest?: Manifest;
 }
 
+// Critical chunks that must be loaded before rendering
+const CRITICAL_CHUNKS: Record<string, string> = {
+  'utils': '_app/immutable/chunks/utils.js',
+  'react-vendor': '_app/immutable/chunks/react-vendor.js',
+  'ui-components': '_app/immutable/chunks/ui-components.js',
+  'constants': '_app/immutable/chunks/constants.js',
+  'admin-styles': '_app/immutable/assets/admin-styles.css'
+};
+
+/**
+ * Create a manifest object from critical chunks
+ */
+function createManifestFromCriticalChunks(): Manifest {
+  const manifest: Manifest = {};
+  Object.entries(CRITICAL_CHUNKS).forEach(([key, path]) => {
+    manifest[key] = { file: path };
+  });
+  return manifest;
+}
+
 /**
  * Higher-order component that handles manifest loading for Edge components
  * @param WrappedComponent - The component to wrap
@@ -25,31 +45,26 @@ export function withManifest<P extends WithManifestProps>(
 ): React.ComponentType<Omit<P, keyof WithManifestProps>> {
   return class WithManifest extends React.Component<Omit<P, keyof WithManifestProps>> {
     render(): React.ReactNode {
-      // In development or preview mode, we want to use non-hashed paths
+      let manifest: Manifest;
+
+      // In development or preview mode, use non-hashed paths
       if (isDev || isPreviewMode) {
-        return <WrappedComponent {...(this.props as P)} manifest={{}} />;
+        manifest = createManifestFromCriticalChunks();
+        return <WrappedComponent {...(this.props as P)} manifest={manifest} />;
       }
 
       // Try to get manifest from props first
-      let manifest = (this.props as P).manifest;
+      manifest = (this.props as P).manifest || {};
 
       // If no manifest in props, try virtual module in Cloudflare Pages
-      if (!manifest && process.env.CF_PAGES) {
-        manifest = virtualManifest;
+      if (Object.keys(manifest).length === 0 && process.env.CF_PAGES) {
+        manifest = virtualManifest as Manifest;
       }
 
-      // If still no manifest, use empty object but log warning
-      if (!manifest) {
-        console.warn('No manifest data available');
-        manifest = {
-          // Add critical fallback entries with proper file structure
-          'utils': { file: '_app/immutable/chunks/utils.js' },
-          'react-vendor': { file: '_app/immutable/chunks/react-vendor.js' },
-          'ui-components': { file: '_app/immutable/chunks/ui-components.js' },
-          'constants': { file: '_app/immutable/chunks/constants.js' },
-          'admin-styles': { file: '_app/immutable/assets/admin-styles.css' }
-        };
-        console.log('Using fallback manifest:', manifest);
+      // If still no manifest, use critical chunks as fallback
+      if (Object.keys(manifest).length === 0) {
+        console.warn('No manifest data available, using critical chunks');
+        manifest = createManifestFromCriticalChunks();
       }
 
       // In production, pass the manifest through
@@ -73,36 +88,37 @@ export function withRouteManifest(
   handler: (context: RouteContext) => Promise<Response>
 ): (context: RouteContext) => Promise<Response> {
   return async function(context: RouteContext): Promise<Response> {
+    let manifest: Manifest;
+
     // Pass through in development or preview mode
     if (isDev || isPreviewMode) {
-      // In preview mode, add an empty manifest to prevent the HTML generator
-      // from trying to use hashed paths which don't exist
-      if (isPreviewMode) {
-        const { data, ...rest } = context;
-        return handler({
-          ...rest,
-          data: {
-            ...data,
-            manifest: {}
-          }
-        });
-      }
-      return handler(context);
+      // In preview mode, add critical chunks manifest
+      manifest = createManifestFromCriticalChunks();
+      
+      const { data, ...rest } = context;
+      return handler({
+        ...rest,
+        data: {
+          ...data,
+          manifest
+        }
+      });
     }
-    
-    // Get manifest data
-    let manifest = {};
     
     // Try to get manifest from virtual module in Cloudflare Pages
     if (process.env.CF_PAGES) {
       try {
-        manifest = virtualManifest;
+        manifest = virtualManifest as Manifest;
       } catch (e) {
         console.warn('Failed to load virtual manifest:', e);
+        // Use critical chunks as fallback
+        manifest = createManifestFromCriticalChunks();
       }
+    } else {
+      manifest = createManifestFromCriticalChunks();
     }
 
-    // In production, add manifest to the data
+    // Add manifest to the data
     const { data, ...rest } = context;
     return handler({
       ...rest,

@@ -2,7 +2,6 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-
 async function updateWranglerConfig(env) {
   const wranglerPath = 'wrangler.json';
   const databaseId = process.env.D1_DATABASE_ID;
@@ -88,35 +87,78 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
  * This is needed because we have publicDir: false in vite.config.js
  */
 async function copyStaticAssets() {
-  // Ensure destination directories exist
-  fs.mkdirSync(path.join('dist', 'assets', 'favicon'), { recursive: true });
-  
-  // Copy favicon files
-  const faviconDir = path.join('public', 'assets', 'favicon');
-  fs.readdirSync(faviconDir).forEach(file => {
-    fs.copyFileSync(path.join(faviconDir, file), path.join('dist', 'assets', 'favicon', file));
+  // Define asset directories to copy
+  const assetDirs = [
+    ['public/assets/favicon', 'dist/assets/favicon'],
+    ['public/assets/brands', 'dist/assets/brands'],
+    ['public/assets/howto', 'dist/assets/howto'],
+    ['public/assets/default', 'dist/assets/default'],
+    ['public/_app/immutable/assets', 'dist/_app/immutable/assets'],
+    ['public/_app/immutable/chunks', 'dist/_app/immutable/chunks']
+  ];
+
+  // Copy each directory
+  assetDirs.forEach(([src, dest]) => {
+    if (fs.existsSync(src)) {
+      fs.mkdirSync(dest, { recursive: true });
+      copyRecursive(src, dest);
+    }
   });
+
+  // Copy individual files
+  const filesToCopy = [
+    ['public/robots.txt', 'dist/robots.txt'],
+    ['public/humans.txt', 'dist/humans.txt'],
+    ['public/openapi.yaml', 'dist/openapi.yaml']
+  ];
+
+  filesToCopy.forEach(([src, dest]) => {
+    if (fs.existsSync(src)) {
+      fs.copyFileSync(src, dest);
+    }
+  });
+
   console.log('Copied static assets to dist directory');
+}
+
+/**
+ * Recursively copy a directory
+ */
+function copyRecursive(src, dest) {
+  const exists = fs.existsSync(src);
+  const stats = exists && fs.statSync(src);
+  const isDirectory = exists && stats.isDirectory();
+
+  if (isDirectory) {
+    fs.mkdirSync(dest, { recursive: true });
+    fs.readdirSync(src).forEach(childItemName => {
+      copyRecursive(
+        path.join(src, childItemName),
+        path.join(dest, childItemName)
+      );
+    });
+  } else {
+    fs.copyFileSync(src, dest);
+  }
 }
 
 /**
  * Rebuild the project with updated manifest
  * This is needed to ensure the HTML files include correct script references
  */
-async function rebuildWithManifest() {
-  console.log('Rebuilding project with updated manifest...');
+async function rebuildWithManifest(env) {
+  console.log(`Rebuilding project with updated manifest for ${env} environment...`);
   
   // Set environment variables for the second build
-  const env = {
+  const buildEnv = {
     ...process.env,
     REBUILD_WITH_MANIFEST: 'true', // Signal that this is a rebuild with manifest
-    VITE_DISABLE_OPTIMIZATIONS: process.env.VITE_DISABLE_HASH, // Pass through the disable optimization flag
-    VITE_PRESERVE_EXPORTS: process.env.VITE_DISABLE_HASH, // Preserve export names 
-    NODE_ENV: process.env.VITE_DISABLE_HASH === 'true' ? 'development' : 'production', // Use development mode for preview to prevent minification
+    NODE_ENV: env === 'preview' ? 'development' : 'production'
   };
   
   // Run second build with manifest data available
-  execSync('pnpm build', { stdio: 'inherit', env });
+  const buildScript = env === 'preview' ? 'pnpm build:dev' : 'pnpm build';
+  execSync(buildScript, { stdio: 'inherit', env: buildEnv });
   console.log('Rebuild complete with proper manifest data');
 }
 
@@ -125,10 +167,6 @@ async function deploy() {
     // Get environment from command line args
     const env = process.argv[2] || 'preview';
     
-    // Disable hashing for preview environment to solve module loading issues
-    const isPreview = env === 'preview';
-    process.env.VITE_DISABLE_HASH = isPreview ? 'true' : 'false';
-    
     // Update wrangler config with database ID
     await updateWranglerConfig(env);
 
@@ -136,15 +174,16 @@ async function deploy() {
     await createInitialManifest();
     
     // First build - generates the manifest
-    console.log('Building project...');
-    execSync('pnpm build', { stdio: 'inherit' });
+    console.log(`Building project for ${env} environment...`);
+    const buildScript = env === 'preview' ? 'pnpm build:dev' : 'pnpm build';
+    execSync(buildScript, { stdio: 'inherit' });
     
     // Update manifest virtual module
     console.log('Updating manifest data...');
     await updateManifestAfterBuild();
     
     // Rebuild with updated manifest to ensure HTML has correct script references
-    await rebuildWithManifest();
+    await rebuildWithManifest(env);
         
     // Copy static assets
     console.log('Copying static assets...');
@@ -153,10 +192,8 @@ async function deploy() {
     // Run deployment
     console.log(`Deploying to ${env}...`);
     
-    // For preview, use compatibility flags to ensure proper module resolution
     // Use the same command for both environments as compatibility flags aren't supported
     const deployCommand = `wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle`;
-    
     
     execSync(
       deployCommand,

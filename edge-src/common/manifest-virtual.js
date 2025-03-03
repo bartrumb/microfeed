@@ -10,9 +10,6 @@ export const manifestData = {
       "_ToastUtils.js",
       "_StringUtils.js",
       "_index6.js"
-    ],
-    "css": [
-      "_app/immutable/assets/BrowserUtils.css"
     ]
   },
   "_Constants.js": {
@@ -81,10 +78,7 @@ export const manifestData = {
   },
   "_react-vendor.js": {
     "file": "_app/immutable/chunks/react-vendor.js",
-    "name": "react-vendor",
-    "css": [
-      "_app/immutable/assets/react-vendor.css"
-    ]
+    "name": "react-vendor"
   },
   "_utils.js": {
     "file": "_app/immutable/chunks/utils.js",
@@ -515,5 +509,9 @@ export const manifestData = {
       "_utils.js",
       "functions/admin/ajax/feed.js"
     ]
+  },
+  "style.css": {
+    "file": "_app/immutable/assets/style.css",
+    "src": "style.css"
   }
 };
