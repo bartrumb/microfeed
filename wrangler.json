@@ -5,22 +5,5 @@
     "nodejs_compat"
   ],
   "pages_build_output_dir": "dist",
-  "d1_databases": [
-    {
-      "binding": "FEED_DB",
-      "database_name": "shop-dawg-microfeed_feed_db_preview",
-      "database_id": "84edb8bb-eef5-495c-a0d6-91681a278bcf"
-    }
-  ],
-  "env": {
-    "production": {
-      "d1_databases": [
-        {
-          "binding": "FEED_DB",
-          "database_name": "shop-dawg-microfeed_feed_db_production",
-          "database_id": "05352400-9e80-42b1-bc1c-b69229aa13ab"
-        }
-      ]
-    }
-  }
+  "env": {}
 }

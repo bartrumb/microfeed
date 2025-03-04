@@ -7,7 +7,3 @@ binding = "MEDIA_BUCKET"
 bucket_name = "microfeed-media"
 preview_bucket_name = "microfeed-media-preview"
 
-[[env.preview.d1_databases]]
-binding = "FEED_DB"
-database_name = "shop-dawg-microfeed_feed_db_preview_preview"
-database_id = "0a14bbce-eaf1-4c6a-8aaf-55a8c6e980b7"
