@@ -1,6 +1,8 @@
 import fs from 'fs';
 import toml from 'toml';
 import https from 'https';
+import crypto from 'crypto';
+import { execSync } from 'child_process';
 
 export class VarsReader {
   constructor(currentEnv, varsFilePath = '.vars.toml') {
@@ -38,48 +40,87 @@ export class WranglerCmd {
     this.v = new VarsReader(currentEnv);
   }
 
-  _getCmd(wranglerCmd) {
-    return `CLOUDFLARE_ACCOUNT_ID="${this.v.get('CLOUDFLARE_ACCOUNT_ID')}" ` +
-      `CLOUDFLARE_API_TOKEN="${this.v.get('CLOUDFLARE_API_TOKEN')}" ` + wranglerCmd;
+  _getEnvVars() {
+    return {
+      ...process.env,
+      CLOUDFLARE_ACCOUNT_ID: this.v.get('CLOUDFLARE_ACCOUNT_ID'),
+      CLOUDFLARE_API_TOKEN: this.v.get('CLOUDFLARE_API_TOKEN')
+    };
+  }
+
+  _execWranglerCmd(cmd) {
+    return execSync(`npx wrangler ${cmd}`, {
+      stdio: 'inherit',
+      env: this._getEnvVars()
+    });
   }
 
   publishProject() {
     const projectName = this.v.get('CLOUDFLARE_PROJECT_NAME');
     const productionBranch = this.v.get('PRODUCTION_BRANCH', 'main');
-
-    // Cloudflare Pages direct upload uses branch to decide deployment environment.
-    // If we want production, then use production_branch. Otherwise, just something else
     const branch = this.currentEnv === 'production' ? productionBranch : `${productionBranch}-preview`;
-    const wranglerCmd = `wrangler pages publish public --project-name ${projectName} --branch ${branch}`;
-    console.log(wranglerCmd);
-    return this._getCmd(wranglerCmd);
+    return this._execWranglerCmd(`pages publish public --project-name ${projectName} --branch ${branch}`);
   }
 
   _non_dev_db() {
-    return this.v.get('D1_DATABASE_NAME') ||
-      `${this.v.get('CLOUDFLARE_PROJECT_NAME')}_feed_db_${this.currentEnv}`;
+    const baseName = this.v.get('D1_DATABASE_NAME') ||
+      `${this.v.get('CLOUDFLARE_PROJECT_NAME')}_feed_db`;
+    return `${baseName}_${this.currentEnv}`;
   }
 
   createFeedDb() {
-    const wranglerCmd = this.currentEnv !== 'development' ?
-      `wrangler d1 create ${this._non_dev_db()}` : 'echo "FEED_DB"';
-    console.log(wranglerCmd);
-    return this._getCmd(wranglerCmd);
+    if (this.currentEnv !== 'development') {
+      return this._execWranglerCmd(`d1 create ${this._non_dev_db()}`);
+    }
+    return 'FEED_DB';
   }
 
   createFeedDbTables() {
     const dbName = this._non_dev_db();
-    const wranglerCmd = `wrangler d1 execute ${dbName} --file ops/db/init.sql --env ${this.currentEnv}`;
-    console.log(wranglerCmd);
-    return this._getCmd(wranglerCmd);
+    return this._execWranglerCmd(`d1 execute ${dbName} --file ops/db/init.sql --env ${this.currentEnv}`);
   }
 
-  /**
-   * XXX: We use private api here, which may be changed on the cloudflare end...
-   * https://github.com/cloudflare/wrangler2/blob/main/packages/wrangler/src/d1/list.tsx#L34
-   */
+  deleteDatabase(databaseId, onSuccess) {
+    const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
+    const apiKey = this.v.get('CLOUDFLARE_API_TOKEN');
+    
+    const options = {
+      host: 'api.cloudflare.com',
+      port: '443',
+      path: `/client/v4/accounts/${accountId}/d1/database/${databaseId}`,
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+      }
+    };
+
+    const request = https.request(options, (response) => {
+      let data = '';
+      response.on('data', (chunk) => {
+        data += chunk.toString();
+      });
+
+      response.on('end', () => {
+        const body = JSON.parse(data);
+        if (body.success) {
+          console.log(`Successfully deleted database: ${databaseId}`);
+          onSuccess(true);
+        } else {
+          console.error('Database deletion failed:', body.errors || body.messages || 'Unknown error');
+          onSuccess(false);
+        }
+      });
+    });
+
+    request.on('error', (error) => {
+      console.error('Database deletion error:', error);
+      onSuccess(false);
+    });
+
+    request.end();
+  }
+
   createDatabaseViaApi(onSuccess) {
-    const dbName = this._non_dev_db();
     const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
     const apiKey = this.v.get('CLOUDFLARE_API_TOKEN');
     
@@ -114,7 +155,12 @@ export class WranglerCmd {
       });
     });
 
-    request.write(JSON.stringify({ name: dbName }));
+    // Generate a unique version identifier to ensure unique database names
+    const timestamp = new Date().toISOString().replace(/[^0-9]/g, '');
+    const uniqueId = crypto.randomBytes(4).toString('hex');
+    const uniqueDbName = `${this._non_dev_db()}_${timestamp}_${uniqueId}`;
+
+    request.write(JSON.stringify({ name: uniqueDbName }));
     request.on('error', (error) => {
       console.error('Database creation error:', error);
       onSuccess(null);
@@ -145,14 +191,17 @@ export class WranglerCmd {
         const body = JSON.parse(data);
         let databaseId = '';
         if (body.result && Array.isArray(body.result)) {
-          body.result.forEach((result) => {
-            if (result.name === dbName) {
-              databaseId = result.uuid;
-            }
-          });
+          // Get the most recently created database that matches our name pattern
+          const databases = body.result
+            .filter(result => result.name.startsWith(dbName))
+            .sort((a, b) => b.created_at - a.created_at);
+          
+          if (databases.length > 0) {
+            databaseId = databases[0].uuid;
+          }
         }
         if (!databaseId) {
-          console.log('No matching database found for name:', dbName);
+          console.log('No matching database found for name pattern:', dbName);
           if (body.errors) {
             console.error('API errors:', body.errors);
           }

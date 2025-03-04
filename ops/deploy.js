@@ -1,30 +1,54 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { WranglerCmd } from './lib/utils.js';
+
+async function ensureDatabase(env) {
+  console.log(`Checking database for ${env} environment...`);
+  const cmd = new WranglerCmd(env);
+
+  // Check for existing database
+  const existingId = await new Promise((resolve) => cmd.getDatabaseId(resolve));
+  
+  if (existingId) {
+    console.log('Using existing database:', existingId);
+    return existingId;
+  }
+
+  // Create new database if none exists
+  console.log('No existing database found, creating new one...');
+  const result = await new Promise((resolve) => cmd.createDatabaseViaApi(resolve));
+
+  if (!result) {
+    throw new Error('Failed to create database');
+  }
+
+  console.log('Database created successfully:', result.uuid);
+  console.log('Database name:', result.name);
+
+  // Initialize database tables for new database
+  console.log('Initializing database tables...');
+  cmd.createFeedDbTables();
+  
+  return result.uuid;
+}
 
 async function updateWranglerConfig(env) {
-  // Read database ID from wrangler.toml
-  const wranglerToml = fs.readFileSync('wrangler.toml', 'utf8');
-  let databaseId;
-  
-  if (env === 'preview') {
-    // Extract preview database ID from wrangler.toml
-    const match = wranglerToml.match(/\[\[env\.preview\.d1_databases\]\][^\[]*?database_id\s*=\s*"([^"]+)"/);
-    databaseId = match ? match[1] : null;
-  } else {
-    // Extract production database ID from wrangler.toml (if needed in the future)
-    const match = wranglerToml.match(/\[\[d1_databases\]\][^\[]*?database_id\s*=\s*"([^"]+)"/);
-    databaseId = match ? match[1] : null;
-  }
+  // First ensure database exists
+  const databaseId = await ensureDatabase(env);
 
   const wranglerPath = 'wrangler.json';
 
-  if (!databaseId || databaseId.trim() === '') {
-    throw new Error(`Database ID not found in wrangler.toml for ${env} environment`);
+  // Create the config file if it doesn't exist
+  if (!fs.existsSync(wranglerPath)) {
+    fs.writeFileSync(wranglerPath, '{}');
   }
 
   // Read existing config
   const config = JSON.parse(fs.readFileSync(wranglerPath, 'utf8'));
+
+  const wranglerCmd = new WranglerCmd(env);
+  const dbName = wranglerCmd._non_dev_db();
 
   if (env === 'production') {
     // Update production environment config
@@ -33,14 +57,14 @@ async function updateWranglerConfig(env) {
     
     config.env.production.d1_databases = [{
       binding: "FEED_DB",
-      database_name: "shop-dawg-microfeed_feed_db",
+      database_name: dbName,
       database_id: databaseId
     }];
   } else {
     // Update preview/default config
     config.d1_databases = [{
       binding: "FEED_DB",
-      database_name: "shop-dawg-microfeed_feed_db_preview",
+      database_name: dbName,
       database_id: databaseId
     }];
   }
@@ -219,16 +243,13 @@ async function deploy() {
     console.log('Copying static assets...');
     await copyStaticAssets();
     
-    // Run deployment
+    // Run deployment using WranglerCmd
     console.log(`Deploying to ${env}...`);
-    
-    // Use the same command for both environments as compatibility flags aren't supported
-    const deployCommand = `wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle`;
-    
-    execSync(
-      deployCommand,
-      { stdio: 'inherit' }
-    );
+    const wranglerCmd = new WranglerCmd(env);
+    execSync(`npx wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle`, {
+      stdio: 'inherit',
+      env: { ...process.env, ...wranglerCmd._getEnvVars() }
+    });
     
   } catch (error) {
     console.error('Deployment failed:', error);
