@@ -80,6 +80,12 @@ export class WranglerCmd {
     return this._execWranglerCmd(`d1 execute ${dbName} --file ops/db/init.sql --env ${this.currentEnv}`);
   }
 
+  createFeedDbTablesRemote() {
+    const dbName = this._non_dev_db();
+    console.log(`Initializing remote database tables for ${dbName}...`);
+    return this._execWranglerCmd(`d1 execute ${dbName} --file ops/db/init.sql --env ${this.currentEnv} --remote`);
+  }
+
   deleteDatabase(databaseId, onSuccess) {
     const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
     const apiKey = this.v.get('CLOUDFLARE_API_TOKEN');

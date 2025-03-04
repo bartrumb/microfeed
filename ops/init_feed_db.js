@@ -69,6 +69,10 @@ async function initializeDatabase() {
     // Initialize database tables using new command execution method
     console.log('Creating tables...');
     cmd.createFeedDbTables();
+
+    // Execute SQL initialization script on remote database
+    console.log('Initializing remote database tables...');
+    cmd.createFeedDbTablesRemote();
     
   } catch (error) {
     console.error('Database initialization failed:', error);

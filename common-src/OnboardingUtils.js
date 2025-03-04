@@ -7,7 +7,7 @@ export default class OnboardingChecker {
     this.request = request;
 
     this.cookie = request.headers.get('cookie') || '';
-    if (env['DEPLOYMENT_ENVIRONMENT'] === 'development') {
+    if (env['DEPLOYMENT_ENVIRONMENT'] === 'development' || env['DEPLOYMENT_ENVIRONMENT'] === 'preview') {
       this.cookie = `CF_Authorization=something; ${this.cookie || ''}`;
     }
     this.env = env;

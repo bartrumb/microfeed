@@ -11,7 +11,7 @@
         {
           "binding": "FEED_DB",
           "database_name": "shop-dawg-microfeed_feed_db_preview_preview",
-          "database_id": "484f742f-2fad-492f-ac53-9d46db958805"
+          "database_id": "6e5ba262-e767-401b-bc88-6189ab7b70d9"
         }
       ]
     },
@@ -29,7 +29,7 @@
     {
       "binding": "FEED_DB",
       "database_name": "shop-dawg-microfeed_feed_db_preview_preview",
-      "database_id": "f73ddd4c-a748-426c-8be9-2bf08b2c33f5"
+      "database_id": "6e5ba262-e767-401b-bc88-6189ab7b70d9"
     }
   ]
 }
