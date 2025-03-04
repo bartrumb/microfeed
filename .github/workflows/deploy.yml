@@ -39,45 +39,34 @@ jobs:
       - name: Cache pnpm dependencies
         uses: actions/cache@v3
         with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: |
+            ${{ env.STORE_PATH }}
+            node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
         shell: pwsh
         run: |
-          # Clean install without frozen lockfile
-          pnpm install --no-frozen-lockfile
-          # Generate new lockfile
-          pnpm install
-          # Clean up store
+          pnpm install --frozen-lockfile
           pnpm store prune
 
-      - name: Run tests
-        run: pnpm test
+      - name: Type Check
+        run: pnpm typecheck
 
       - name: Load environment variables
         run: |
           Get-Content .env.shared | Select-String -Pattern '^\[shared\]' -Context 0,10 | ForEach-Object { $_.Context.PostContext } | ForEach-Object { $_ -replace '^(\w+)=(.*)$', '$1=$2' } | Out-File -FilePath $env:GITHUB_ENV -Append
 
       # Preview deployment (automatic on main)
-      - name: Build Preview
-        if: github.ref == 'refs/heads/main'
-        run: pnpm build
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          D1_DATABASE_ID: ${{ secrets.PREVIEW_D1_DATABASE_ID }}
-          NODE_ENV: development
-
       - name: Deploy to Preview
         if: github.ref == 'refs/heads/main'
         run: pnpm deploy:preview
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          D1_DATABASE_ID: ${{ secrets.PREVIEW_D1_DATABASE_ID }}
 
   # Production deployment (requires approval)
   deploy-production:
@@ -104,27 +93,33 @@ jobs:
           version: 8
           run_install: false
 
+      - name: Get pnpm store directory
+        shell: pwsh
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $env:GITHUB_ENV
+
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Install dependencies
         shell: pwsh
         run: |
-          # Clean install without frozen lockfile
-          pnpm install --no-frozen-lockfile
-          # Generate new lockfile
-          pnpm install
-          # Clean up store
+          pnpm install --frozen-lockfile
           pnpm store prune
 
-      - name: Build Production
-        run: pnpm build
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          D1_DATABASE_ID: ${{ secrets.PRODUCTION_D1_DATABASE_ID }}
-          NODE_ENV: production
+      - name: Type Check
+        run: pnpm typecheck
 
       - name: Deploy to Production
-        run: pnpm deploy:prod
+        run: pnpm deploy:production
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          D1_DATABASE_ID: ${{ secrets.PRODUCTION_D1_DATABASE_ID }}

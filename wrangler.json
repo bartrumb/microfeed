@@ -8,8 +8,8 @@
   "d1_databases": [
     {
       "binding": "FEED_DB",
-      "database_name": "shop-dawg-microfeed_feed_db_preview_preview",
-      "database_id": "a90888ec-0854-496b-9a9e-083dda6b560a"
+      "database_name": "shop-dawg-microfeed_feed_db_development_development",
+      "database_id": "c9f68fba-4b41-465f-bafe-e27608125941"
     }
   ],
   "env": {
