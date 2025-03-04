@@ -1,6 +1,6 @@
 # Microfeed Project File Index
 
-Generated on: 2025-03-03 19:02:39
+Generated on: 2025-03-03 19:09:16
 
 This index provides a structured view of the microfeed project source code.
 
@@ -20,20 +20,20 @@ This index provides a structured view of the microfeed project source code.
 | Category | Count | Total Size |
 |----------|-------|------------|
 | Web Resources | 4 | 50.32 KB |
-| React Components | 94 | 308.14 KB |
-| JavaScript/TypeScript | 64 | 210.45 KB |
+| React Components | 95 | 309.31 KB |
+| JavaScript/TypeScript | 67 | 229.29 KB |
 | Configuration | 4 | 8.03 KB |
-| Documentation | 9 | 67.35 KB |
+| Documentation | 9 | 67.34 KB |
 
 ## Top-Level Directories
 
 - **client-src/** - 77 files, 283.74 KB
 - **cloudflare/** - 0 files, 0 B
-- **common-src/** - 10 files, 33.76 KB
+- **common-src/** - 12 files, 46.59 KB
 - **docs/** - 1 files, 3.33 KB
-- **edge-src/** - 28 files, 184.31 KB
-- **functions/** - 29 files, 29.97 KB
-- **memory-bank/** - 7 files, 43.25 KB
+- **edge-src/** - 29 files, 190.73 KB
+- **functions/** - 30 files, 30.73 KB
+- **memory-bank/** - 7 files, 43.23 KB
 - **ops/** - 10 files, 27.72 KB
 - **public/** - 3 files, 1.80 KB
 
@@ -394,13 +394,13 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 1.01 KB | 2025-03-02 18:28:46 |
+| index.tsx | 1.14 KB | 2025-03-03 19:05:58 |
 
 ### edge-src\EdgeAdminItemsApp\New
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 997 B | 2025-03-02 20:16:22 |
+| index.tsx | 1.24 KB | 2025-03-03 19:06:25 |
 
 ### edge-src\EdgeCommonRequests
 
@@ -437,6 +437,7 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | index.jsx | 568 B | 2025-02-28 09:34:28 |
+| index.tsx | 783 B | 2025-03-03 19:07:27 |
 | sitemap.xml.jsx | 450 B | 2025-02-28 09:34:28 |
 
 ### functions\admin
@@ -653,8 +654,10 @@ This index provides a structured view of the microfeed project source code.
 | R2Utils.js | 115 B | 2025-02-28 09:34:28 |
 | StringUtils.js | 8.62 KB | 2025-03-01 16:50:20 |
 | StringUtils.test.js | 1.31 KB | 2025-02-28 09:34:28 |
+| StringUtils.ts | 10.04 KB | 2025-03-03 19:04:58 |
 | TimeUtils.js | 1.21 KB | 2025-02-28 09:34:28 |
 | TimeUtils.test.js | 673 B | 2025-02-28 09:34:28 |
+| TimeUtils.ts | 2.79 KB | 2025-03-03 19:05:30 |
 | Version.js | 73 B | 2025-02-28 23:43:03 |
 
 ### common-src\types
@@ -669,6 +672,7 @@ This index provides a structured view of the microfeed project source code.
 |------|------|---------------|
 | manifest-virtual.js | 14.09 KB | 2025-03-03 14:34:17 |
 | ManifestUtils.js | 5.09 KB | 2025-03-03 14:07:46 |
+| ManifestUtils.ts | 6.01 KB | 2025-03-03 19:03:48 |
 | RouteUtils.js | 1.00 KB | 2025-03-02 20:09:15 |
 | ViteUtils.js | 3.15 KB | 2025-03-03 13:29:18 |
 
@@ -776,7 +780,7 @@ This index provides a structured view of the microfeed project source code.
 | activeContext.md | 1.73 KB | 2025-03-03 14:28:03 |
 | decisionLog.md | 3.24 KB | 2025-03-03 01:25:19 |
 | fileStructureUpdate.md | 3.70 KB | 2025-03-03 13:09:46 |
-| microfeed-index.md | 23.19 KB | 2025-03-03 18:45:04 |
+| microfeed-index.md | 23.18 KB | 2025-03-03 19:02:39 |
 | productContext.md | 3.92 KB | 2025-03-01 16:23:07 |
 | progress.md | 4.72 KB | 2025-03-03 14:24:52 |
 | typeCheckingPlan.md | 2.74 KB | 2025-03-03 16:15:54 |
@@ -786,11 +790,17 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Type | Size | Last Modified |
 |------|------|------|---------------|
+| functions\index.tsx | React Components | 783 B | 2025-03-03 19:07:27 |
+| edge-src\EdgeAdminItemsApp\New\index.tsx | React Components | 1.24 KB | 2025-03-03 19:06:25 |
+| edge-src\EdgeAdminItemsApp\Edit\index.tsx | React Components | 1.14 KB | 2025-03-03 19:05:58 |
+| common-src\TimeUtils.ts | JavaScript/TypeScript | 2.79 KB | 2025-03-03 19:05:30 |
+| common-src\StringUtils.ts | JavaScript/TypeScript | 10.04 KB | 2025-03-03 19:04:58 |
+| edge-src\common\ManifestUtils.ts | JavaScript/TypeScript | 6.01 KB | 2025-03-03 19:03:48 |
+| memory-bank\microfeed-index.md | Documentation | 23.18 KB | 2025-03-03 19:02:39 |
 | edge-src\EdgeAdminItemsApp\index.tsx | React Components | 2.80 KB | 2025-03-03 18:59:55 |
 | client-src\ClientAdminCustomCodeEditorApp\components\CustomCodeEditorApp\index.tsx | React Components | 3.80 KB | 2025-03-03 18:59:39 |
 | functions\json\openapi.yaml\index.tsx | React Components | 673 B | 2025-03-03 18:50:14 |
 | vite.config.js | JavaScript/TypeScript | 6.22 KB | 2025-03-03 18:46:46 |
-| memory-bank\microfeed-index.md | Documentation | 23.19 KB | 2025-03-03 18:45:04 |
 | client-src\ClientAdminItemsApp\components\EditItemApp\types.ts | JavaScript/TypeScript | 3.16 KB | 2025-03-03 16:23:52 |
 | client-src\ClientAdminItemsApp\components\EditItemApp\index.tsx | React Components | 18.55 KB | 2025-03-03 16:22:50 |
 | client-src\ClientAdminItemsApp\components\EditItemApp\FormExplainTexts.ts | JavaScript/TypeScript | 10.88 KB | 2025-03-03 16:18:48 |
@@ -800,10 +810,4 @@ This index provides a structured view of the microfeed project source code.
 | client-src\ClientAdminHomeApp\components\AdminHomeApp\component\WhatsNewApp\index.tsx | React Components | 2.44 KB | 2025-03-03 16:07:04 |
 | client-src\ClientAdminHomeApp\components\AdminHomeApp\component\WhatsNewApp\types.ts | JavaScript/TypeScript | 399 B | 2025-03-03 16:06:41 |
 | client-src\ClientAdminHomeApp\components\AdminHomeApp\component\DistributionApp\index.tsx | React Components | 3.54 KB | 2025-03-03 16:05:48 |
-| client-src\ClientAdminHomeApp\components\AdminHomeApp\component\DistributionApp\types.ts | JavaScript/TypeScript | 313 B | 2025-03-03 16:05:21 |
-| client-src\ClientAdminHomeApp\components\AdminHomeApp\index.tsx | React Components | 2.23 KB | 2025-03-03 16:04:29 |
-| client-src\ClientAdminHomeApp\components\AdminHomeApp\types.ts | JavaScript/TypeScript | 1.15 KB | 2025-03-03 16:04:08 |
-| client-src\ClientAdminCustomCodeEditorApp\components\CustomCodeEditorApp\types.ts | JavaScript/TypeScript | 2.01 KB | 2025-03-03 15:59:57 |
-| edge-src\EdgeSettingsApp\index.tsx | React Components | 1.47 KB | 2025-03-03 15:33:31 |
-| edge-src\EdgeItemApp\index.tsx | React Components | 1.70 KB | 2025-03-03 15:32:21 |
 

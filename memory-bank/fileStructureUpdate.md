@@ -2,67 +2,59 @@
 
 ## Overview
 
-This document tracks the progress of migrating the Microfeed project from JavaScript/JSX to TypeScript. It provides an overview of the current file structure, highlighting which components have been migrated to TypeScript and which files need to be removed.
+This document tracks the progress of migrating the Microfeed project from JavaScript/JSX to TypeScript. It provides an overview of the current file structure, highlighting which components have been migrated to TypeScript.
 
 ## Components Migrated to TypeScript
 
-The following components have been successfully migrated to TypeScript:
-
 1. **client-src/components/ExternalLink**
    - ✅ index.tsx
-   - ❌ index.jsx (to be removed)
 
 2. **client-src/components/ExplainText**
    - ✅ index.tsx
-   - ❌ index.jsx (to be removed)
 
 3. **client-src/components/AdminRichEditor**
    - ✅ index.tsx
-   - ❌ index.jsx (to be removed)
    - **component/RichEditorQuill**
      - ✅ index.tsx
-     - ❌ index.jsx (to be removed)
    - **component/RichEditorMediaDialog**
      - ✅ index.tsx
-     - ❌ index.jsx (to be removed)
 
 4. **client-src/components/LabelWrapper**
-   - ✅ index.tsx (new component, no JSX version)
+   - ✅ index.tsx
 
 5. **client-src/ClientAdminChannelApp/components/EditChannelApp**
    - ✅ index.tsx
    - ✅ types.ts
-   - ❌ index.jsx (to be removed)
-   - FormExplainTexts.js (not yet migrated)
-   - FormExplainTexts.jsx (not yet migrated)
+   - ✅ FormExplainTexts.ts
 
 6. **client-src/components/AdminInput**
    - ✅ index.tsx
-   - ❌ index.jsx (to be removed)
 
 7. **client-src/components/AdminRadio**
    - ✅ index.tsx
-   - ❌ index.jsx (to be removed)
 
 8. **client-src/components/AdminTextarea**
    - ✅ index.tsx
-   - ❌ index.jsx (to be removed)
 
 9. **client-src/components/AdminSelect**
    - ✅ index.tsx
-   - ❌ index.jsx (to be removed)
 
 10. **edge-src/EdgeAdminItemsApp**
     - ✅ index.tsx
-    - Edit/ (not yet migrated)
-    - New/ (not yet migrated)
+    - ✅ Edit/index.tsx
+    - ✅ New/index.tsx
 
 11. **edge-src/common**
     - ✅ withManifest.tsx
 
-## Type Definitions
+12. **Server-Side Handlers**
+    - ✅ functions/index.tsx
+    - ✅ functions/admin/index.tsx
+    - ✅ functions/json/index.tsx
+    - ✅ functions/rss/index.tsx
+    - ✅ functions/sitemap.xml.tsx
 
-The following type definition files have been created:
+## Type Definitions
 
 1. **common-src/types/FeedContent.ts**
    - Core data structure interfaces
@@ -75,26 +67,22 @@ The following type definition files have been created:
 3. **client-src/ClientAdminChannelApp/components/EditChannelApp/types.ts**
    - Component-specific type definitions
 
-## Next Steps for Migration
+## Migrated Utility Functions
 
-1. **Components to Migrate Next:**
-   - AdminWholeHtml component
-   - Remaining Edge components
-   - Server-side handlers
+1. ✅ StringUtils.ts
+2. ✅ TimeUtils.ts
+3. ✅ ManifestUtils.ts
 
-2. **Utility Functions to Migrate:**
-   - StringUtils.js → StringUtils.ts
-   - TimeUtils.js → TimeUtils.ts
-   - ManifestUtils.js → ManifestUtils.ts
+## Next Steps
 
-3. **Clean Up Tasks:**
-   - Remove redundant .jsx files
-   - Update import statements
+1. **Clean Up Tasks:**
    - Verify build and runtime functionality
+   - Test the application thoroughly
+   - Update any remaining import statements that might still reference .js or .jsx files
 
-## Updated Project Structure
+## Project Structure
 
-After completing the TypeScript migration, the project structure will follow this pattern:
+The project now follows this TypeScript-focused structure:
 
 ```
 client-src/
