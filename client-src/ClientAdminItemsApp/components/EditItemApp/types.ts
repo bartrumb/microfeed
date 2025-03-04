@@ -89,7 +89,8 @@ export interface AdminInputProps {
 }
 
 export interface AdminDatetimePickerProps {
-  labelComponent: React.ReactNode;
+  label: string | null;
+  labelComponent?: React.ReactNode | null;
   value?: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

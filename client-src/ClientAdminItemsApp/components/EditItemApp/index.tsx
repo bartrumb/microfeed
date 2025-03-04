@@ -35,6 +35,8 @@ import {
   DEFAULT_FEED,
   DEFAULT_ITEM,
   StateUpdate
+,
+  ItemUpdate
 } from './types';
 
 const SUBMIT_STATUS__START = 1;
@@ -119,11 +121,12 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
     }), onSuccess);
   }
 
-  onUpdateItemMeta(attrDict: Partial<Item>, extraDict?: Partial<EditItemAppState>): void {
+  onUpdateItemMeta(attrDict: ItemUpdate, extraDict?: StateUpdate): void {
     this.setState(prevState => ({
-      changed: true,
-      item: {...prevState.item, ...attrDict},
+      ...prevState,
       ...extraDict,
+      changed: true,
+      item: {...prevState.item, ...attrDict}
     }));
   }
 
@@ -249,26 +252,30 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                 <div className="ml-8 flex-1">
                   <AdminInput
                     labelComponent={<ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.TITLE]}/>}
-                    value={item.title}
+                    value={item.title || ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const attrDict = {'title': e.target.value};
-                      if (action !== 'edit' && !this.state.userChangedLink) {
-                        attrDict.link = PUBLIC_URLS.webItem(itemId, item.title, getPublicBaseUrl());
+                      const attrDict: ItemUpdate = {
+                        title: e.target.value,
+                        link: action !== 'edit' && !this.state.userChangedLink ? 
+                          PUBLIC_URLS.webItem(itemId, e.target.value, getPublicBaseUrl()) : undefined
                       }
+;
                       this.onUpdateItemMeta(attrDict);
                     }}
                   />
                   <div className="grid grid-cols-2 gap-4 mt-4">
-                    <AdminDatetimePicker
-                      labelComponent={<ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.PUB_DATE]}/>}
-                      value={item.pubDateMs}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        this.onUpdateItemMeta({'pubDateMs': datetimeLocalStringToMs(e.target.value)});
-                      }}
-                    />
+                    {React.createElement(AdminDatetimePicker as any, {
+                      label: null,
+                      labelComponent: <ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.PUB_DATE]}/>,
+                      value: item.pubDateMs,
+                      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                        this.onUpdateItemMeta({'pubDateMs': datetimeLocalStringToMs(e.target.value)})
+                      }
+                    })}
+
                     <AdminInput
                       labelComponent={<ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.LINK]}/>}
-                      value={item.link}
+                      value={item.link || ''}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                         this.onUpdateItemMeta({'link': e.target.value}, {userChangedLink: true})}
                     />
@@ -280,17 +287,17 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                       buttons={[
                         {
                           name: ITEM_STATUSES_DICT[STATUSES.PUBLISHED].name,
-                          value: STATUSES.PUBLISHED,
+                          value: STATUSES.PUBLISHED.toString(),
                           checked: status === STATUSES.PUBLISHED,
                         },
                         {
                           name: ITEM_STATUSES_DICT[STATUSES.UNLISTED].name,
-                          value: STATUSES.UNLISTED,
+                          value: STATUSES.UNLISTED.toString(),
                           checked: status === STATUSES.UNLISTED,
                         },
                         {
                           name: ITEM_STATUSES_DICT[STATUSES.UNPUBLISHED].name,
-                          value: STATUSES.UNPUBLISHED,
+                          value: STATUSES.UNPUBLISHED.toString(),
                           checked: status === STATUSES.UNPUBLISHED,
                         }]}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -307,7 +314,7 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
               <div className="mt-8 pt-8 border-t">
                 <AdminRichEditor
                   labelComponent={<ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.DESCRIPTION]}/>}
-                  value={item.description}
+                  value={item.description || ''}
                   onChange={(value: string) => this.onUpdateItemMeta({'description': value})}
                   extra={{
                     publicBucketUrl,
@@ -326,10 +333,12 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                       groupName="lh-explicit"
                       buttons={[{
                         'name': 'yes',
-                        'checked': item['itunes:explicit'],
+                        'value': 'yes',
+                        'checked': !!item['itunes:explicit'],
                       }, {
                         'name': 'no',
-                        'checked': !item['itunes:explicit'],
+                        'value': 'no',
+                        'checked': !item['itunes:explicit']
                       }]}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                         this.onUpdateItemMeta({'itunes:explicit': e.target.value === 'yes'})}
@@ -347,7 +356,7 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                     />
                     <AdminInput
                       labelComponent={<ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.ITUNES_TITLE]}/>}
-                      value={item['itunes:title']}
+                      value={item['itunes:title'] || ''}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                         this.onUpdateItemMeta({'itunes:title': e.target.value})}
                     />
@@ -358,12 +367,15 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                       groupName="feed-itunes-episodetype"
                       buttons={[{
                         'name': 'full',
+                        'value': 'full',
                         'checked': item['itunes:episodeType'] === 'full',
                       }, {
                         'name': 'trailer',
+                        'value': 'trailer',
                         'checked': item['itunes:episodeType'] === 'trailer',
                       }, {
                         'name': 'bonus',
+                        'value': 'bonus',
                         'checked': item['itunes:episodeType'] === 'bonus',
                       }]}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
@@ -372,7 +384,7 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                     <AdminInput
                       type="number"
                       labelComponent={<ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.ITUNES_SEASON]}/>}
-                      value={item['itunes:season']?.toString()}
+                      value={item['itunes:season']?.toString() || ''}
                       extraParams={{min: "1"}}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                         this.onUpdateItemMeta({'itunes:season': parseInt(e.target.value, 10)})}
@@ -380,7 +392,7 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                     <AdminInput
                       type="number"
                       labelComponent={<ExplainText bundle={CONTROLS_TEXTS_DICT[ITEM_CONTROLS.ITUNES_EPISODE]}/>}
-                      value={item['itunes:episode']?.toString()}
+                      value={item['itunes:episode']?.toString() || ''}
                       extraParams={{min: "1"}}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                         this.onUpdateItemMeta({'itunes:episode': parseInt(e.target.value, 10)})}
@@ -392,9 +404,11 @@ export default class EditItemApp extends React.Component<EditItemAppProps, EditI
                       groupName="feed-itunes-block"
                       buttons={[{
                         'name': 'Yes',
-                        'checked': item['itunes:block'],
+                        'value': 'Yes',
+                        'checked': !!item['itunes:block'],
                       }, {
                         'name': 'No',
+                        'value': 'No',
                         'checked': !item['itunes:block'],
                       }]}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => 

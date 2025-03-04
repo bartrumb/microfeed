@@ -5,9 +5,9 @@ import FeedDb, {getFetchItemsParams} from "../models/FeedDb";
 import {CODE_TYPES} from "../../common-src/Constants";
 import {ADMIN_URLS, escapeHtml, urlJoinWithRelative} from "../../common-src/StringUtils";
 import OnboardingChecker from "../../common-src/OnboardingUtils";
-import { getViteAssetPath } from "./ViteUtils";
-import { FeedContent } from "../../common-src/types/FeedContent";
+import { FeedContent, SettingsData } from "../../common-src/types/FeedContent";
 
+import { getViteAssetPath } from "./ViteUtils";
 interface ChannelData {
   id: string;
   status: number;
@@ -35,25 +35,7 @@ interface FetchItemsObject {
   limit?: number;
 }
 
-interface Settings {
-  access?: {
-    currentPolicy: string;
-  };
-  subscribeMethods?: {
-    methods: Array<{
-      type: string;
-      editable: boolean;
-      enabled: boolean;
-    }>;
-  };
-  webGlobalSettings?: {
-    favicon?: {
-      url: string;
-      contentType: string;
-    };
-    publicBucketUrl?: string;
-  };
-}
+type Settings = SettingsData;
 
 interface ThemeCode {
   html: string;
@@ -98,11 +80,11 @@ class ResponseBuilder {
   }
 
   protected async fetchFeed(): Promise<void> {
-    this.content = (await this.feed.getContent(this._fetchItems)) as FeedContent;
+    this.content = await this.feed.getContent(null) as FeedContent;
     this.settings = this.content.settings || {};
     const queryKwargs = this.fetchItemsObj.queryKwargs || {};
     const forOneItem = !!queryKwargs.id;
-    this.jsonData = await this.feed.getPublicJsonData(this.content, forOneItem);
+    this.jsonData = await this.feed.getPublicJsonData(null, forOneItem);
   }
 
   protected _verifyPasscode(): boolean {
@@ -166,7 +148,7 @@ class ResponseBuilder {
       this.request,
       {
         ...queryKwargs,
-      }, this.fetchItemsObj.limit);
+      }, null);
   }
 
   protected _getResponse(props?: ResponseBuilderProps): Response {
@@ -291,7 +273,7 @@ class CodeInjector {
       if (this.settings.webGlobalSettings) {
         const {favicon, publicBucketUrl} = this.settings.webGlobalSettings;
         if (favicon && favicon.url) {
-          const faviconUrl = urlJoinWithRelative(publicBucketUrl, favicon.url);
+          const faviconUrl = urlJoinWithRelative(publicBucketUrl || '', favicon.url);
           element.append(`<link rel="icon" type="${favicon.contentType}" href="${faviconUrl}">`, {html: true});
         }
       }
@@ -318,8 +300,8 @@ export class WebResponseBuilder extends ResponseBuilder {
 
   protected _getResponse(props: ResponseBuilderProps): Response {
     const res = super._getResponse(props);
-    const theme = new Theme(this.jsonData, this.settings);
-    const sharedTheme = new Theme(this.jsonData, this.settings, CODE_TYPES.SHARED);
+    const theme = new Theme(this.jsonData, null);
+    const sharedTheme = new Theme(this.jsonData, null, CODE_TYPES.SHARED as any);
     const component = props.getComponent ? props.getComponent(this.content, this.jsonData, theme) : null;
     if (!component) {
       return ResponseBuilder.Response404();

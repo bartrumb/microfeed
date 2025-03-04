@@ -1,6 +1,7 @@
 import React from "react";
 import EdgeAdminItemsApp from '../../../../edge-src/EdgeAdminItemsApp';
 import { renderReactToHtml } from "../../../../edge-src/common/PageUtils";
+ 
 import { withRouteManifest } from "../../../../edge-src/common/withManifest";
 import { FeedContent, OnboardingResult } from "../../../../common-src/types/FeedContent";
 
@@ -22,7 +23,7 @@ class ErrorBoundary extends React.Component<
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: any) {
     return { hasError: true };
   }
 
@@ -64,7 +65,7 @@ interface RequestProps {
   data: RequestData;
 }
 
-async function handleItemsListRequest({ data }: RequestProps) {
+async function handleItemsListRequest({ data }: RequestProps): Promise<Response> {
   const {feedContent, onboardingResult} = data;
   
   // Ensure items array always exists and add empty state flag
@@ -78,7 +79,6 @@ async function handleItemsListRequest({ data }: RequestProps) {
       <EdgeAdminItemsApp
         feedContent={feedContent}
         onboardingResult={onboardingResult}
-        manifest={data.manifest}
       />
     </ErrorBoundary>
   );
@@ -90,4 +90,4 @@ async function handleItemsListRequest({ data }: RequestProps) {
   });
 }
 
-export const onRequestGet = withRouteManifest(handleItemsListRequest);
+export const onRequestGet = withRouteManifest(handleItemsListRequest as any);

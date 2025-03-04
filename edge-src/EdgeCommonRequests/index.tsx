@@ -50,7 +50,7 @@ export async function onFetchFeedJsonRequestGet({ env, request }: RequestParams,
 
 export async function onFetchItemRequestGet({ params, env, request }: ItemRequestParams, checkIsAllowed = true, statuses: number[] | null = null) {
   const { slug, itemId } = params;
-  const theItemId = itemId || getIdFromSlug(slug);
+  const theItemId = itemId || (slug ? getIdFromSlug(slug) : '');
 
   if (theItemId) {
     const jsonResponseBuilder = new JsonResponseBuilder(env, request, {

@@ -17,8 +17,8 @@
       "d1_databases": [
         {
           "binding": "FEED_DB",
-          "database_name": "shop-dawg-microfeed_feed_db",
-          "database_id": "84edb8bb-eef5-495c-a0d6-91681a278bcf"
+          "database_name": "shop-dawg-microfeed_feed_db_production_production",
+          "database_id": "ce108cdc-90d6-499a-bf12-83000d3529e5"
         }
       ]
     }
