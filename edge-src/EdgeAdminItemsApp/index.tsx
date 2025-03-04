@@ -1,4 +1,4 @@
-mport React from 'react';
+import React from "react";
 import AdminWholeHtml from "../components/AdminWholeHtml";
 import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
 import { isDev } from '../common/ManifestUtils';

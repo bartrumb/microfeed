@@ -6,11 +6,11 @@ import { createRequire } from 'module';
 
 // Entry points configuration
 const entryPoints = {
-  'adminhome': 'client-src/ClientAdminHomeApp/index.jsx',
-  'admincustomcode': 'client-src/ClientAdminCustomCodeEditorApp/index.jsx',
-  'adminchannel': 'client-src/ClientAdminChannelApp/index.jsx',
-  'adminitems': 'client-src/ClientAdminItemsApp/index.jsx',
-  'adminsettings': 'client-src/ClientAdminSettingsApp/index.jsx'
+  'adminhome': 'client-src/ClientAdminHomeApp/index.tsx',
+  'admincustomcode': 'client-src/ClientAdminCustomCodeEditorApp/index.tsx',
+  'adminchannel': 'client-src/ClientAdminChannelApp/index.tsx',
+  'adminitems': 'client-src/ClientAdminItemsApp/index.tsx',
+  'adminsettings': 'client-src/ClientAdminSettingsApp/index.tsx'
 };
 
 // Manual chunks configuration
@@ -53,7 +53,7 @@ if (fs.existsSync(functionsDir)) {
       const relativePath = path.join(base, entry);
       if (fs.statSync(fullPath).isDirectory()) {
         addFunctionEntries(fullPath, relativePath);
-      } else if (entry.endsWith('.jsx') || entry.endsWith('.js')) {
+      } else if (entry.endsWith('.jsx') || entry.endsWith('.js') || entry.endsWith('.tsx') || entry.endsWith('.ts')) {
         const name = relativePath.replace(/\.[^/.]+$/, '').replace(/\\/g, '/');
         entryPoints[`functions/${name}`] = path.relative('.', fullPath);
       }
