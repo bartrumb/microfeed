@@ -158,7 +158,7 @@ export class WranglerCmd {
     // Generate a unique version identifier to ensure unique database names
     const timestamp = new Date().toISOString().replace(/[^0-9]/g, '');
     const uniqueId = crypto.randomBytes(4).toString('hex');
-    const uniqueDbName = `${this._non_dev_db()}_${timestamp}_${uniqueId}`;
+    const uniqueDbName = `${this._non_dev_db()}_${timestamp.substring(0, 14)}_${uniqueId}`;
 
     request.write(JSON.stringify({ name: uniqueDbName }));
     request.on('error', (error) => {
@@ -169,6 +169,33 @@ export class WranglerCmd {
   }
 
   getDatabaseId(onSuccess) {
+    // Try to get the database ID from wrangler.json first
+    try {
+      const wranglerConfig = JSON.parse(fs.readFileSync('wrangler.json', 'utf8'));
+      let databaseId = '';
+      
+      if (this.currentEnv === 'production' && wranglerConfig.env && wranglerConfig.env.production) {
+        const dbConfig = wranglerConfig.env.production.d1_databases.find(db => db.binding === 'FEED_DB');
+        if (dbConfig) {
+          databaseId = dbConfig.database_id;
+          console.log(`Found database ID in wrangler.json for production: ${databaseId}`);
+          onSuccess(databaseId);
+          return;
+        }
+      } else if (wranglerConfig.d1_databases) {
+        const dbConfig = wranglerConfig.d1_databases.find(db => db.binding === 'FEED_DB');
+        if (dbConfig) {
+          databaseId = dbConfig.database_id;
+          console.log(`Found database ID in wrangler.json for preview: ${databaseId}`);
+          onSuccess(databaseId);
+          return;
+        }
+      }
+    } catch (error) {
+      console.log('Error reading wrangler.json:', error);
+    }
+    
+    // Fall back to API lookup if not found in wrangler.json
     const dbName = this._non_dev_db();
     const accountId = this.v.get('CLOUDFLARE_ACCOUNT_ID');
     const apiKey = this.v.get('CLOUDFLARE_API_TOKEN');
