@@ -3,11 +3,24 @@ import fs from 'fs';
 import path from 'path';
 
 async function updateWranglerConfig(env) {
-  const wranglerPath = 'wrangler.json';
-  const databaseId = process.env.D1_DATABASE_ID;
+  // Read database ID from wrangler.toml
+  const wranglerToml = fs.readFileSync('wrangler.toml', 'utf8');
+  let databaseId;
+  
+  if (env === 'preview') {
+    // Extract preview database ID from wrangler.toml
+    const match = wranglerToml.match(/\[\[env\.preview\.d1_databases\]\][^\[]*?database_id\s*=\s*"([^"]+)"/);
+    databaseId = match ? match[1] : null;
+  } else {
+    // Extract production database ID from wrangler.toml (if needed in the future)
+    const match = wranglerToml.match(/\[\[d1_databases\]\][^\[]*?database_id\s*=\s*"([^"]+)"/);
+    databaseId = match ? match[1] : null;
+  }
 
-  if (!databaseId) {
-    throw new Error('D1_DATABASE_ID environment variable is required');
+  const wranglerPath = 'wrangler.json';
+
+  if (!databaseId || databaseId.trim() === '') {
+    throw new Error(`Database ID not found in wrangler.toml for ${env} environment`);
   }
 
   // Read existing config
@@ -128,7 +141,6 @@ async function copyStaticAssets() {
     'dist/_app/immutable/chunks/ui-components.js',
     'dist/_app/immutable/chunks/react-vendor.js',
     'dist/_app/immutable/chunks/utils.js'
-,
   ];
 
   const missingAssets = requiredAssets.filter(asset => !fs.existsSync(asset));

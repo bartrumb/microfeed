@@ -9,7 +9,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_ToastUtils.js",
       "_StringUtils.js",
-      "_admin_styles.js"
+      "_index3.js"
     ]
   },
   "_Constants.js": {
@@ -57,16 +57,16 @@ export const manifestData = {
     "file": "_app/immutable/chunks/index3.js",
     "name": "index",
     "imports": [
-      "_react-vendor.js",
-      "_index4.js",
-      "_StringUtils.js"
+      "_react-vendor.js"
     ]
   },
   "_index4.js": {
     "file": "_app/immutable/chunks/index4.js",
     "name": "index",
     "imports": [
-      "_react-vendor.js"
+      "_react-vendor.js",
+      "_index5.js",
+      "_StringUtils.js"
     ]
   },
   "_index5.js": {
@@ -99,72 +99,71 @@ export const manifestData = {
     "name": "withManifest",
     "imports": [
       "_react-vendor.js",
-      "_index4.js"
+      "_index5.js"
     ]
   },
-  "client-src/ClientAdminChannelApp/index.jsx": {
+  "client-src/ClientAdminChannelApp/index.tsx": {
     "file": "_app/immutable/entry-adminchannel.js",
     "name": "adminchannel",
-    "src": "client-src/ClientAdminChannelApp/index.jsx",
+    "src": "client-src/ClientAdminChannelApp/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
       "_ToastUtils.js",
       "_admin_styles.js",
       "_BrowserUtils.js",
-      "_index5.js",
       "_index2.js",
       "_StringUtils.js",
+      "_index3.js",
       "_Constants.js",
       "_index.js"
     ]
   },
-  "client-src/ClientAdminCustomCodeEditorApp/index.jsx": {
+  "client-src/ClientAdminCustomCodeEditorApp/index.tsx": {
     "file": "_app/immutable/entry-admincustomcode.js",
     "name": "admincustomcode",
-    "src": "client-src/ClientAdminCustomCodeEditorApp/index.jsx",
+    "src": "client-src/ClientAdminCustomCodeEditorApp/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
       "_admin_styles.js",
-      "_StringUtils.js",
-      "_ToastUtils.js",
       "_ui-components.js",
       "_Constants.js",
       "_index.js"
     ]
   },
-  "client-src/ClientAdminHomeApp/index.jsx": {
+  "client-src/ClientAdminHomeApp/index.tsx": {
     "file": "_app/immutable/entry-adminhome.js",
     "name": "adminhome",
-    "src": "client-src/ClientAdminHomeApp/index.jsx",
+    "src": "client-src/ClientAdminHomeApp/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
       "_Constants.js",
       "_admin_styles.js",
       "_StringUtils.js",
-      "_index5.js",
+      "_index3.js",
       "_ToastUtils.js"
     ]
   },
-  "client-src/ClientAdminItemsApp/index.jsx": {
+  "client-src/ClientAdminItemsApp/index.tsx": {
     "file": "_app/immutable/entry-adminitems.js",
     "name": "adminitems",
-    "src": "client-src/ClientAdminItemsApp/index.jsx",
+    "src": "client-src/ClientAdminItemsApp/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
       "_admin_styles.js",
       "_StringUtils.js",
       "_Constants.js",
+      "_index3.js",
       "_index2.js"
     ]
   },
-  "client-src/ClientAdminSettingsApp/index.jsx": {
+  "client-src/ClientAdminSettingsApp/index.tsx": {
     "file": "_app/immutable/entry-adminsettings.js",
     "name": "adminsettings",
-    "src": "client-src/ClientAdminSettingsApp/index.jsx",
+    "src": "client-src/ClientAdminSettingsApp/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
@@ -172,10 +171,10 @@ export const manifestData = {
       "_BrowserUtils.js",
       "_StringUtils.js",
       "_Constants.js",
-      "_index5.js",
+      "_ToastUtils.js",
+      "_index3.js",
       "_index.js",
-      "_index2.js",
-      "_ToastUtils.js"
+      "_index2.js"
     ]
   },
   "functions/admin/_middleware.js": {
@@ -207,7 +206,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx"
     ]
   },
   "functions/admin/channels/index.jsx": {
@@ -226,14 +225,14 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index3.js",
-      "_Constants.js",
       "_index4.js",
+      "_Constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx",
+      "_index5.js"
     ]
   },
   "functions/admin/feed/json.jsx": {
@@ -242,20 +241,19 @@ export const manifestData = {
     "src": "functions/admin/feed/json.jsx",
     "isEntry": true
   },
-  "functions/admin/index.jsx": {
+  "functions/admin/index.tsx": {
     "file": "functions/admin/index.js",
     "name": "functions/admin/index",
-    "src": "functions/admin/index.jsx",
+    "src": "functions/admin/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index3.js",
-      "_Constants.js",
+      "functions/sitemap.xml.tsx",
       "_index4.js",
+      "_Constants.js",
       "_withManifest.js"
     ]
   },
@@ -266,12 +264,13 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index3.js",
+      "_index4.js",
       "_Constants.js",
+      "_index5.js",
       "_utils.js",
       "functions/admin/ajax/feed.js",
       "functions/rss/stylesheet.jsx",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx"
     ]
   },
   "functions/admin/items/index.jsx": {
@@ -283,21 +282,21 @@ export const manifestData = {
       "_utils.js"
     ]
   },
-  "functions/admin/items/list/index.jsx": {
+  "functions/admin/items/list/index.tsx": {
     "file": "functions/admin/items/list/index.js",
     "name": "functions/admin/items/list/index",
-    "src": "functions/admin/items/list/index.jsx",
+    "src": "functions/admin/items/list/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index3.js",
+      "_index4.js",
       "_Constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
-      "_index4.js"
+      "functions/sitemap.xml.tsx",
+      "_index5.js"
     ]
   },
   "functions/admin/items/new/index.jsx": {
@@ -307,14 +306,14 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index3.js",
-      "_Constants.js",
       "_index4.js",
+      "_Constants.js",
+      "_index5.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx"
     ]
   },
   "functions/admin/settings/code-editor/index.jsx": {
@@ -324,14 +323,13 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index3.js",
-      "_Constants.js",
       "_index4.js",
+      "_Constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx"
     ]
   },
   "functions/admin/settings/index.jsx": {
@@ -341,14 +339,14 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index3.js",
-      "_Constants.js",
       "_index4.js",
+      "_Constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx",
+      "_index5.js"
     ]
   },
   "functions/api/_middleware.js": {
@@ -378,7 +376,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
+      "functions/sitemap.xml.tsx",
       "functions/admin/ajax/r2-ops.js"
     ]
   },
@@ -392,7 +390,7 @@ export const manifestData = {
       "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
+      "functions/sitemap.xml.tsx",
       "functions/admin/ajax/r2-ops.js"
     ]
   },
@@ -412,7 +410,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
+      "functions/sitemap.xml.tsx",
       "functions/admin/ajax/r2-ops.js"
     ]
   },
@@ -423,12 +421,12 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index4.js",
+      "_index5.js",
       "_StringUtils.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx"
     ]
   },
   "functions/i/[slug]/json/index.jsx": {
@@ -441,7 +439,7 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
+      "functions/sitemap.xml.tsx",
       "functions/admin/ajax/r2-ops.js"
     ]
   },
@@ -455,51 +453,56 @@ export const manifestData = {
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx"
     ]
   },
-  "functions/index.jsx": {
+  "functions/index.tsx": {
     "file": "functions/index.js",
     "name": "functions/index",
-    "src": "functions/index.jsx",
+    "src": "functions/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_index3.js",
-      "_Constants.js",
       "_index4.js",
+      "_Constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx"
+      "functions/sitemap.xml.tsx"
     ]
   },
-  "functions/json/index.jsx": {
+  "functions/json/index.tsx": {
     "file": "functions/json/index.js",
     "name": "functions/json/index",
-    "src": "functions/json/index.jsx",
+    "src": "functions/json/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
+      "functions/sitemap.xml.tsx",
       "functions/admin/ajax/r2-ops.js"
     ]
   },
-  "functions/rss/index.jsx": {
+  "functions/json/openapi.yaml/index.tsx": {
+    "file": "functions/json/openapi.yaml/index.js",
+    "name": "functions/json/openapi.yaml/index",
+    "src": "functions/json/openapi.yaml/index.tsx",
+    "isEntry": true
+  },
+  "functions/rss/index.tsx": {
     "file": "functions/rss/index.js",
     "name": "functions/rss/index",
-    "src": "functions/rss/index.jsx",
+    "src": "functions/rss/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "functions/sitemap.xml.jsx",
+      "functions/sitemap.xml.tsx",
       "functions/i/[slug]/rss/index.jsx"
     ]
   },
@@ -513,10 +516,10 @@ export const manifestData = {
       "functions/admin/ajax/feed.js"
     ]
   },
-  "functions/sitemap.xml.jsx": {
+  "functions/sitemap.xml.tsx": {
     "file": "functions/sitemap.xml.js",
     "name": "functions/sitemap.xml",
-    "src": "functions/sitemap.xml.jsx",
+    "src": "functions/sitemap.xml.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
