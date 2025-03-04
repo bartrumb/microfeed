@@ -1,7 +1,5 @@
-const { S3Client, CreateBucketCommand, PutBucketCorsCommand } = require('@aws-sdk/client-s3');
-const { VarsReader } = require('./lib/utils');
-const { fromIni } = require('@aws-sdk/credential-provider-ini');
-const { Endpoint } = require('@aws-sdk/types');
+import { S3Client, CreateBucketCommand, PutBucketCorsCommand } from '@aws-sdk/client-s3';
+import { VarsReader } from './lib/utils.js';
 
 class SetupR2 {
   constructor() {
@@ -81,7 +79,9 @@ class SetupR2 {
   }
 }
 
-(async () => {
+const main = async () => {
   const setupR2 = new SetupR2();
   await setupR2.setupPublicBucket();
-})();
+};
+
+main();

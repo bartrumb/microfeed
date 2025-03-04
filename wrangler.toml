@@ -7,3 +7,17 @@ binding = "MEDIA_BUCKET"
 bucket_name = "microfeed-media"
 preview_bucket_name = "microfeed-media-preview"
 
+[[d1_databases]]
+binding = "FEED_DB"
+database_name = "shop-dawg-microfeed_feed_db_development_development"
+database_id = "f73ddd4c-a748-426c-8be9-2bf08b2c33f5"
+
+[[env.preview.d1_databases]]
+binding = "FEED_DB"
+database_name = "shop-dawg-microfeed_feed_db_preview_preview"
+database_id = "484f742f-2fad-492f-ac53-9d46db958805"
+
+[[env.production.d1_databases]]
+binding = "FEED_DB"
+database_name = "shop-dawg-microfeed_feed_db_production_production"
+database_id = "67c53614-394b-4475-b30d-1baec3c5dcd8"
