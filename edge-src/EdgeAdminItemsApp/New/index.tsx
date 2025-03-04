@@ -1,12 +1,18 @@
 import React from 'react';
 import AdminWholeHtml from "../../components/AdminWholeHtml";
-import {NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND} from "../../../common-src/Constants";
+import { NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND } from "../../../common-src/Constants";
 import { isDev } from '../../common/ManifestUtils';
-import { withManifest } from '../../common/withManifest';
+import { withManifest, WithManifestProps } from '../../common/withManifest';
+import { FeedContent, OnboardingResult } from "../../../common-src/types/FeedContent";
 
-class AdminItemsNewApp extends React.Component {
-  render() {
-    const {feedContent, onboardingResult, manifest} = this.props;
+interface AdminItemsNewAppProps {
+  feedContent: FeedContent;
+  onboardingResult: OnboardingResult;
+}
+
+class AdminItemsNewApp extends React.Component<AdminItemsNewAppProps & WithManifestProps> {
+  render(): React.ReactNode {
+    const { feedContent, onboardingResult, manifest } = this.props;
     return (
       <AdminWholeHtml
         title={`${NAV_ITEMS_DICT[NAV_ITEMS.NEW_ITEM].name} | ${OUR_BRAND.domain}`}
