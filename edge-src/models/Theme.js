@@ -419,7 +419,7 @@ export default class Theme {
     } else {
       this.theme = themeName;
     }
-    this.themeBundle = (this.settings[SETTINGS_CATEGORIES.CUSTOM_CODE] &&
+    this.themeBundle = (this.settings && this.settings[SETTINGS_CATEGORIES.CUSTOM_CODE] &&
       this.settings[SETTINGS_CATEGORIES.CUSTOM_CODE].themes) ?
       this.settings[SETTINGS_CATEGORIES.CUSTOM_CODE].themes[this.theme] : null;
   }
