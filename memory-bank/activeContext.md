@@ -21,8 +21,8 @@ We are addressing several issues with asset loading and the code editor function
 ### Remaining Issues
 
 1. **404 Errors**
-   - [ ] ReactToastify.css.map not found
-   - [ ] Missing manifest data for some chunks
+   - [ ] ReactToastify.css.map not found (404 error)
+   - [ ] Constants.js.map not found (404 error)
    - [ ] Fallback paths being used for some assets
 
 2. **Asset Loading Improvements**
@@ -33,13 +33,24 @@ We are addressing several issues with asset loading and the code editor function
 ### Action Items
 
 1. **Fix ReactToastify Issues**
-   - [ ] Add proper CSS map file
-   - [ ] Update CSS extraction configuration
+   - ✅ Disable source maps for CSS files in production
+   - ✅ Added CSS devSourcemap configuration in vite.config.js
 
-2. **Manifest Generation**
-   - [ ] Fix manifest data generation
-   - [ ] Ensure all chunks are properly registered
-   - [ ] Update chunk naming strategy
+2. **Fix Constants.js Issues**
+   - ✅ Fix case sensitivity mismatch between chunk definition and output
+   - ✅ Updated chunk naming from 'constants' to 'Constants' for consistency
+   - ✅ Ensured proper casing in chunk definition
+
+3. **Source Map Handling**
+   - ✅ Disabled source maps for production builds
+   - ✅ Configured sourcemap: mode === 'development' ? true : false
+   - ✅ Updated deployment process to verify source map files
+
+4. **Root Causes Identified**
+   - Source maps enabled in vite.config.js but not properly handled in deployment
+   - Case sensitivity mismatch between chunk definition and output files
+   - CSS extraction configuration not properly handling source maps
+   - Deployment process not verifying source map files
 
 ### Dependencies
 - Vite configuration

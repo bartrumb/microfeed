@@ -8,13 +8,44 @@
    - ✅ Fix CSS naming inconsistency between build output and runtime requests
    - ✅ Add constants.js to manual chunks in vite.config.js
    - ✅ Fixed theme template data loading in code editor
-   - [ ] Fix remaining React warnings and 404 errors
+   - ✅ Fix 404 errors for source map files:
+     - ✅ ReactToastify.css.map - Disabled CSS source maps in production
+     - ✅ Constants.js.map - Fixed case sensitivity in chunk naming
 
-2. **Validate and Test Fixes**
+2. **Implement Source Map Fixes**
+   - ✅ Update vite.config.js to disable source maps in production
+   - ✅ Fix case sensitivity mismatch in chunk naming (constants → Constants)
+   - ✅ Update CSS extraction configuration with devSourcemap option
+   - ✅ Added source map verification in deployment process
+
+3. **Validate and Test Fixes**
    - [ ] Deploy to preview environment and verify all assets load correctly
    - [ ] Verify no React warnings appear in the console
    - [ ] Confirm all application functionality works in preview environment
    - [ ] Document the fixes and update the deployment process
+
+### Implementation Plan (Completed)
+
+1. **Source Map Configuration**
+   - ✅ Modify vite.config.js to conditionally enable source maps:
+     ```javascript
+     sourcemap: mode === 'development' ? true : false,
+     ```
+
+2. **Fix Case Sensitivity Issue**
+   - ✅ Update chunk naming in vite.config.js:
+     ```javascript
+     'constants': ['@common/Constants'] → 'Constants': ['@common/Constants']
+     ```
+
+3. **CSS Source Map Handling**
+   - ✅ Update CSS extraction configuration to handle source maps:
+     ```javascript
+     devSourcemap: mode === 'development' ? true : false,
+     ```
+
+4. **Deployment Process Improvement**
+   - ✅ Add verification for source map files in deploy.js
 
 ### Next Steps
 

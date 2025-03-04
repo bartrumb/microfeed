@@ -40,7 +40,8 @@ const manualChunks = {
     ],
     enforce: true
   },
-  'constants': ['@common/Constants']
+  'Constants': ['@common/Constants']
+  // Fixed case to match output file name
 };
 
 // Add functions entry points
@@ -89,7 +90,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     minify: mode === 'development' ? false : 'esbuild',  // Only minify in production
     target: 'esnext',
-    sourcemap: true,
+    sourcemap: mode === 'development' ? true : false,  // Only enable source maps in development
     modulePreload: false,
     manifest: true,
     outDir: 'dist',
@@ -189,6 +190,7 @@ export default defineConfig(({ mode }) => ({
   },
   envPrefix: ['VITE_', 'CLOUDFLARE_'],
   css: {
+    devSourcemap: mode === 'development' ? true : false, // Only enable CSS source maps in development
     modules: {
       localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:5]',

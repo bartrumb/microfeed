@@ -172,6 +172,23 @@ async function copyStaticAssets() {
     throw new Error(`Missing required assets:\n${missingAssets.join('\n')}`);
   }
 
+  // Check for source map files in development mode
+  const env = process.argv[2] || 'preview';
+  if (env === 'development' || env === 'preview') {
+    // In development and preview, we expect source maps
+    const sourceMapFiles = requiredAssets
+      .filter(asset => asset.endsWith('.js') || asset.endsWith('.css'))
+      .map(asset => `${asset}.map`);
+    
+    console.log('Checking for source map files...');
+    const missingSourceMaps = sourceMapFiles.filter(file => !fs.existsSync(file));
+    
+    if (missingSourceMaps.length > 0) {
+      console.warn(`Warning: Some source map files are missing:\n${missingSourceMaps.join('\n')}`);
+      console.warn('This is expected in production builds where source maps are disabled.');
+    }
+  }
+
   console.log('Copied static assets to dist directory');
 }
 
