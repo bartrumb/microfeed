@@ -1,6 +1,6 @@
 ﻿# Microfeed Project File Index
 
-Generated on: 2025-03-03 15:49:33
+Generated on: 2025-03-03 15:51:16
 
 This index provides a structured view of the microfeed project source code.
 
@@ -23,7 +23,7 @@ This index provides a structured view of the microfeed project source code.
 | Configuration | 4 | 8.03 KB |
 | React Components | 87 | 268.40 KB |
 | Web Resources | 4 | 50.32 KB |
-| Documentation | 9 | 63.84 KB |
+| Documentation | 9 | 63.88 KB |
 
 ## Top-Level Directories
 
@@ -712,7 +712,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| microfeed-index.md | 21.13 KB | 2025-03-03 15:24:13 |
+| microfeed-index.md | 21.17 KB | 2025-03-03 15:49:34 |
 | README.md | 20.78 KB | 2025-02-28 09:34:28 |
 
 ### docs
@@ -737,6 +737,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Type | Size | Last Modified |
 |------|------|------|---------------|
+| microfeed-index.md | Documentation | 21.17 KB | 2025-03-03 15:49:34 |
 | memory-bank\typeCheckingPlan.md | Documentation | 1.30 KB | 2025-03-03 15:49:19 |
 | edge-src\EdgeAdminItemsApp\index.tsx | React Components | 2.80 KB | 2025-03-03 15:48:50 |
 | edge-src\EdgeSettingsApp\index.tsx | React Components | 1.47 KB | 2025-03-03 15:33:31 |
@@ -745,7 +746,6 @@ This index provides a structured view of the microfeed project source code.
 | edge-src\EdgeCustomCodeEditorApp\index.tsx | React Components | 1.60 KB | 2025-03-03 15:28:46 |
 | edge-src\EdgeAdminHomeApp\index.tsx | React Components | 1.23 KB | 2025-03-03 15:26:48 |
 | edge-src\EdgeAdminChannelApp\index.tsx | React Components | 1.49 KB | 2025-03-03 15:25:28 |
-| microfeed-index.md | Documentation | 21.13 KB | 2025-03-03 15:24:13 |
 | client-src\ClientAdminSettingsApp\index.tsx | React Components | 490 B | 2025-03-03 15:23:46 |
 | client-src\ClientAdminItemsApp\index.tsx | React Components | 490 B | 2025-03-03 15:23:08 |
 | client-src\ClientAdminHomeApp\index.tsx | React Components | 493 B | 2025-03-03 15:21:05 |

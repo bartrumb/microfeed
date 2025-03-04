@@ -2,7 +2,7 @@
 # This script generates a structured Markdown index of source code files
 
 $projectRoot = "C:\Code\microfeed"
-$outputFile = "$projectRoot\microfeed-index.md"
+$outputFile = "$projectRoot\memory-bank\microfeed-index.md"
 
 # Define file type groups
 $fileGroups = @{
