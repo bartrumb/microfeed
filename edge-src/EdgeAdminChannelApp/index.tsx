@@ -1,51 +1,20 @@
 import React from 'react';
-import AdminWholeHtml from "../components/AdminWholeHtml";
-import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
-import { isDev } from '../common/ManifestUtils';
-import { withManifest, WithManifestProps } from '../common/withManifest';
 import { FeedContent, OnboardingResult } from '../../common-src/types/FeedContent';
 
-// Critical chunks that should be loaded first
-const CRITICAL_CHUNKS = [
-  'react-vendor',
-  'utils',
-  'ui-components',
-  'constants'
-];
-
-interface EdgeAdminChannelAppProps {
+export interface EdgeAdminChannelAppProps {
   feedContent: FeedContent;
   onboardingResult: OnboardingResult;
 }
 
-class EdgeAdminChannelApp extends React.Component<
-  EdgeAdminChannelAppProps & WithManifestProps
-> {
-  constructor(props: EdgeAdminChannelAppProps & WithManifestProps) {
-    super(props);
-  }
+const EdgeAdminChannelApp: React.FC<EdgeAdminChannelAppProps> = ({ feedContent, onboardingResult }) => {
+  return (
+    <div className="admin-channel-app">
+      <h1>Channel Settings</h1>
+      <div className="channel-form">
+        {/* Channel form content will be rendered here by the client */}
+      </div>
+    </div>
+  );
+};
 
-  render(): React.ReactNode {
-    const {feedContent, onboardingResult, manifest} = this.props;
-
-    // In development, we only need the entry point
-    // In production, we need both entry points and critical chunks
-    const scripts = [
-      'adminchannel'
-    ];
-
-    return (
-      <AdminWholeHtml
-        title={`${NAV_ITEMS_DICT[NAV_ITEMS.EDIT_CHANNEL].name} | ${OUR_BRAND.domain}`}
-        description=""
-        scripts={scripts}
-        styles={['index', 'admin-styles']}
-        feedContent={feedContent}
-        onboardingResult={onboardingResult}
-        manifest={manifest}
-      />
-    );
-  }
-}
-
-export default withManifest(EdgeAdminChannelApp);
+export default EdgeAdminChannelApp;

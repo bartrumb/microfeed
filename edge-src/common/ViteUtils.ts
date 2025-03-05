@@ -1,4 +1,5 @@
-import type { Manifest, ManifestEntry } from './ManifestUtils';
+// During development, assets are served directly by Vite
+// In production, we need to use the manifest to get the correct hashed filenames
 
 // Known entry points from vite.config.js
 const ENTRY_POINTS = [
@@ -8,10 +9,7 @@ const ENTRY_POINTS = [
   'adminitems',
   'adminsettings',
   'withManifest'
-] as const;
-
-type EntryPoint = typeof ENTRY_POINTS[number];
-type AssetType = 'js' | 'css';
+];
 
 // Match the same environment detection logic from ManifestUtils.js for consistency
 const isDev = typeof process !== 'undefined' && 
@@ -24,32 +22,20 @@ const isDev = typeof process !== 'undefined' &&
 const BASE_PATH = '/_app/immutable';
 
 // Load manifest data
-let manifestData: Manifest | null = null;
+let manifestData = null;
 try {
-  // Note: Using require for compatibility with Vite's virtual modules
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   manifestData = require('../../dist/.vite/manifest.json');
 } catch (e) {
   console.warn('Could not load manifest data:', e);
 }
 
 /**
- * Validates that a string is a valid entry point
- * @param name - The name to check
- * @returns True if the name is a valid entry point
- */
-function isValidEntryPoint(name: string): name is EntryPoint {
-  return ENTRY_POINTS.includes(name as EntryPoint);
-}
-
-/**
  * Get the appropriate asset path based on environment and asset type
- * @param name - Asset name without extension
- * @param type - Asset type (js or css)
- * @returns The resolved asset path
- * @throws Error if name is missing or type is invalid
+ * @param {string} name - Asset name without extension
+ * @param {('js'|'css')} type - Asset type
+ * @returns {string} The resolved asset path
  */
-export function getViteAssetPath(name: string, type: AssetType = 'js'): string {
+export function getViteAssetPath(name, type = 'js') {
   // Validate input
   if (!name) {
     console.error('Asset name is required');
@@ -70,7 +56,7 @@ export function getViteAssetPath(name: string, type: AssetType = 'js'): string {
   }
 
   // Determine if this is an entry point
-  const isEntry = isValidEntryPoint(name);
+  const isEntry = ENTRY_POINTS.includes(name);
 
   // In development, use non-hashed paths
   if (isDev) {

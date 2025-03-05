@@ -7,12 +7,26 @@
 import React from 'react';
 
 /**
+ * Settings categories enum
+ */
+export enum SETTINGS_CATEGORY {
+  API_SETTINGS = 'apiSettings',
+  WEB_GLOBAL = 'webGlobalSettings',
+  SUBSCRIBE = 'subscribeMethods',
+  ACCESS = 'access',
+  ANALYTICS = 'analytics',
+  CUSTOM_CODE = 'customCode'
+}
+
+/**
  * Channel data structure representing feed channel information
  */
 export interface ChannelData {
   id: string;
   status: number;
   is_primary: number;
+  title: string;
+  description?: string;
   image: string;
   link: string;
   language: string;
@@ -74,13 +88,23 @@ export interface SubscribeMethod {
 }
 
 /**
+ * API Application interface
+ */
+export interface ApiApp {
+  id: string;
+  name: string;
+  token: string;
+  createdAtMs: number;
+}
+
+/**
  * Settings data structure containing all configuration options
  */
 export interface SettingsData {
-  subscribeMethods?: {
+  [SETTINGS_CATEGORY.SUBSCRIBE]?: {
     methods: SubscribeMethod[];
   };
-  webGlobalSettings?: {
+  [SETTINGS_CATEGORY.WEB_GLOBAL]?: {
     favicon?: {
       url: string;
       contentType: string;
@@ -89,21 +113,16 @@ export interface SettingsData {
     itemsSortOrder?: string;
     itemsPerPage?: number;
   };
-  access?: {
+  [SETTINGS_CATEGORY.ACCESS]?: {
     currentPolicy?: string;
   };
-  analytics?: {
+  [SETTINGS_CATEGORY.ANALYTICS]?: {
     urls?: string[];
   };
-  customCode?: Record<string, any>;
-  apiSettings?: {
+  [SETTINGS_CATEGORY.CUSTOM_CODE]?: Record<string, any>;
+  [SETTINGS_CATEGORY.API_SETTINGS]?: {
     enabled?: boolean;
-    apps?: Array<{
-      id: string;
-      name: string;
-      token: string;
-      createdAtMs: number;
-    }>;
+    apps?: ApiApp[];
   };
 }
 

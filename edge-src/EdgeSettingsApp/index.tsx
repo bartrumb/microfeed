@@ -1,51 +1,64 @@
 import React from 'react';
-import AdminWholeHtml from "../components/AdminWholeHtml";
-import {NAV_ITEMS_DICT, OUR_BRAND, NAV_ITEMS} from "../../common-src/Constants";
-import { isDev } from '../common/ManifestUtils';
-import { withManifest, WithManifestProps } from '../common/withManifest';
 import { FeedContent, OnboardingResult } from '../../common-src/types/FeedContent';
 
-// Critical chunks that should be loaded first
-const CRITICAL_CHUNKS = [
-  'react-vendor',
-  'utils',
-  'ui-components',
-  'constants'
-];
-
-interface EdgeSettingsAppProps {
+export interface EdgeSettingsAppProps {
   feedContent: FeedContent;
   onboardingResult: OnboardingResult;
 }
 
-class EdgeSettingsApp extends React.Component<
-  EdgeSettingsAppProps & WithManifestProps
-> {
-  constructor(props: EdgeSettingsAppProps & WithManifestProps) {
-    super(props);
-  }
+const EdgeSettingsApp: React.FC<EdgeSettingsAppProps> = ({ 
+  feedContent, 
+  onboardingResult 
+}) => {
+  return (
+    <div className="admin-settings-app">
+      <h1>Settings</h1>
+      
+      <div className="settings-sections">
+        <section className="api-settings">
+          <h2>API Settings</h2>
+          <div className="settings-form">
+            {/* API settings form will be rendered here by the client */}
+          </div>
+        </section>
 
-  render(): React.ReactNode {
-    const {feedContent, onboardingResult, manifest} = this.props;
+        <section className="web-settings">
+          <h2>Web Settings</h2>
+          <div className="settings-form">
+            {/* Web settings form will be rendered here by the client */}
+          </div>
+        </section>
 
-    // In development, we only need the entry point
-    // In production, we need both entry points and critical chunks
-    const scripts = [
-      'adminsettings'
-    ];
+        <section className="subscribe-settings">
+          <h2>Subscribe Methods</h2>
+          <div className="settings-form">
+            {/* Subscribe methods form will be rendered here by the client */}
+          </div>
+        </section>
 
-    return (
-      <AdminWholeHtml
-        title={`${NAV_ITEMS_DICT[NAV_ITEMS.SETTINGS].name} | ${OUR_BRAND.domain}`}
-        description=""
-        scripts={scripts}
-        styles={['index', 'admin-styles']}
-        feedContent={feedContent}
-        onboardingResult={onboardingResult}
-        manifest={manifest}
-      />
-    );
-  }
-}
+        <section className="access-settings">
+          <h2>Access Settings</h2>
+          <div className="settings-form">
+            {/* Access settings form will be rendered here by the client */}
+          </div>
+        </section>
 
-export default withManifest(EdgeSettingsApp);
+        <section className="tracking-settings">
+          <h2>Tracking Settings</h2>
+          <div className="settings-form">
+            {/* Tracking settings form will be rendered here by the client */}
+          </div>
+        </section>
+
+        <section className="custom-code">
+          <h2>Custom Code</h2>
+          <div className="settings-form">
+            {/* Custom code form will be rendered here by the client */}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default EdgeSettingsApp;

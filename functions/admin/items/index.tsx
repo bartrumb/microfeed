@@ -1,7 +1,7 @@
-import { Context } from "../../../../common-src/types/CloudflareTypes";
-import { FeedContent, OnboardingResult } from "../../../../common-src/types/FeedContent";
-import EdgeAdminItemsApp from "../../../../edge-src/EdgeAdminItemsApp";
-import type { EdgeAdminItemsAppProps } from "../../../../edge-src/EdgeAdminItemsApp";
+import { Context } from "../../../common-src/types/CloudflareTypes";
+import { FeedContent, OnboardingResult } from "../../../common-src/types/FeedContent";
+import EdgeAdminItemsApp from "../../../edge-src/EdgeAdminItemsApp";
+import type { EdgeAdminItemsAppProps } from "../../../edge-src/EdgeAdminItemsApp";
 
 interface AdminItemsData {
   feedContent: FeedContent;
@@ -9,7 +9,7 @@ interface AdminItemsData {
   manifest: Record<string, { file: string }>;
 }
 
-async function handleItemsListRequest({ data }: Context): Promise<Response> {
+export async function onRequestGet({ request, data }: Context): Promise<Response> {
   const itemsData: AdminItemsData = {
     feedContent: data.feedContent!,
     onboardingResult: data.onboardingResult!,
@@ -20,7 +20,7 @@ async function handleItemsListRequest({ data }: Context): Promise<Response> {
     `<!DOCTYPE html>
     <html>
       <head>
-        <title>Items List</title>
+        <title>Items</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
@@ -40,5 +40,3 @@ async function handleItemsListRequest({ data }: Context): Promise<Response> {
     }
   );
 }
-
-export const onRequest = [handleItemsListRequest];

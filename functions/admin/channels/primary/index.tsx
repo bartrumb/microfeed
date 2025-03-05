@@ -1,16 +1,16 @@
 import { Context } from "../../../../common-src/types/CloudflareTypes";
 import { FeedContent, OnboardingResult } from "../../../../common-src/types/FeedContent";
-import EdgeAdminItemsApp from "../../../../edge-src/EdgeAdminItemsApp";
-import type { EdgeAdminItemsAppProps } from "../../../../edge-src/EdgeAdminItemsApp";
+import EdgeAdminChannelApp from "../../../../edge-src/EdgeAdminChannelApp";
+import type { EdgeAdminChannelAppProps } from "../../../../edge-src/EdgeAdminChannelApp";
 
-interface AdminItemsData {
+interface AdminChannelData {
   feedContent: FeedContent;
   onboardingResult: OnboardingResult;
   manifest: Record<string, { file: string }>;
 }
 
-async function handleItemsListRequest({ data }: Context): Promise<Response> {
-  const itemsData: AdminItemsData = {
+async function handleChannelRequest({ data }: Context): Promise<Response> {
+  const channelData: AdminChannelData = {
     feedContent: data.feedContent!,
     onboardingResult: data.onboardingResult!,
     manifest: data.manifest || {}
@@ -20,15 +20,14 @@ async function handleItemsListRequest({ data }: Context): Promise<Response> {
     `<!DOCTYPE html>
     <html>
       <head>
-        <title>Items List</title>
+        <title>Channel Settings</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
         <div id="app">
-          <EdgeAdminItemsApp 
-            feedContent={itemsData.feedContent}
-            onboardingResult={itemsData.onboardingResult}
-            mode="list"
+          <EdgeAdminChannelApp 
+            feedContent={channelData.feedContent}
+            onboardingResult={channelData.onboardingResult}
           />
         </div>
       </body>
@@ -41,4 +40,4 @@ async function handleItemsListRequest({ data }: Context): Promise<Response> {
   );
 }
 
-export const onRequest = [handleItemsListRequest];
+export const onRequest = [handleChannelRequest];

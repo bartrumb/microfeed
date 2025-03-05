@@ -9,7 +9,7 @@ interface AdminItemsData {
   manifest: Record<string, { file: string }>;
 }
 
-async function handleItemsListRequest({ data }: Context): Promise<Response> {
+async function handleNewItemRequest({ data }: Context): Promise<Response> {
   const itemsData: AdminItemsData = {
     feedContent: data.feedContent!,
     onboardingResult: data.onboardingResult!,
@@ -20,7 +20,7 @@ async function handleItemsListRequest({ data }: Context): Promise<Response> {
     `<!DOCTYPE html>
     <html>
       <head>
-        <title>Items List</title>
+        <title>New Item</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
@@ -28,7 +28,7 @@ async function handleItemsListRequest({ data }: Context): Promise<Response> {
           <EdgeAdminItemsApp 
             feedContent={itemsData.feedContent}
             onboardingResult={itemsData.onboardingResult}
-            mode="list"
+            mode="new"
           />
         </div>
       </body>
@@ -41,4 +41,4 @@ async function handleItemsListRequest({ data }: Context): Promise<Response> {
   );
 }
 
-export const onRequest = [handleItemsListRequest];
+export const onRequest = [handleNewItemRequest];

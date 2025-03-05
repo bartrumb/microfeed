@@ -1,37 +1,21 @@
-import { RssResponseBuilder } from "../../edge-src/common/PageUtils";
+import { Context } from "../../common-src/types/CloudflareTypes";
 import FeedPublicRssBuilder from "../../edge-src/models/FeedPublicRssBuilder";
-import { STATUSES } from "../../common-src/Constants";
-import type { D1Database } from '@cloudflare/workers-types';
-import { FeedContent } from "../../common-src/types/FeedContent";
+import FeedDb from "../../edge-src/models/FeedDb";
 
-interface Env {
-  FEED_DB: D1Database;
-  R2_ACCESS_KEY_ID: string;
-  R2_SECRET_ACCESS_KEY: string;
-  CLOUDFLARE_ACCOUNT_ID: string;
-  R2_PUBLIC_BUCKET: string;
-}
+export async function onRequestGet({ request, env }: Context): Promise<Response> {
+  const feed = new FeedDb(env);
+  const content = await feed.getContent({
+    status: 1 // Only published items
+  });
 
-interface RequestContext {
-  env: Env;
-  request: Request;
-}
+  const baseUrl = new URL(request.url).origin;
+  const rssBuilder = new FeedPublicRssBuilder(content, baseUrl);
+  const rssContent = rssBuilder.build();
 
-export async function onRequestGet({ request, env }: RequestContext): Promise<Response> {
-  const rssResponseBuilder = new RssResponseBuilder(env, request, {
-    queryKwargs: {
-      status: STATUSES.PUBLISHED,
+  return new Response(rssContent, {
+    headers: {
+      "Content-Type": "application/xml",
+      "Cache-Control": "public, max-age=300", // 5 minutes cache
     },
   });
-  return await rssResponseBuilder.getResponse({
-    buildXmlFunc: (jsonData: FeedContent): string => {
-      const urlObj = new URL(request.url);
-      const builder = new FeedPublicRssBuilder(jsonData, urlObj.origin);
-      return builder.getRssData();
-    }
-  });
-}
-
-export function onRequestHead(): Response {
-  return new Response('ok');
 }
