@@ -33,4 +33,10 @@ export interface ExplainBundle {
   json?: string;
 }
 
+export interface ExplainTextProps {
+  title: string;
+  description: string;
+  learnMoreUrl?: string;
+}
+
 export type LabelRenderer = (bundle: ExplainBundle | null) => ReactNode | null | undefined;

@@ -1,24 +1,24 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { ArrowRightCircleIcon, ArrowUpCircleIcon } from '@heroicons/react/24/outline'
 import clsx from "clsx";
 import AdminDialog from "../AdminDialog";
 import ExternalLink from "../ExternalLink";
-import {PUBLIC_URLS} from "../../../common-src/StringUtils";
+import { PUBLIC_URLS } from "../../../common-src/StringUtils";
+import type { ExplainTextProps } from "../types";
 
-export interface ExplainBundle {
-  linkName: string;
-  modalTitle?: string;
-  text: string;
-  rss?: string;
-  json?: string;
-}
-
-interface ExplainTextProps {
-  bundle: ExplainBundle;
+interface ExplainDialogProps {
+  title: string;
+  description: string;
+  learnMoreUrl?: string;
   customClass?: string;
 }
 
-export default function ExplainText({bundle, customClass}: ExplainTextProps): JSX.Element {
+export default function ExplainText({ 
+  title,
+  description,
+  learnMoreUrl,
+  customClass 
+}: ExplainDialogProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const Icon = isOpen ? ArrowUpCircleIcon : ArrowRightCircleIcon;
   
@@ -33,49 +33,31 @@ export default function ExplainText({bundle, customClass}: ExplainTextProps): JS
         }}
       >
         <div className="flex items-center">
-          <div>{bundle.linkName}</div>
+          <div>{title}</div>
           <div className="ml-2"><Icon className="w-4" /></div>
         </div>
       </a>
       <AdminDialog
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        title={bundle.modalTitle || bundle.linkName}
+        title={title}
       >
         <div className="py-2">
-          {bundle && <div className="text-helper-color grid grid-cols-1 gap-4 text-sm">
-            <div className="leading-relaxed" dangerouslySetInnerHTML={{__html: bundle.text}} />
-            {bundle.rss ? <div>
-              <div>
-                <ExternalLink 
-                  text='in rss' 
-                  url={PUBLIC_URLS.rssFeed()} 
-                  linkClass="text-helper-color"
-                  iconClass="w-4"
-                />
-              </div>
-              <code className="m-code">{bundle.rss}</code>
+          <div className="text-helper-color grid grid-cols-1 gap-4 text-sm">
+            <div className="leading-relaxed">{description}</div>
+            {learnMoreUrl && (
               <div className="text-xs mt-2 text-muted-color">
-                Learn more about Podcasts RSS at <a className="text-helper-color" href="https://help.apple.com/itc/podcasts_connect/#/itcb54353390" target="_blank" rel="noopener noreferrer">apple.com</a>.
+                Learn more at <a 
+                  className="text-helper-color" 
+                  href={learnMoreUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  {new URL(learnMoreUrl).hostname}
+                </a>
               </div>
-            </div> : <em>{bundle.linkName} is not in rss feed</em>}
-            {bundle.json ? <div>
-              <div>
-                <ExternalLink 
-                  text='in json' 
-                  url={PUBLIC_URLS.jsonFeed()} 
-                  linkClass="text-helper-color"
-                  iconClass="w-4"
-                />
-              </div>
-              <code className="m-code">{bundle.json}</code>
-              <div className="text-xs mt-2 text-muted-color">
-                Learn more about JSON Feed at <a className="text-helper-color" href="https://www.jsonfeed.org/" target="_blank" rel="noopener noreferrer">
-                jsonfeed.org</a>. See the OpenAPI spec of microfeed's JSON feed: <a className="text-helper-color" href="/json/openapi.yaml" target="_blank" rel="noopener noreferrer">
-                YAML</a> or <a className="text-helper-color" href="/json/openapi.html" target="_blank" rel="noopener noreferrer">HTML</a>.
-              </div>
-            </div> : <em>{bundle.linkName} is not in json feed</em>}
-          </div>}
+            )}
+          </div>
         </div>
       </AdminDialog>
     </div>

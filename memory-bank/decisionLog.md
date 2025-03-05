@@ -1,6 +1,26 @@
 # TypeScript Migration Decisions
 
-## March 5, 2025 - Manifest System TypeScript Migration
+## March 5, 2025 - Settings Components Migration
+
+### Decision: Unified Settings Component Architecture
+- Standardized props interfaces across all settings components
+- Created shared types for common settings patterns
+- Implemented consistent state management approach
+- Rationale: Ensures type safety and maintainable code across settings
+
+### Decision: Subscribe Methods Type System
+- Created dedicated types for subscribe methods
+- Added proper validation for method properties
+- Implemented type-safe method management
+- Rationale: Improves reliability of subscribe feature management
+
+### Decision: Component Props Standardization
+- Updated AdminSwitch to use optional label prop
+- Standardized enabled/setEnabled pattern for toggles
+- Added proper typing for custom styling props
+- Rationale: Creates consistent component API across the application
+
+## March 5, 2025 - Manifest System Migration
 
 ### Decision: Enhanced Type Safety for Asset Loading
 - Converted ViteUtils.js and ManifestUtils.ts to use strict TypeScript types

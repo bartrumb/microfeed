@@ -1,6 +1,6 @@
 # Microfeed Project File Index
 
-Generated on: 2025-03-05 15:24:06
+Generated on: 2025-03-05 16:04:08
 
 This index provides a structured view of the microfeed project source code.
 
@@ -9,59 +9,237 @@ This index provides a structured view of the microfeed project source code.
 
 ## Table of Contents
 
-- [Web Resources](#web-resources)
-- [React Components](#react-components)
-- [Documentation](#documentation)
 - [JavaScript/TypeScript](#javascripttypescript)
+- [Documentation](#documentation)
+- [React Components](#react-components)
 - [Configuration](#configuration)
+- [Web Resources](#web-resources)
 
 ## File Statistics
 
 | Category | Count | Total Size |
 |----------|-------|------------|
-| Web Resources | 4 | 50.32 KB |
-| React Components | 93 | 301.51 KB |
-| Documentation | 9 | 75.46 KB |
-| JavaScript/TypeScript | 64 | 223.42 KB |
+| JavaScript/TypeScript | 65 | 227.28 KB |
+| Documentation | 9 | 65.06 KB |
+| React Components | 94 | 305.92 KB |
 | Configuration | 4 | 8.83 KB |
+| Web Resources | 4 | 50.32 KB |
 
 ## Top-Level Directories
 
-- **client-src/** - 76 files, 279.20 KB
+- **client-src/** - 77 files, 283.62 KB
 - **cloudflare/** - 0 files, 0 B
 - **common-src/** - 10 files, 36.81 KB
 - **docs/** - 1 files, 3.33 KB
-- **edge-src/** - 28 files, 185.48 KB
+- **edge-src/** - 29 files, 189.32 KB
 - **functions/** - 29 files, 31.92 KB
-- **memory-bank/** - 7 files, 51.35 KB
+- **memory-bank/** - 7 files, 40.95 KB
 - **ops/** - 10 files, 31.95 KB
 - **public/** - 3 files, 1.80 KB
 
-## Web Resources
+## JavaScript/TypeScript
+
+### [Root Directory]
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| .eslintrc.js | 1.36 KB | 2025-03-03 02:01:07 |
+| jest.config.js | 291 B | 2025-02-28 10:18:55 |
+| jest.setup.js | 1.32 KB | 2025-02-28 10:21:45 |
+| postcss.config.js | 85 B | 2025-02-28 23:30:30 |
+| tailwind.config.js | 2.81 KB | 2025-02-28 23:37:38 |
+| vite.config.js | 6.70 KB | 2025-03-04 08:26:32 |
+
+### client-src\ClientAdminChannelApp\components\EditChannelApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| FormExplainTexts.ts | 9.21 KB | 2025-03-03 19:41:16 |
+| types.ts | 1.07 KB | 2025-03-03 12:46:40 |
+
+### client-src\ClientAdminCustomCodeEditorApp\components\CustomCodeEditorApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| types.ts | 2.01 KB | 2025-03-03 15:59:57 |
+
+### client-src\ClientAdminHomeApp\components\AdminHomeApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| types.ts | 1.15 KB | 2025-03-03 16:04:08 |
+
+### client-src\ClientAdminHomeApp\components\AdminHomeApp\component\DistributionApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| types.ts | 313 B | 2025-03-03 16:05:21 |
+
+### client-src\ClientAdminHomeApp\components\AdminHomeApp\component\WhatsNewApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| types.ts | 399 B | 2025-03-03 16:06:41 |
+
+### client-src\ClientAdminItemsApp\components\AllItemsApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| types.ts | 2.42 KB | 2025-03-03 16:15:27 |
+
+### client-src\ClientAdminItemsApp\components\EditItemApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| FormExplainTexts.ts | 10.88 KB | 2025-03-03 16:18:48 |
+| types.ts | 3.22 KB | 2025-03-05 15:34:33 |
+
+### client-src\ClientAdminSettingsApp\components
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| FormExplainTexts.js | 828 B | 2025-02-28 09:34:28 |
 
 ### client-src\common
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| admin_styles.css | 2.12 KB | 2025-02-28 09:34:28 |
+| AccessibilityUtils.js | 2.28 KB | 2025-03-01 21:22:58 |
+| BrowserUtils.js | 294 B | 2025-02-28 09:34:28 |
+| ClientUrlUtils.js | 235 B | 2025-02-28 09:34:28 |
+| index.js | 208 B | 2025-03-02 09:03:48 |
+| react-vendor.js | 198 B | 2025-03-02 09:04:16 |
+| requests.js | 1.65 KB | 2025-02-28 09:34:28 |
+| utils.ts | 791 B | 2025-03-03 14:10:18 |
 
-### edge-src\EdgeApiApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| openapi.yaml.html | 47.49 KB | 2025-02-28 09:34:28 |
-
-### public
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| 404.html | 157 B | 2025-02-28 09:34:28 |
-
-### public\json
+### client-src\components
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| openapi.html | 574 B | 2025-03-02 19:30:09 |
+| index.js | 507 B | 2025-03-02 09:04:43 |
+| types.ts | 929 B | 2025-03-03 12:52:47 |
+
+### common-src
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| Constants.js | 14.14 KB | 2025-03-02 22:43:05 |
+| MediaFileUtils.js | 777 B | 2025-02-28 09:34:28 |
+| OnboardingUtils.js | 2.67 KB | 2025-03-04 07:41:00 |
+| R2Utils.js | 115 B | 2025-02-28 09:34:28 |
+| StringUtils.test.js | 1.31 KB | 2025-02-28 09:34:28 |
+| StringUtils.ts | 10.04 KB | 2025-03-03 19:04:58 |
+| TimeUtils.test.js | 673 B | 2025-02-28 09:34:28 |
+| TimeUtils.ts | 2.79 KB | 2025-03-03 19:05:30 |
+| Version.js | 73 B | 2025-02-28 23:43:03 |
+
+### common-src\types
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| FeedContent.ts | 4.27 KB | 2025-03-03 00:23:31 |
+
+### edge-src\common
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| manifest-virtual.js | 14.23 KB | 2025-03-05 15:52:28 |
+| ManifestUtils.ts | 6.22 KB | 2025-03-05 16:01:13 |
+| RouteUtils.js | 1.00 KB | 2025-03-02 20:09:15 |
+| ViteUtils.js | 3.15 KB | 2025-03-03 13:29:18 |
+| ViteUtils.ts | 3.64 KB | 2025-03-05 16:00:39 |
+
+### edge-src\models
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| DatabaseInitializer.js | 10.04 KB | 2025-03-01 16:02:38 |
+| DatabaseInitializer.test.js | 5.24 KB | 2025-02-28 10:24:19 |
+| FeedCrudManager.js | 5.52 KB | 2025-02-28 09:34:28 |
+| FeedCrudManager.test.js | 2.67 KB | 2025-02-28 09:34:28 |
+| FeedDb.js | 15.55 KB | 2025-02-28 23:58:43 |
+| FeedDb.test.js | 3.13 KB | 2025-02-28 10:35:43 |
+| FeedPublicJsonBuilder.js | 10.91 KB | 2025-02-28 09:34:28 |
+| FeedPublicRssBuilder.js | 7.12 KB | 2025-02-28 09:34:28 |
+| Theme.js | 13.38 KB | 2025-03-04 07:13:10 |
+
+### functions\admin
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| _middleware.js | 2.27 KB | 2025-03-01 21:22:38 |
+
+### functions\admin\ajax
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| feed.js | 376 B | 2025-02-28 09:34:28 |
+| r2-ops.js | 408 B | 2025-02-28 09:34:28 |
+
+### functions\api
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| _middleware.js | 1.28 KB | 2025-02-28 09:34:28 |
+
+### functions\api\feed
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| index.js | 276 B | 2025-02-28 09:34:28 |
+
+### ops
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| deploy.js | 8.86 KB | 2025-03-04 08:38:47 |
+| direct_upload.js | 464 B | 2025-02-28 09:34:28 |
+| handle_vars.js | 875 B | 2025-03-02 12:00:07 |
+| init_feed_db.js | 2.81 KB | 2025-03-04 07:53:12 |
+| init_project.js | 2.93 KB | 2025-03-01 18:39:58 |
+| init_r2.js | 2.58 KB | 2025-03-04 07:06:30 |
+| process_openapi.js | 619 B | 2025-03-02 13:34:43 |
+| sync_microfeed_version.js | 486 B | 2025-02-28 09:34:28 |
+| sync_project_config.js | 4.43 KB | 2025-02-28 09:34:28 |
+
+### ops\lib
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| utils.js | 7.97 KB | 2025-03-04 07:53:30 |
+
+### public\_app\immutable\chunks
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| modulepreload-polyfill.js | 1.09 KB | 2025-03-02 10:56:44 |
+
+
+## Documentation
+
+### [Root Directory]
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| README.md | 20.78 KB | 2025-02-28 09:34:28 |
+
+### docs
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| template-structure.md | 3.33 KB | 2025-03-01 15:47:42 |
+
+### memory-bank
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| activeContext.md | 2.60 KB | 2025-03-05 16:02:14 |
+| decisionLog.md | 1.74 KB | 2025-03-05 16:01:28 |
+| fileStructureUpdate.md | 3.11 KB | 2025-03-03 19:42:28 |
+| microfeed-index.md | 22.55 KB | 2025-03-05 15:24:06 |
+| productContext.md | 3.92 KB | 2025-03-01 16:23:07 |
+| progress.md | 4.29 KB | 2025-03-05 16:01:56 |
+| typeCheckingPlan.md | 2.74 KB | 2025-03-03 16:15:54 |
 
 
 ## React Components
@@ -151,6 +329,7 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | index.jsx | 11.66 KB | 2025-03-03 02:05:16 |
+| index.tsx | 4.40 KB | 2025-03-05 15:51:53 |
 
 ### client-src\ClientAdminItemsApp\EditItem
 
@@ -560,210 +739,6 @@ This index provides a structured view of the microfeed project source code.
 | stylesheet.jsx | 648 B | 2025-02-28 09:34:28 |
 
 
-## Documentation
-
-### [Root Directory]
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| README.md | 20.78 KB | 2025-02-28 09:34:28 |
-
-### docs
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| template-structure.md | 3.33 KB | 2025-03-01 15:47:42 |
-
-### memory-bank
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| activeContext.md | 3.15 KB | 2025-03-04 08:41:12 |
-| decisionLog.md | 7.72 KB | 2025-03-04 08:40:16 |
-| fileStructureUpdate.md | 3.11 KB | 2025-03-03 19:42:28 |
-| microfeed-index.md | 23.20 KB | 2025-03-03 19:09:16 |
-| productContext.md | 3.92 KB | 2025-03-01 16:23:07 |
-| progress.md | 7.50 KB | 2025-03-04 08:46:24 |
-| typeCheckingPlan.md | 2.74 KB | 2025-03-03 16:15:54 |
-
-
-## JavaScript/TypeScript
-
-### [Root Directory]
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| .eslintrc.js | 1.36 KB | 2025-03-03 02:01:07 |
-| jest.config.js | 291 B | 2025-02-28 10:18:55 |
-| jest.setup.js | 1.32 KB | 2025-02-28 10:21:45 |
-| postcss.config.js | 85 B | 2025-02-28 23:30:30 |
-| tailwind.config.js | 2.81 KB | 2025-02-28 23:37:38 |
-| vite.config.js | 6.70 KB | 2025-03-04 08:26:32 |
-
-### client-src\ClientAdminChannelApp\components\EditChannelApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| FormExplainTexts.ts | 9.21 KB | 2025-03-03 19:41:16 |
-| types.ts | 1.07 KB | 2025-03-03 12:46:40 |
-
-### client-src\ClientAdminCustomCodeEditorApp\components\CustomCodeEditorApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| types.ts | 2.01 KB | 2025-03-03 15:59:57 |
-
-### client-src\ClientAdminHomeApp\components\AdminHomeApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| types.ts | 1.15 KB | 2025-03-03 16:04:08 |
-
-### client-src\ClientAdminHomeApp\components\AdminHomeApp\component\DistributionApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| types.ts | 313 B | 2025-03-03 16:05:21 |
-
-### client-src\ClientAdminHomeApp\components\AdminHomeApp\component\WhatsNewApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| types.ts | 399 B | 2025-03-03 16:06:41 |
-
-### client-src\ClientAdminItemsApp\components\AllItemsApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| types.ts | 2.42 KB | 2025-03-03 16:15:27 |
-
-### client-src\ClientAdminItemsApp\components\EditItemApp
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| FormExplainTexts.ts | 10.88 KB | 2025-03-03 16:18:48 |
-| types.ts | 3.20 KB | 2025-03-03 20:44:46 |
-
-### client-src\ClientAdminSettingsApp\components
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| FormExplainTexts.js | 828 B | 2025-02-28 09:34:28 |
-
-### client-src\common
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| AccessibilityUtils.js | 2.28 KB | 2025-03-01 21:22:58 |
-| BrowserUtils.js | 294 B | 2025-02-28 09:34:28 |
-| ClientUrlUtils.js | 235 B | 2025-02-28 09:34:28 |
-| index.js | 208 B | 2025-03-02 09:03:48 |
-| react-vendor.js | 198 B | 2025-03-02 09:04:16 |
-| requests.js | 1.65 KB | 2025-02-28 09:34:28 |
-| utils.ts | 791 B | 2025-03-03 14:10:18 |
-
-### client-src\components
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| index.js | 507 B | 2025-03-02 09:04:43 |
-| types.ts | 929 B | 2025-03-03 12:52:47 |
-
-### common-src
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| Constants.js | 14.14 KB | 2025-03-02 22:43:05 |
-| MediaFileUtils.js | 777 B | 2025-02-28 09:34:28 |
-| OnboardingUtils.js | 2.67 KB | 2025-03-04 07:41:00 |
-| R2Utils.js | 115 B | 2025-02-28 09:34:28 |
-| StringUtils.test.js | 1.31 KB | 2025-02-28 09:34:28 |
-| StringUtils.ts | 10.04 KB | 2025-03-03 19:04:58 |
-| TimeUtils.test.js | 673 B | 2025-02-28 09:34:28 |
-| TimeUtils.ts | 2.79 KB | 2025-03-03 19:05:30 |
-| Version.js | 73 B | 2025-02-28 23:43:03 |
-
-### common-src\types
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| FeedContent.ts | 4.27 KB | 2025-03-03 00:23:31 |
-
-### edge-src\common
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| manifest-virtual.js | 14.23 KB | 2025-03-04 08:45:33 |
-| ManifestUtils.ts | 6.01 KB | 2025-03-03 19:03:48 |
-| RouteUtils.js | 1.00 KB | 2025-03-02 20:09:15 |
-| ViteUtils.js | 3.15 KB | 2025-03-03 13:29:18 |
-
-### edge-src\models
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| DatabaseInitializer.js | 10.04 KB | 2025-03-01 16:02:38 |
-| DatabaseInitializer.test.js | 5.24 KB | 2025-02-28 10:24:19 |
-| FeedCrudManager.js | 5.52 KB | 2025-02-28 09:34:28 |
-| FeedCrudManager.test.js | 2.67 KB | 2025-02-28 09:34:28 |
-| FeedDb.js | 15.55 KB | 2025-02-28 23:58:43 |
-| FeedDb.test.js | 3.13 KB | 2025-02-28 10:35:43 |
-| FeedPublicJsonBuilder.js | 10.91 KB | 2025-02-28 09:34:28 |
-| FeedPublicRssBuilder.js | 7.12 KB | 2025-02-28 09:34:28 |
-| Theme.js | 13.38 KB | 2025-03-04 07:13:10 |
-
-### functions\admin
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| _middleware.js | 2.27 KB | 2025-03-01 21:22:38 |
-
-### functions\admin\ajax
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| feed.js | 376 B | 2025-02-28 09:34:28 |
-| r2-ops.js | 408 B | 2025-02-28 09:34:28 |
-
-### functions\api
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| _middleware.js | 1.28 KB | 2025-02-28 09:34:28 |
-
-### functions\api\feed
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| index.js | 276 B | 2025-02-28 09:34:28 |
-
-### ops
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| deploy.js | 8.86 KB | 2025-03-04 08:38:47 |
-| direct_upload.js | 464 B | 2025-02-28 09:34:28 |
-| handle_vars.js | 875 B | 2025-03-02 12:00:07 |
-| init_feed_db.js | 2.81 KB | 2025-03-04 07:53:12 |
-| init_project.js | 2.93 KB | 2025-03-01 18:39:58 |
-| init_r2.js | 2.58 KB | 2025-03-04 07:06:30 |
-| process_openapi.js | 619 B | 2025-03-02 13:34:43 |
-| sync_microfeed_version.js | 486 B | 2025-02-28 09:34:28 |
-| sync_project_config.js | 4.43 KB | 2025-02-28 09:34:28 |
-
-### ops\lib
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| utils.js | 7.97 KB | 2025-03-04 07:53:30 |
-
-### public\_app\immutable\chunks
-
-| File | Size | Last Modified |
-|------|------|---------------|
-| modulepreload-polyfill.js | 1.09 KB | 2025-03-02 10:56:44 |
-
-
 ## Configuration
 
 ### [Root Directory]
@@ -772,7 +747,7 @@ This index provides a structured view of the microfeed project source code.
 |------|------|---------------|
 | package.json | 2.83 KB | 2025-03-03 20:19:17 |
 | tsconfig.json | 709 B | 2025-03-03 00:14:03 |
-| wrangler.json | 872 B | 2025-03-04 08:45:15 |
+| wrangler.json | 872 B | 2025-03-05 15:52:15 |
 
 ### functions
 
@@ -781,15 +756,47 @@ This index provides a structured view of the microfeed project source code.
 | webpack-stats.json | 4.46 KB | 2025-02-28 20:59:06 |
 
 
+## Web Resources
+
+### client-src\common
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| admin_styles.css | 2.12 KB | 2025-02-28 09:34:28 |
+
+### edge-src\EdgeApiApp
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| openapi.yaml.html | 47.49 KB | 2025-02-28 09:34:28 |
+
+### public
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| 404.html | 157 B | 2025-02-28 09:34:28 |
+
+### public\json
+
+| File | Size | Last Modified |
+|------|------|---------------|
+| openapi.html | 574 B | 2025-03-02 19:30:09 |
+
+
 ## Most Recently Modified Files
 
 | File | Type | Size | Last Modified |
 |------|------|------|---------------|
-| memory-bank\progress.md | Documentation | 7.50 KB | 2025-03-04 08:46:24 |
-| edge-src\common\manifest-virtual.js | JavaScript/TypeScript | 14.23 KB | 2025-03-04 08:45:33 |
-| wrangler.json | Configuration | 872 B | 2025-03-04 08:45:15 |
-| memory-bank\activeContext.md | Documentation | 3.15 KB | 2025-03-04 08:41:12 |
-| memory-bank\decisionLog.md | Documentation | 7.72 KB | 2025-03-04 08:40:16 |
+| memory-bank\activeContext.md | Documentation | 2.60 KB | 2025-03-05 16:02:14 |
+| memory-bank\progress.md | Documentation | 4.29 KB | 2025-03-05 16:01:56 |
+| memory-bank\decisionLog.md | Documentation | 1.74 KB | 2025-03-05 16:01:28 |
+| edge-src\common\ManifestUtils.ts | JavaScript/TypeScript | 6.22 KB | 2025-03-05 16:01:13 |
+| edge-src\common\ViteUtils.ts | JavaScript/TypeScript | 3.64 KB | 2025-03-05 16:00:39 |
+| edge-src\common\manifest-virtual.js | JavaScript/TypeScript | 14.23 KB | 2025-03-05 15:52:28 |
+| wrangler.json | Configuration | 872 B | 2025-03-05 15:52:15 |
+| client-src\ClientAdminItemsApp\components\EditItemApp\components\MediaManager\index.tsx | React Components | 4.40 KB | 2025-03-05 15:51:53 |
+| client-src\ClientAdminItemsApp\components\EditItemApp\types.ts | JavaScript/TypeScript | 3.22 KB | 2025-03-05 15:34:33 |
+| memory-bank\microfeed-index.md | Documentation | 22.55 KB | 2025-03-05 15:24:06 |
 | ops\deploy.js | JavaScript/TypeScript | 8.86 KB | 2025-03-04 08:38:47 |
 | vite.config.js | JavaScript/TypeScript | 6.70 KB | 2025-03-04 08:26:32 |
 | ops\lib\utils.js | JavaScript/TypeScript | 7.97 KB | 2025-03-04 07:53:30 |
@@ -798,11 +805,6 @@ This index provides a structured view of the microfeed project source code.
 | edge-src\models\Theme.js | JavaScript/TypeScript | 13.38 KB | 2025-03-04 07:13:10 |
 | ops\init_r2.js | JavaScript/TypeScript | 2.58 KB | 2025-03-04 07:06:30 |
 | client-src\ClientAdminItemsApp\components\EditItemApp\index.tsx | React Components | 19.04 KB | 2025-03-03 20:47:52 |
-| client-src\ClientAdminItemsApp\components\EditItemApp\types.ts | JavaScript/TypeScript | 3.20 KB | 2025-03-03 20:44:46 |
 | edge-src\EdgeCommonRequests\index.tsx | React Components | 3.76 KB | 2025-03-03 20:42:12 |
 | functions\admin\items\list\index.tsx | React Components | 2.45 KB | 2025-03-03 20:41:35 |
-| edge-src\common\PageUtils.tsx | React Components | 10.54 KB | 2025-03-03 20:40:24 |
-| client-src\ClientAdminCustomCodeEditorApp\index.tsx | React Components | 687 B | 2025-03-03 20:31:07 |
-| package.json | Configuration | 2.83 KB | 2025-03-03 20:19:17 |
-| memory-bank\fileStructureUpdate.md | Documentation | 3.11 KB | 2025-03-03 19:42:28 |
 
