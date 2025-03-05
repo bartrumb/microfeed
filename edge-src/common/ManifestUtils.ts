@@ -1,14 +1,16 @@
 // Type definitions
-interface ManifestEntry {
+export interface ManifestEntry {
   file: string;
   src?: string;
   isEntry?: boolean;
   isDynamicEntry?: boolean;
   imports?: string[];
   dynamicImports?: string[];
+  name?: string;
+  css?: string[];
 }
 
-interface Manifest {
+export interface Manifest {
   [key: string]: ManifestEntry;
 }
 
@@ -51,6 +53,21 @@ export const isCloudflarePages = typeof process !== 'undefined' &&
   );
 
 const BASE_PATH = '/_app/immutable';
+
+/**
+ * Validates manifest data structure
+ * @param manifest - The manifest data to validate
+ * @returns True if the manifest is valid
+ */
+function isValidManifest(manifest: unknown): manifest is Manifest {
+  if (!manifest || typeof manifest !== 'object') return false;
+  
+  // Check if every entry has required properties
+  return Object.values(manifest as Record<string, unknown>).every(entry => {
+    if (!entry || typeof entry !== 'object') return false;
+    return typeof (entry as ManifestEntry).file === 'string';
+  });
+}
 
 /**
  * Get the file path from the manifest
@@ -134,15 +151,6 @@ export function getDevPath(
   return null;
 }
 
-// Critical chunks that should only be loaded as chunks, not as entries
-const CRITICAL_CHUNKS: ReadonlyArray<string> = [
-  'react-vendor',
-  'utils',
-  'ui-components',
-  'constants',
-  'withManifest'
-] as const;
-
 /**
  * Get the asset path based on environment
  * @param manifest - The manifest data
@@ -159,11 +167,6 @@ export function getAssetPath(
 ): string {
   // In preview mode or development, use non-hashed paths
   if (isPreviewMode) {
-    // Special handling for critical chunks - never load them as entry points in preview mode
-    if (CRITICAL_CHUNKS.includes(name) && isEntry) {
-      console.log(`Preventing entry-point loading for ${name} in preview mode`);
-      return getDevPath(name, type, false) || ''; // Force loading as chunk
-    }
     return getDevPath(name, type, isEntry) || '';
   }
 
@@ -174,21 +177,25 @@ export function getAssetPath(
 
   // Try to get manifest from window if available
   const clientManifest = typeof window !== 'undefined' ? window.__MANIFEST__ : null;
-  let manifestData: Manifest = manifest || clientManifest || {};
+  let manifestData: Manifest | null = manifest || clientManifest || null;
 
   // In Cloudflare Pages production, try to load manifest from virtual module
-  if (typeof process !== 'undefined' && process.env.CF_PAGES && !Object.keys(manifestData).length) {
+  if (typeof process !== 'undefined' && process.env.CF_PAGES && !manifestData) {
     try {
       // Note: This require is intentionally using a string literal to prevent bundling
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { manifestData: virtualManifest } = require('./manifest-virtual');
-      manifestData = virtualManifest;
+      if (isValidManifest(virtualManifest)) {
+        manifestData = virtualManifest;
+      } else {
+        console.warn('Invalid manifest data from virtual module');
+      }
     } catch (e) {
       console.warn('Failed to load virtual manifest:', e);
     }
   }
 
-  const manifestPath = getManifestPath(manifestData, name, type, isEntry);
+  const manifestPath = manifestData ? getManifestPath(manifestData, name, type, isEntry) : null;
   if (!manifestPath) {
     console.debug(`Could not find ${name} in manifest for ${type}, using fallback path`);
     return getDevPath(name, type, isEntry) || '';

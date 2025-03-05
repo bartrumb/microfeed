@@ -1,5 +1,25 @@
 # TypeScript Migration Decisions
 
+## March 5, 2025 - Manifest System TypeScript Migration
+
+### Decision: Enhanced Type Safety for Asset Loading
+- Converted ViteUtils.js and ManifestUtils.ts to use strict TypeScript types
+- Added proper interfaces for manifest data structures
+- Implemented type guards for manifest validation
+- Rationale: Prevents runtime errors and improves code reliability
+
+### Decision: Improved Manifest Validation
+- Added isValidManifest type guard function
+- Enhanced error handling for manifest loading
+- Added strict typing for entry points using const assertions
+- Rationale: Catches manifest-related issues earlier in the development process
+
+### Decision: Unified Asset Type Handling
+- Created shared types between ViteUtils and ManifestUtils
+- Standardized asset type handling ('js' | 'css')
+- Added proper type exports for cross-file usage
+- Rationale: Ensures consistent asset handling across the codebase
+
 ## March 5, 2025 - MediaManager Component Migration
 
 ### Decision: Update MediaFile Interface
