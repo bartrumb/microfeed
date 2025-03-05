@@ -7,16 +7,16 @@ interface SideQuickLinkProps {
   text: string;
 }
 
-interface AdminSideQuickLinksProps {
-  AdditionalLinksDiv?: ReactNode;
-}
-
 export function SideQuickLink({ url, text }: SideQuickLinkProps): JSX.Element {
   return (
     <div className="mr-4">
       <ExternalLink url={url} text={text} linkClass="text-sm" iconClass="w-3"/>
     </div>
   );
+}
+
+interface AdminSideQuickLinksProps {
+  AdditionalLinksDiv?: ReactNode;
 }
 
 export function AdminSideQuickLinks({ AdditionalLinksDiv }: AdminSideQuickLinksProps): JSX.Element {

@@ -4,11 +4,11 @@ import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.min.css';
 import FileUploaderWrapper from "../FileUploaderWrapper";
 import Requests from '../../common/requests';
-import {randomHex, urlJoinWithRelative} from '../../../common-src/StringUtils';
+import { randomHex, urlJoinWithRelative } from '../../../common-src/StringUtils';
 import AdminDialog from "../AdminDialog";
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import ExternalLink from "../ExternalLink";
-import {showToast} from "../../common/ToastUtils";
+import { showToast } from "../../common/ToastUtils";
 
 const UPLOAD_STATUS__START = 1;
 
@@ -16,8 +16,51 @@ interface EmptyImageProps {
   fileTypes: string[];
 }
 
+function EmptyImage({ fileTypes }: EmptyImageProps): JSX.Element {
+  return (
+    <div className="text-brand-light text-sm flex flex-col justify-center items-center h-full">
+      <div className="mb-2">
+        <CloudArrowUpIcon className="w-8" />
+      </div>
+      <div className="font-semibold">
+        Click or drag here to upload image
+      </div>
+      <div className="mt-2">
+        {fileTypes.join(',')}
+      </div>
+    </div>
+  );
+}
+
 interface PreviewImageProps {
   url: string;
+}
+
+function PreviewImage({ url }: PreviewImageProps): JSX.Element {
+  return (
+    <div className="relative flex justify-center">
+      <img
+        src={url}
+        className={clsx('lh-upload-image-size object-cover', 'gradient-mask-b-20')}
+        alt="Preview"
+      />
+      <div className="absolute bottom-4 text-sm font-normal text-brand-light">
+        <em>
+          Click or drag here to change image
+        </em>
+      </div>
+    </div>
+  );
+}
+
+function isInvalidImage(): string | undefined {
+  // TODO: implement it -
+  // - check if it's image
+  // - square size
+  // - at least 1400x1400
+  // - ...
+  // return 'error message'
+  return undefined;
 }
 
 interface FeedSettings {
@@ -54,55 +97,20 @@ interface AdminImageUploaderState {
   imageHeight: number;
 }
 
-function EmptyImage({fileTypes}: EmptyImageProps) {
-  return (
-    <div className="text-brand-light text-sm flex flex-col justify-center items-center h-full">
-      <div className="mb-2">
-        <CloudArrowUpIcon className="w-8" />
-      </div>
-      <div className="font-semibold">
-        Click or drag here to upload image
-      </div>
-      <div className="mt-2">
-        {fileTypes.join(',')}
-      </div>
-    </div>
-  );
-}
-
-function PreviewImage({url}: PreviewImageProps) {
-  return (
-    <div className="relative flex justify-center">
-      <img
-        src={url}
-        alt="Preview of uploaded image"
-        className={clsx('lh-upload-image-size object-cover', 'gradient-mask-b-20')}
-      />
-      <div className="absolute bottom-4 text-sm font-normal text-brand-light">
-        <em>
-          Click or drag here to change image
-        </em>
-      </div>
-    </div>
-  );
-}
-
-function isInvalidImage(): string | undefined {
-  // TODO: implement it -
-  // - check if it's image
-  // - square size
-  // - at least 1400x1400
-  // - ...
-  // return 'error message'
-  return undefined;
+interface AxiosError extends Error {
+  response?: any;
 }
 
 export default class AdminImageUploaderApp extends React.Component<AdminImageUploaderProps, AdminImageUploaderState> {
   private inputFile: HTMLInputElement | null = null;
-  private readonly initState: AdminImageUploaderState;
+  private initState: AdminImageUploaderState;
 
   constructor(props: AdminImageUploaderProps) {
     super(props);
+
+    this.onFileUploadClick = this.onFileUploadClick.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
+    this.onFileUploadToR2 = this.onFileUploadToR2.bind(this);
 
     const webGlobalSettings = props.feed?.settings?.webGlobalSettings || {};
     const publicBucketUrl = webGlobalSettings?.publicBucketUrl || '';
@@ -127,12 +135,12 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
     };
   }
 
-  onFileUploadClick = (e: React.MouseEvent<HTMLElement>) => {
+  onFileUploadClick(e: React.MouseEvent<HTMLElement>): void {
     e.preventDefault();
     if (!this.inputFile) {
       return;
     }
-    const {uploadStatus} = this.state;
+    const { uploadStatus } = this.state;
     if (uploadStatus === UPLOAD_STATUS__START) {
       return;
     }
@@ -140,8 +148,8 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
     this.inputFile.click();
   }
 
-  onFileUpload = (file: File) => {
-    const {mediaType} = this.state;
+  onFileUpload(file: File): void {
+    const { mediaType } = this.state;
     if (!file) {
       return;
     }
@@ -152,7 +160,7 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
       return;
     }
 
-    const {name, type} = file;
+    const { name, type } = file;
     const extension = name.slice((name.lastIndexOf(".") - 1 >>> 0) + 2);
     let newFilename = `${mediaType}-${randomHex(32)}`;
     if (extension && extension.length > 0) {
@@ -167,8 +175,8 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
     });
   }
 
-  onFileUploadToR2 = () => {
-    const {cropper, cdnFilename, contentType} = this.state;
+  onFileUploadToR2(): void {
+    const { cropper, cdnFilename, contentType } = this.state;
     if (!cropper || !cdnFilename) {
       return;
     }
@@ -178,29 +186,32 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
       
       cropper.disable();
 
+      // Create a File from the Blob
+      const file = new File([blob], cdnFilename, { type: 'image/png' });
+
       Requests.upload(
-        blob, 
-        cdnFilename, 
-        (percentage: number) => {
+        file,
+        cdnFilename,
+        (percentage) => {
           this.setState({
             progressText: `${parseFloat((percentage * 100.0).toString()).toFixed(2)}%`,
           });
-        }, 
-        (cdnUrl: string) => {
+        },
+        (cdnUrl, arrayBuffer) => {
           this.props.onImageUploaded(cdnUrl, contentType);
           cropper.destroy();
           this.setState({
             ...this.initState,
             currentImageUrl: cdnUrl,
           });
-        }, 
+        },
         () => {
           showToast('Failed to upload. Please refresh this page and try again.', 'error', 2000);
-          this.setState({...this.initState});
-        }, 
-        (error: unknown) => {
-          this.setState({...this.initState}, () => {
-            if (error && typeof error === 'object' && !('response' in error)) {
+          this.setState({ ...this.initState });
+        },
+        (error: Error | Event) => {
+          this.setState({ ...this.initState }, () => {
+            if (error instanceof Error && (error as AxiosError).response === undefined) {
               showToast('Network error. Please refresh the page and try again.', 'error');
             } else {
               showToast('Failed. Please try again.', 'error');
@@ -211,17 +222,29 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
     }, 'image/png');
   }
 
-  render() {
-    const {uploadStatus, currentImageUrl, progressText, showModal, publicBucketUrl, previewImageUrl, imageWidth, imageHeight} = this.state;
+  render(): JSX.Element {
+    const {
+      uploadStatus,
+      currentImageUrl,
+      progressText,
+      showModal,
+      publicBucketUrl,
+      previewImageUrl,
+      imageWidth,
+      imageHeight
+    } = this.state;
+
     const absoluteImageUrl = currentImageUrl ? urlJoinWithRelative(publicBucketUrl, currentImageUrl) : null;
     const fileTypes = ['PNG', 'JPG', 'JPEG'];
     const uploading = uploadStatus === UPLOAD_STATUS__START;
-    const {imageSizeNotOkayFunc, imageSizeNotOkayMsgFunc} = this.props;
-    const imageSizeNotOkay = imageSizeNotOkayFunc ? imageSizeNotOkayFunc(imageWidth, imageHeight) :
-      imageWidth < 1400 || imageHeight < 1400;
-    const imageSizeNotOkayMsg = imageSizeNotOkayMsgFunc ? imageSizeNotOkayMsgFunc(imageWidth, imageHeight) :
-      `Image too small: ${parseInt(imageWidth.toString())} x ${parseInt(imageHeight.toString())} pixels. ` +
-      "If it's for a podcast image, Apple Podcasts requires the image to have 1400 x 1400 to 3000 x 3000 pixels.";
+    const { imageSizeNotOkayFunc, imageSizeNotOkayMsgFunc } = this.props;
+    const imageSizeNotOkay = imageSizeNotOkayFunc
+      ? imageSizeNotOkayFunc(imageWidth, imageHeight)
+      : imageWidth < 1400 || imageHeight < 1400;
+    const imageSizeNotOkayMsg = imageSizeNotOkayMsgFunc
+      ? imageSizeNotOkayMsgFunc(imageWidth, imageHeight)
+      : `Image too small: ${parseInt(imageWidth.toString())} x ${parseInt(imageHeight.toString())} pixels. ` +
+        "If it's for a podcast image, Apple Podcasts requires the image to have 1400 x 1400 to 3000 x 3000 pixels.";
 
     return (
       <div className="lh-upload-wrapper">
@@ -233,52 +256,58 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
           classes="lh-upload-fileinput"
         >
           <div className="lh-upload-image-size lh-upload-box">
-            {absoluteImageUrl ? <PreviewImage url={absoluteImageUrl}/> :
-              <EmptyImage fileTypes={fileTypes} />}
+            {absoluteImageUrl ? (
+              <PreviewImage url={absoluteImageUrl} />
+            ) : (
+              <EmptyImage fileTypes={fileTypes} />
+            )}
           </div>
         </FileUploaderWrapper>
-        {absoluteImageUrl && <div className="text-sm flex justify-center mt-1">
-          <ExternalLink 
-            linkClass="text-helper-color text-xs" 
-            text="preview image" 
-            url={absoluteImageUrl}
-            iconClass="w-4 h-4" 
-          />
-        </div>}
-        <AdminDialog
-          title="Upload Image"
-          isOpen={showModal}
-          setIsOpen={(trueOrFalse: boolean) => this.setState({showModal: trueOrFalse})}
-          disabledClose={uploading}
-        >
-          {previewImageUrl && <div>
-            <img
-              className="w-full"
-              src={previewImageUrl}
-              alt="Image preview for cropping"
-              onLoad={(e) => {
-                const target = e.target as HTMLImageElement;
-                const {clientWidth, clientHeight} = target;
-                const size = Math.min(clientWidth, clientHeight);
-                const options: Cropper.Options = {
-                  aspectRatio: 1.0,
-                  viewMode: 3 as Cropper.ViewMode,
-                  cropBoxResizable: true,
-                  crop: (event: Cropper.CropEvent) => {
-                    const {width, height} = event.detail;
-                    this.setState({imageWidth: width, imageHeight: height});
-                  },
-                  ready: () => {
-                    if (this.state.cropper) {
-                      this.state.cropper.setCropBoxData({width: size, height: size});
-                    }
-                  }
-                };
-                const cropper = new Cropper(target, options);
-                this.setState({cropper});
-              }}
+        {absoluteImageUrl && (
+          <div className="text-sm flex justify-center mt-1">
+            <ExternalLink
+              linkClass="text-helper-color text-xs"
+              text="preview image"
+              url={absoluteImageUrl}
             />
-          </div>}
+          </div>
+        )}
+        <AdminDialog
+          isOpen={showModal}
+          setIsOpen={(trueOrFalse) => this.setState({ showModal: trueOrFalse })}
+          disabledClose={uploading}
+          title="Crop Image"
+        >
+          {previewImageUrl && (
+            <div>
+              <img
+                className="w-full"
+                src={previewImageUrl}
+                alt="Upload preview"
+                onLoad={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                  const target = e.target as HTMLImageElement;
+                  const { clientWidth, clientHeight } = target;
+                  const size = Math.min(clientWidth, clientHeight);
+                  const options: Cropper.Options = {
+                    aspectRatio: 1.0,
+                    viewMode: 1,
+                    cropBoxResizable: true,
+                    crop: (event: Cropper.CropEvent) => {
+                      const { width, height } = event.detail;
+                      this.setState({ imageWidth: width, imageHeight: height });
+                    },
+                    ready: () => {
+                      if (this.state.cropper) {
+                        this.state.cropper.setCropBoxData({ width: size, height: size });
+                      }
+                    }
+                  };
+                  const cropper = new Cropper(target, options);
+                  this.setState({ cropper });
+                }}
+              />
+            </div>
+          )}
           <div className="mt-4 flex justify-center">
             <button
               className="lh-btn lh-btn-brand-dark"
@@ -288,10 +317,22 @@ export default class AdminImageUploaderApp extends React.Component<AdminImageUpl
               {uploading ? `Uploading... ${progressText}` : 'Upload'}
             </button>
           </div>
-          {imageWidth > 0 && imageHeight > 0 && <div className={clsx("mt-2 text-xs text-center", imageSizeNotOkay ? 'text-red-500' : 'text-green-500')}>
-            {imageSizeNotOkay ? <div>{imageSizeNotOkayMsg}</div> :
-              <div>Image ok: {parseInt(imageWidth.toString())} x {parseInt(imageHeight.toString())} pixels.</div>}
-          </div>}
+          {imageWidth > 0 && imageHeight > 0 && (
+            <div
+              className={clsx(
+                "mt-2 text-xs text-center",
+                imageSizeNotOkay ? 'text-red-500' : 'text-green-500'
+              )}
+            >
+              {imageSizeNotOkay ? (
+                <div>{imageSizeNotOkayMsg}</div>
+              ) : (
+                <div>
+                  Image ok: {parseInt(imageWidth.toString())} x {parseInt(imageHeight.toString())} pixels.
+                </div>
+              )}
+            </div>
+          )}
         </AdminDialog>
       </div>
     );
