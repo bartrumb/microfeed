@@ -1,8 +1,9 @@
 import { OnboardingResult } from '../../../../common-src/types/FeedContent';
 
 export interface MediaFile {
-  category: number;
+  category: string;
   url: string;
+  sizeByte?: number;
   durationSecond?: number;
   contentType?: string;
 }

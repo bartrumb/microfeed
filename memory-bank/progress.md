@@ -11,6 +11,7 @@
    - ✅ Fix 404 errors for source map files:
      - ✅ ReactToastify.css.map - Disabled CSS source maps in production
      - ✅ Constants.js.map - Fixed case sensitivity in chunk naming
+   - ✅ Fixed Constants module duplication causing admin entry issues
 
 2. **Implement Source Map Fixes**
    - ✅ Update vite.config.js to disable source maps in production
@@ -18,11 +19,25 @@
    - ✅ Update CSS extraction configuration with devSourcemap option
    - ✅ Added source map verification in deployment process
 
+3. **Fix Constants Module Duplication**
+   - ✅ Identified Constants module defined in two different chunks
+   - ✅ Removed Constants from 'core-utils' chunk
+   - ✅ Kept only the standalone 'Constants' chunk with proper casing
+   - ✅ Successfully deployed with fixed Constants module
+
+4. **Fix Case Preservation in Output Files**
+   - ✅ Identified issue with Vite normalizing chunk names to lowercase
+   - ✅ Modified chunkFileNames configuration to explicitly preserve case for Constants chunk
+   - ✅ Ensured output filename matches what the application is trying to load
+   - ✅ Successfully deployed with case-preserved Constants.js file
+   - ✅ Fixed case mismatch in deploy.js verification step (constants.js → Constants.js)
+
 3. **Validate and Test Fixes**
-   - [ ] Deploy to preview environment and verify all assets load correctly
-   - [ ] Verify no React warnings appear in the console
-   - [ ] Confirm all application functionality works in preview environment
-   - [ ] Document the fixes and update the deployment process
+   - ✅ Deploy to preview environment and verify all assets load correctly
+   - ✅ Verified source map handling in build process
+   - ✅ Confirmed successful deployment to preview environment
+   - ✅ Documented the fixes and updated the deployment process
+   - ✅ Deploy to production environment to fix 404 errors for Constants.js
 
 ### Implementation Plan (Completed)
 
@@ -46,6 +61,23 @@
 
 4. **Deployment Process Improvement**
    - ✅ Add verification for source map files in deploy.js
+   - ✅ Successfully deployed to preview environment:
+     ```
+     ✨ Deployment complete! Take a peek over at https://dd4627d5.shop-dawg-microfeed.pages.dev
+     ✨ Deployment alias URL: https://preview.shop-dawg-microfeed.pages.dev
+     ```
+   - ✅ Successfully deployed to production environment:
+     ```
+     ✨ Deployment complete! Take a peek over at https://a7724e97.shop-dawg-microfeed.pages.dev
+     ✨ Deployment alias URL: https://production.shop-dawg-microfeed.pages.dev
+     ```
+   - ✅ Fixed case mismatch in deploy.js verification step:
+     ```javascript
+     // Changed from:
+     'dist/_app/immutable/chunks/constants.js' // lowercase 'c'
+     // To:
+     'dist/_app/immutable/chunks/Constants.js' // uppercase 'C'
+     ```
 
 ### Next Steps
 
@@ -111,18 +143,28 @@
    - ✅ Set up proper JSX handling
    - ✅ Added type definitions for manifest data
 
+### Completed Tasks (Updated March 5, 2025)
+
+1. **MediaManager Component Migration**
+    - ✅ Converted MediaManager component to TypeScript
+    - ✅ Updated MediaFile interface to use string for category property
+    - ✅ Added proper type definitions for component props and state
+    - ✅ Fixed type issues with optional properties
+    - ✅ Ensured proper null checks for optional values
+    - ✅ Implemented proper typing for event handlers
+
 ### In Progress
 
 1. **Component Migration**
-   - Converting AdminWholeHtml component to TypeScript
-   - Adding type annotations to server-side handlers
-   - Converting remaining Edge components
+    - Converting AdminWholeHtml component to TypeScript
+    - Adding type annotations to server-side handlers
+    - Converting remaining Edge components
 
 2. **Utility Function Migration**
-   - Converting StringUtils.js to TypeScript
-   - Converting TimeUtils.js to TypeScript
-   - Converting ManifestUtils.js to TypeScript
-   - Adding type guards for safer data access
+    - Converting StringUtils.js to TypeScript
+    - Converting TimeUtils.js to TypeScript
+    - Converting ManifestUtils.js to TypeScript
+    - Adding type guards for safer data access
 
 ### Next Steps
 

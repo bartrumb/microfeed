@@ -28,7 +28,6 @@ const manualChunks = {
   ],
   'core-utils': [
     '@edge/common/withManifest',
-    '@common/Constants'
   ],
   'ui-components': {
     include: [
@@ -132,7 +131,15 @@ export default defineConfig(({ mode }) => ({
           }
           return chunkInfo.name;
         },
-        chunkFileNames: '_app/immutable/chunks/[name].js',
+        chunkFileNames: (chunkInfo) => {
+          // Special handling for Constants chunk to preserve case
+          if (chunkInfo.name === 'Constants') {
+            return '_app/immutable/chunks/Constants.js';
+          }
+          // Default handling for other chunks
+          return '_app/immutable/chunks/[name].js';
+        },
+        
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
             const name = assetInfo.name.replace('.css', '');
