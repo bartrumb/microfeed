@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { Switch } from '@headlessui/react';
+import { Switch } from '@headlessui/react'
 
 interface AdminSwitchProps {
   label?: string;

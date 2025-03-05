@@ -169,12 +169,11 @@ export const manifestData = {
       "_react-vendor.js",
       "_admin_styles.js",
       "_BrowserUtils.js",
-      "_StringUtils.js",
+      "_index2.js",
       "_Constants.js",
       "_ToastUtils.js",
-      "_index3.js",
-      "_index.js",
-      "_index2.js"
+      "_StringUtils.js",
+      "_index.js"
     ]
   },
   "functions/admin/_middleware.js": {
