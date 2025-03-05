@@ -4,23 +4,35 @@ import clsx from "clsx";
 import AdminDialog from "../AdminDialog";
 import ExternalLink from "../ExternalLink";
 import { PUBLIC_URLS } from "../../../common-src/StringUtils";
-import type { ExplainTextProps } from "../types";
+import type { ExplainBundle, ExplainTextProps } from "../types";
 
 interface ExplainDialogProps {
-  title: string;
-  description: string;
+  bundle?: ExplainBundle;
+  title?: string;
+  description?: string;
   learnMoreUrl?: string;
   customClass?: string;
 }
 
+export type { ExplainBundle };
+
 export default function ExplainText({ 
-  title,
-  description,
+  bundle,
+  title: propTitle,
+  description: propDescription,
   learnMoreUrl,
   customClass 
 }: ExplainDialogProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const Icon = isOpen ? ArrowUpCircleIcon : ArrowRightCircleIcon;
+  
+  // Use either direct props or bundle props
+  const title = propTitle || (bundle?.modalTitle || bundle?.linkName);
+  const description = propDescription || bundle?.text;
+
+  if (!title || !description) {
+    return <div />; // Return empty div instead of null
+  }
   
   return (
     <div className="flex">
@@ -33,7 +45,7 @@ export default function ExplainText({
         }}
       >
         <div className="flex items-center">
-          <div>{title}</div>
+          <div>{bundle?.linkName || title}</div>
           <div className="ml-2"><Icon className="w-4" /></div>
         </div>
       </a>

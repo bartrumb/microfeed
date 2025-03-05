@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { SettingsBase } from '../SettingsBase';
 import { FORM_EXPLAIN_TEXTS } from '../FormExplainTexts';
 import { ADMIN_URLS } from '../../../../common-src/StringUtils';
@@ -11,10 +11,10 @@ interface CustomCodeSettingsAppProps {
 export const CustomCodeSettingsApp: React.FC<CustomCodeSettingsAppProps> = ({
   origin
 }) => {
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const handleOpenEditor = () => {
-    navigate(ADMIN_URLS.codeEditorSettings());
+    history.push(ADMIN_URLS.codeEditorSettings());
   };
 
   return (
