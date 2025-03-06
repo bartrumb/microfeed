@@ -26,7 +26,6 @@ import {
 import clsx from "clsx";
 import ExternalLink from "../../../components/ExternalLink";
 import AdminRadio from "../../../components/AdminRadio";
-import {isValidMediaFile} from "../../../../common-src/MediaFileUtils";
 import {
   AllItemsAppProps,
   AllItemsAppState,
@@ -215,7 +214,7 @@ export default class AllItemsApp extends React.Component<AllItemsAppProps, AllIt
       ),
       mediaFile: (
         <div className="flex flex-col items-center">
-          {isValidMediaFile(item.mediaFile) && isValidMediaFileType(item.mediaFile) ? (
+          {item.mediaFile && isValidMediaFileType(item.mediaFile) ? (
             <div>
               <ExternalLink
                 url={getMediaFileUrl(item.mediaFile, publicBucketUrl)}

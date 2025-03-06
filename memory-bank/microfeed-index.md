@@ -1,6 +1,6 @@
 # Microfeed Project File Index
 
-Generated on: 2025-03-05 17:23:42
+Generated on: 2025-03-05 18:12:32
 
 This index provides a structured view of the microfeed project source code.
 
@@ -20,20 +20,20 @@ This index provides a structured view of the microfeed project source code.
 | Category | Count | Total Size |
 |----------|-------|------------|
 | Web Resources | 4 | 50.32 KB |
-| Documentation | 9 | 65.58 KB |
-| JavaScript/TypeScript | 67 | 230.03 KB |
-| React Components | 107 | 330.34 KB |
+| Documentation | 9 | 64.17 KB |
+| JavaScript/TypeScript | 68 | 195.09 KB |
+| React Components | 107 | 332.03 KB |
 | Configuration | 4 | 8.99 KB |
 
 ## Top-Level Directories
 
-- **client-src/** - 92 files, 310.81 KB
+- **client-src/** - 92 files, 311.63 KB
 - **cloudflare/** - 0 files, 0 B
-- **common-src/** - 10 files, 36.81 KB
+- **common-src/** - 12 files, 41.86 KB
 - **docs/** - 1 files, 3.33 KB
-- **edge-src/** - 29 files, 189.30 KB
-- **functions/** - 29 files, 31.92 KB
-- **memory-bank/** - 7 files, 41.47 KB
+- **edge-src/** - 28 files, 147.77 KB
+- **functions/** - 29 files, 34.32 KB
+- **memory-bank/** - 7 files, 40.06 KB
 - **ops/** - 10 files, 31.95 KB
 - **public/** - 3 files, 1.80 KB
 
@@ -83,12 +83,12 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | activeContext.md | 2.52 KB | 2025-03-05 16:26:23 |
-| decisionLog.md | 2.58 KB | 2025-03-05 16:26:04 |
+| decisionLog.md | 1.71 KB | 2025-03-05 17:25:50 |
 | fileStructureUpdate.md | 3.11 KB | 2025-03-03 19:42:28 |
-| microfeed-index.md | 23.72 KB | 2025-03-05 16:30:23 |
+| microfeed-index.md | 23.65 KB | 2025-03-05 17:23:42 |
 | productContext.md | 3.92 KB | 2025-03-01 16:23:07 |
-| progress.md | 2.88 KB | 2025-03-05 16:24:48 |
-| typeCheckingPlan.md | 2.74 KB | 2025-03-03 16:15:54 |
+| progress.md | 2.05 KB | 2025-03-05 17:32:24 |
+| typeCheckingPlan.md | 3.10 KB | 2025-03-05 17:25:28 |
 
 
 ## JavaScript/TypeScript
@@ -97,19 +97,19 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| .eslintrc.js | 1.36 KB | 2025-03-03 02:01:07 |
-| jest.config.js | 291 B | 2025-02-28 10:18:55 |
-| jest.setup.js | 1.32 KB | 2025-02-28 10:21:45 |
-| postcss.config.js | 85 B | 2025-02-28 23:30:30 |
-| tailwind.config.js | 2.81 KB | 2025-02-28 23:37:38 |
-| vite.config.js | 6.70 KB | 2025-03-04 08:26:32 |
+| .eslintrc.ts | 1.36 KB | 2025-03-03 02:01:07 |
+| jest.config.ts | 291 B | 2025-02-28 10:18:55 |
+| jest.setup.ts | 1.32 KB | 2025-02-28 10:21:45 |
+| postcss.config.ts | 85 B | 2025-02-28 23:30:30 |
+| tailwind.config.ts | 2.81 KB | 2025-02-28 23:37:38 |
+| vite.config.ts | 6.70 KB | 2025-03-04 08:26:32 |
 
 ### client-src\ClientAdminChannelApp\components\EditChannelApp
 
 | File | Size | Last Modified |
 |------|------|---------------|
 | FormExplainTexts.ts | 9.21 KB | 2025-03-03 19:41:16 |
-| types.ts | 1.07 KB | 2025-03-03 12:46:40 |
+| types.ts | 1.12 KB | 2025-03-05 17:55:41 |
 
 ### client-src\ClientAdminCustomCodeEditorApp\components\CustomCodeEditorApp
 
@@ -121,7 +121,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| types.ts | 1.15 KB | 2025-03-03 16:04:08 |
+| types.ts | 844 B | 2025-03-05 17:56:03 |
 
 ### client-src\ClientAdminHomeApp\components\AdminHomeApp\component\DistributionApp
 
@@ -184,51 +184,52 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| Constants.js | 14.14 KB | 2025-03-02 22:43:05 |
-| MediaFileUtils.js | 777 B | 2025-02-28 09:34:28 |
-| OnboardingUtils.js | 2.67 KB | 2025-03-04 07:41:00 |
-| R2Utils.js | 115 B | 2025-02-28 09:34:28 |
+| Constants.ts | 14.14 KB | 2025-03-02 22:43:05 |
+| MediaFileUtils.ts | 2.25 KB | 2025-03-05 17:57:51 |
+| OnboardingUtils.ts | 2.29 KB | 2025-03-05 17:48:16 |
+| R2Utils.ts | 1.10 KB | 2025-03-05 17:52:01 |
 | StringUtils.test.js | 1.31 KB | 2025-02-28 09:34:28 |
 | StringUtils.ts | 10.04 KB | 2025-03-03 19:04:58 |
 | TimeUtils.test.js | 673 B | 2025-02-28 09:34:28 |
 | TimeUtils.ts | 2.79 KB | 2025-03-03 19:05:30 |
-| Version.js | 73 B | 2025-02-28 23:43:03 |
+| Version.ts | 73 B | 2025-02-28 23:43:03 |
 
 ### common-src\types
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| FeedContent.ts | 4.27 KB | 2025-03-03 00:23:31 |
+| CloudflareTypes.ts | 2.06 KB | 2025-03-05 17:49:21 |
+| FeedContent.ts | 4.72 KB | 2025-03-05 17:31:01 |
+| OnboardingTypes.ts | 438 B | 2025-03-05 17:55:55 |
 
 ### edge-src\common
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| manifest-virtual.js | 14.21 KB | 2025-03-05 16:44:32 |
+| manifest-virtual.ts | 14.21 KB | 2025-03-05 16:44:32 |
 | ManifestUtils.ts | 6.22 KB | 2025-03-05 16:01:13 |
-| RouteUtils.js | 1.00 KB | 2025-03-02 20:09:15 |
-| ViteUtils.js | 3.15 KB | 2025-03-03 13:29:18 |
-| ViteUtils.ts | 3.64 KB | 2025-03-05 16:00:39 |
+| RouteUtils.ts | 1.26 KB | 2025-03-05 18:03:49 |
+| ViteUtils.ts | 3.36 KB | 2025-03-05 18:04:37 |
 
 ### edge-src\models
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| DatabaseInitializer.js | 10.04 KB | 2025-03-01 16:02:38 |
 | DatabaseInitializer.test.js | 5.24 KB | 2025-02-28 10:24:19 |
-| FeedCrudManager.js | 5.52 KB | 2025-02-28 09:34:28 |
+| DatabaseInitializer.ts | 3.78 KB | 2025-03-05 17:36:43 |
 | FeedCrudManager.test.js | 2.67 KB | 2025-02-28 09:34:28 |
-| FeedDb.js | 15.55 KB | 2025-02-28 23:58:43 |
+| FeedCrudManager.ts | 4.28 KB | 2025-03-05 17:42:14 |
 | FeedDb.test.js | 3.13 KB | 2025-02-28 10:35:43 |
-| FeedPublicJsonBuilder.js | 10.91 KB | 2025-02-28 09:34:28 |
-| FeedPublicRssBuilder.js | 7.12 KB | 2025-02-28 09:34:28 |
-| Theme.js | 13.38 KB | 2025-03-04 07:13:10 |
+| FeedDb.ts | 5.39 KB | 2025-03-05 17:58:25 |
+| FeedPublicJsonBuilder.ts | 2.73 KB | 2025-03-05 17:35:59 |
+| FeedPublicRssBuilder.ts | 4.76 KB | 2025-03-05 17:36:23 |
+| Theme.ts | 5.29 KB | 2025-03-05 18:01:17 |
 
 ### functions\admin
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| _middleware.js | 2.27 KB | 2025-03-01 21:22:38 |
+| _middleware.ts | 1.70 KB | 2025-03-05 17:41:52 |
 
 ### functions\admin\ajax
 
@@ -241,33 +242,33 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| _middleware.js | 1.28 KB | 2025-02-28 09:34:28 |
+| _middleware.ts | 1.35 KB | 2025-03-05 17:27:49 |
 
 ### functions\api\feed
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.js | 276 B | 2025-02-28 09:34:28 |
+| index.ts | 522 B | 2025-03-05 17:27:57 |
 
 ### ops
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| deploy.js | 8.86 KB | 2025-03-04 08:38:47 |
-| direct_upload.js | 464 B | 2025-02-28 09:34:28 |
-| handle_vars.js | 875 B | 2025-03-02 12:00:07 |
-| init_feed_db.js | 2.81 KB | 2025-03-04 07:53:12 |
-| init_project.js | 2.93 KB | 2025-03-01 18:39:58 |
-| init_r2.js | 2.58 KB | 2025-03-04 07:06:30 |
-| process_openapi.js | 619 B | 2025-03-02 13:34:43 |
-| sync_microfeed_version.js | 486 B | 2025-02-28 09:34:28 |
-| sync_project_config.js | 4.43 KB | 2025-02-28 09:34:28 |
+| deploy.ts | 8.86 KB | 2025-03-04 08:38:47 |
+| direct_upload.ts | 464 B | 2025-02-28 09:34:28 |
+| handle_vars.ts | 875 B | 2025-03-02 12:00:07 |
+| init_feed_db.ts | 2.81 KB | 2025-03-04 07:53:12 |
+| init_project.ts | 2.93 KB | 2025-03-01 18:39:58 |
+| init_r2.ts | 2.58 KB | 2025-03-04 07:06:30 |
+| process_openapi.ts | 619 B | 2025-03-02 13:34:43 |
+| sync_microfeed_version.ts | 486 B | 2025-02-28 09:34:28 |
+| sync_project_config.ts | 4.43 KB | 2025-02-28 09:34:28 |
 
 ### ops\lib
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| utils.js | 7.97 KB | 2025-03-04 07:53:30 |
+| utils.ts | 7.97 KB | 2025-03-04 07:53:30 |
 
 ### public\_app\immutable\chunks
 
@@ -288,7 +289,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.tsx | 14.82 KB | 2025-03-03 12:52:30 |
+| index.tsx | 15.01 KB | 2025-03-05 18:08:31 |
 
 ### client-src\ClientAdminCustomCodeEditorApp
 
@@ -314,7 +315,7 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | index.jsx | 1.88 KB | 2025-03-02 21:11:07 |
-| index.tsx | 2.23 KB | 2025-03-03 16:04:29 |
+| index.tsx | 2.31 KB | 2025-03-05 18:09:41 |
 
 ### client-src\ClientAdminHomeApp\components\AdminHomeApp\component\DistributionApp
 
@@ -335,7 +336,7 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | index.jsx | 1.83 KB | 2025-02-28 09:34:28 |
-| index.tsx | 2.44 KB | 2025-03-03 16:07:04 |
+| index.tsx | 3.21 KB | 2025-03-05 17:57:11 |
 
 ### client-src\ClientAdminItemsApp
 
@@ -489,7 +490,7 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | index.jsx | 4.76 KB | 2025-02-28 09:34:28 |
-| index.tsx | 5.76 KB | 2025-03-05 16:48:17 |
+| index.tsx | 5.82 KB | 2025-03-05 17:56:40 |
 
 ### client-src\components\AdminRadio
 
@@ -582,7 +583,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| PageUtils.tsx | 10.54 KB | 2025-03-03 20:40:24 |
+| PageUtils.tsx | 10.40 KB | 2025-03-05 18:02:12 |
 | withManifest.tsx | 4.17 KB | 2025-03-03 13:55:27 |
 
 ### edge-src\components\AdminWholeHtml
@@ -601,7 +602,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.tsx | 1.49 KB | 2025-03-03 15:25:28 |
+| index.tsx | 612 B | 2025-03-05 17:43:08 |
 
 ### edge-src\EdgeAdminHomeApp
 
@@ -613,7 +614,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.tsx | 2.80 KB | 2025-03-03 18:59:55 |
+| index.tsx | 1.29 KB | 2025-03-05 17:45:25 |
 
 ### edge-src\EdgeAdminItemsApp\Edit
 
@@ -655,7 +656,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.tsx | 1.47 KB | 2025-03-03 15:33:31 |
+| index.tsx | 1.94 KB | 2025-03-05 17:46:50 |
 
 ### functions
 
@@ -674,25 +675,25 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 243 B | 2025-02-28 09:34:28 |
+| index.tsx | 336 B | 2025-03-05 18:05:30 |
 
 ### functions\admin\channels\primary
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 743 B | 2025-03-02 20:16:48 |
+| index.tsx | 1.29 KB | 2025-03-05 17:44:11 |
 
 ### functions\admin\feed
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| json.jsx | 228 B | 2025-02-28 09:34:28 |
+| json.tsx | 414 B | 2025-03-05 18:06:30 |
 
 ### functions\admin\items
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 233 B | 2025-02-28 09:34:28 |
+| index.tsx | 1.23 KB | 2025-03-05 17:45:35 |
 
 ### functions\admin\items\[itemId]
 
@@ -704,25 +705,25 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.tsx | 2.45 KB | 2025-03-03 20:41:35 |
+| index.tsx | 1.29 KB | 2025-03-05 17:50:39 |
 
 ### functions\admin\items\new
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 737 B | 2025-03-02 20:17:01 |
+| index.tsx | 1.29 KB | 2025-03-05 17:44:21 |
 
 ### functions\admin\settings
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 724 B | 2025-03-02 20:16:36 |
+| index.tsx | 1.26 KB | 2025-03-05 17:46:38 |
 
 ### functions\admin\settings\code-editor
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 1.52 KB | 2025-03-03 14:24:01 |
+| index.tsx | 1.67 KB | 2025-03-05 17:39:19 |
 
 ### functions\api\channels\[channelId]
 
@@ -734,7 +735,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 844 B | 2025-02-28 09:34:28 |
+| index.tsx | 1.89 KB | 2025-03-05 17:28:10 |
 
 ### functions\api\items\[itemId]
 
@@ -746,7 +747,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.jsx | 3.13 KB | 2025-02-28 09:34:28 |
+| index.tsx | 1.83 KB | 2025-03-05 17:28:25 |
 
 ### functions\i\[slug]
 
@@ -782,8 +783,8 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| index.tsx | 1.13 KB | 2025-03-03 19:14:00 |
-| stylesheet.jsx | 648 B | 2025-02-28 09:34:28 |
+| index.tsx | 744 B | 2025-03-05 17:37:56 |
+| stylesheet.tsx | 2.00 KB | 2025-03-05 17:37:10 |
 
 
 ## Configuration
@@ -807,24 +808,24 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Type | Size | Last Modified |
 |------|------|------|---------------|
-| client-src\components\AdminSideQuickLinks\index.tsx | React Components | 1.12 KB | 2025-03-05 17:14:46 |
-| client-src\components\AdminImageUploaderApp\index.tsx | React Components | 10.42 KB | 2025-03-05 17:10:53 |
-| client-src\common\ToastUtils.tsx | React Components | 1.03 KB | 2025-03-05 17:04:44 |
-| client-src\common\requests.ts | JavaScript/TypeScript | 1.99 KB | 2025-03-05 17:02:14 |
-| client-src\common\react-vendor.ts | JavaScript/TypeScript | 441 B | 2025-03-05 17:00:27 |
-| client-src\common\index.ts | JavaScript/TypeScript | 208 B | 2025-03-05 16:59:01 |
-| client-src\common\ClientUrlUtils.ts | JavaScript/TypeScript | 383 B | 2025-03-05 16:57:49 |
-| client-src\common\BrowserUtils.ts | JavaScript/TypeScript | 412 B | 2025-03-05 16:56:37 |
-| client-src\common\AccessibilityUtils.ts | JavaScript/TypeScript | 2.71 KB | 2025-03-05 16:55:35 |
-| client-src\components\FileUploaderWrapper\index.tsx | React Components | 564 B | 2025-03-05 16:53:44 |
-| client-src\components\index.ts | JavaScript/TypeScript | 507 B | 2025-03-05 16:52:38 |
-| client-src\components\FileUploaderTest\index.tsx | React Components | 484 B | 2025-03-05 16:50:59 |
-| client-src\components\AdminSwitch\index.tsx | React Components | 1.13 KB | 2025-03-05 16:49:56 |
-| client-src\components\AdminNavApp\index.tsx | React Components | 5.76 KB | 2025-03-05 16:48:17 |
-| client-src\components\AdminDialog\index.tsx | React Components | 1.39 KB | 2025-03-05 16:46:31 |
-| client-src\components\AdminDatetimePicker\index.tsx | React Components | 1.03 KB | 2025-03-05 16:45:36 |
-| edge-src\common\manifest-virtual.js | JavaScript/TypeScript | 14.21 KB | 2025-03-05 16:44:32 |
-| wrangler.json | Configuration | 872 B | 2025-03-05 16:44:17 |
-| client-src\components\AdminCodeEditor\index.tsx | React Components | 1.05 KB | 2025-03-05 16:42:43 |
-| client-src\components\ExplainText\index.tsx | React Components | 2.33 KB | 2025-03-05 16:42:27 |
+| client-src\ClientAdminHomeApp\components\AdminHomeApp\index.tsx | React Components | 2.31 KB | 2025-03-05 18:09:41 |
+| client-src\ClientAdminChannelApp\components\EditChannelApp\index.tsx | React Components | 15.01 KB | 2025-03-05 18:08:31 |
+| functions\admin\feed\json.tsx | React Components | 414 B | 2025-03-05 18:06:30 |
+| functions\admin\channels\index.tsx | React Components | 336 B | 2025-03-05 18:05:30 |
+| edge-src\common\ViteUtils.ts | JavaScript/TypeScript | 3.36 KB | 2025-03-05 18:04:37 |
+| edge-src\common\RouteUtils.ts | JavaScript/TypeScript | 1.26 KB | 2025-03-05 18:03:49 |
+| edge-src\common\PageUtils.tsx | React Components | 10.40 KB | 2025-03-05 18:02:12 |
+| edge-src\models\Theme.ts | JavaScript/TypeScript | 5.29 KB | 2025-03-05 18:01:17 |
+| edge-src\models\FeedDb.ts | JavaScript/TypeScript | 5.39 KB | 2025-03-05 17:58:25 |
+| common-src\MediaFileUtils.ts | JavaScript/TypeScript | 2.25 KB | 2025-03-05 17:57:51 |
+| client-src\ClientAdminHomeApp\components\AdminHomeApp\component\WhatsNewApp\index.tsx | React Components | 3.21 KB | 2025-03-05 17:57:11 |
+| client-src\components\AdminNavApp\index.tsx | React Components | 5.82 KB | 2025-03-05 17:56:40 |
+| client-src\ClientAdminHomeApp\components\AdminHomeApp\types.ts | JavaScript/TypeScript | 844 B | 2025-03-05 17:56:03 |
+| common-src\types\OnboardingTypes.ts | JavaScript/TypeScript | 438 B | 2025-03-05 17:55:55 |
+| client-src\ClientAdminChannelApp\components\EditChannelApp\types.ts | JavaScript/TypeScript | 1.12 KB | 2025-03-05 17:55:41 |
+| common-src\R2Utils.ts | JavaScript/TypeScript | 1.10 KB | 2025-03-05 17:52:01 |
+| functions\admin\items\list\index.tsx | React Components | 1.29 KB | 2025-03-05 17:50:39 |
+| common-src\types\CloudflareTypes.ts | JavaScript/TypeScript | 2.06 KB | 2025-03-05 17:49:21 |
+| common-src\OnboardingUtils.ts | JavaScript/TypeScript | 2.29 KB | 2025-03-05 17:48:16 |
+| edge-src\EdgeSettingsApp\index.tsx | React Components | 1.94 KB | 2025-03-05 17:46:50 |
 

@@ -1,8 +1,9 @@
 import { Env } from './types/CloudflareTypes';
 import { uploadToR2, getPublicUrl, projectPrefix } from './R2Utils';
+import { ENCLOSURE_CATEGORIES } from './Constants';
 
 interface MediaFileMetadata {
-  category: number;
+  category: string;
   url: string;
   contentType?: string;
   durationSecond?: number;
@@ -10,7 +11,7 @@ interface MediaFileMetadata {
 }
 
 interface UploadOptions {
-  category: number;
+  category: string;
   contentType?: string;
   durationSecond?: number;
 }
@@ -44,9 +45,14 @@ export function getMediaFileFromUrl(urlParams: URLSearchParams): MediaFileMetada
     return null;
   }
 
+  // Ensure the category is a valid ENCLOSURE_CATEGORIES value
+  if (!Object.values(ENCLOSURE_CATEGORIES).includes(category)) {
+    return null;
+  }
+
   return {
     url,
-    category: parseInt(category, 10),
+    category,
     contentType: contentType || undefined,
     durationSecond: durationSecond ? parseInt(durationSecond, 10) : undefined
   };

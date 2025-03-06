@@ -5,20 +5,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { projectPrefix } from "../../common-src/R2Utils";
-
-import type { D1Database } from '@cloudflare/workers-types';
-
-//
-// Fetch feed / item json
-//
-
-interface Env {
-  R2_ACCESS_KEY_ID: string;
-  R2_SECRET_ACCESS_KEY: string;
-  CLOUDFLARE_ACCOUNT_ID: string;
-  R2_PUBLIC_BUCKET: string;
-  FEED_DB: D1Database;
-}
+import type { Env } from '../../common-src/types/CloudflareTypes';
 
 interface RequestParams {
   env: Env;

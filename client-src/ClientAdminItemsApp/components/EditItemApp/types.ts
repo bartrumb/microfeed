@@ -1,7 +1,10 @@
 import { OnboardingResult } from '../../../../common-src/types/FeedContent';
+import { ENCLOSURE_CATEGORIES } from '../../../../common-src/Constants';
+
+export type EnclosureCategory = typeof ENCLOSURE_CATEGORIES[keyof typeof ENCLOSURE_CATEGORIES];
 
 export interface MediaFile {
-  category: string;
+  category: EnclosureCategory;
   url: string;
   sizeByte?: number;
   durationSecond?: number;

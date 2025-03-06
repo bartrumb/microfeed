@@ -2,13 +2,9 @@ import React from "react";
 import EdgeHomeApp from '../edge-src/EdgeHomeApp';
 import { WebResponseBuilder } from '../edge-src/common/PageUtils';
 import { STATUSES } from "../common-src/Constants";
-import type { D1Database } from '@cloudflare/workers-types';
 import { FeedContent, OnboardingResult } from "../common-src/types/FeedContent";
 import Theme from "../edge-src/models/Theme";
-
-interface Env {
-  FEED_DB: D1Database;
-}
+import type { Env } from '../common-src/types/CloudflareTypes';
 
 interface RequestContext {
   env: Env;

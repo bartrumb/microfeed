@@ -1,13 +1,5 @@
 import { onFetchFeedJsonRequestGet } from "../../edge-src/EdgeCommonRequests";
-import type { D1Database } from '@cloudflare/workers-types';
-
-interface Env {
-  FEED_DB: D1Database;
-  R2_ACCESS_KEY_ID: string;
-  R2_SECRET_ACCESS_KEY: string;
-  CLOUDFLARE_ACCOUNT_ID: string;
-  R2_PUBLIC_BUCKET: string;
-}
+import type { Env } from '../../common-src/types/CloudflareTypes';
 
 interface RequestContext {
   env: Env;

@@ -26,6 +26,10 @@ export interface Env {
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_PROJECT_NAME: string;
   R2_PUBLIC_BUCKET: string;
+
+  // R2 Credentials
+  R2_ACCESS_KEY_ID: string;
+  R2_SECRET_ACCESS_KEY: string;
 }
 
 export interface Context {
