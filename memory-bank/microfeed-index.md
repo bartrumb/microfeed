@@ -1,6 +1,6 @@
 # Microfeed Project File Index
 
-Generated on: 2025-03-05 18:19:54
+Generated on: 2025-03-05 18:34:00
 
 This index provides a structured view of the microfeed project source code.
 
@@ -20,20 +20,20 @@ This index provides a structured view of the microfeed project source code.
 | Category | Count | Total Size |
 |----------|-------|------------|
 | Web Resources | 4 | 50.32 KB |
-| Documentation | 9 | 64.28 KB |
-| JavaScript/TypeScript | 68 | 195.53 KB |
+| Documentation | 9 | 64.24 KB |
+| JavaScript/TypeScript | 69 | 201.59 KB |
 | React Components | 107 | 331.38 KB |
-| Configuration | 4 | 8.99 KB |
+| Configuration | 4 | 9.08 KB |
 
 ## Top-Level Directories
 
 - **client-src/** - 92 files, 311.73 KB
 - **cloudflare/** - 0 files, 0 B
-- **common-src/** - 12 files, 42.12 KB
+- **common-src/** - 12 files, 42.42 KB
 - **docs/** - 1 files, 3.33 KB
-- **edge-src/** - 28 files, 147.57 KB
+- **edge-src/** - 29 files, 153.24 KB
 - **functions/** - 29 files, 33.95 KB
-- **memory-bank/** - 7 files, 40.18 KB
+- **memory-bank/** - 7 files, 40.13 KB
 - **ops/** - 10 files, 31.95 KB
 - **public/** - 3 files, 1.80 KB
 
@@ -85,7 +85,7 @@ This index provides a structured view of the microfeed project source code.
 | activeContext.md | 2.52 KB | 2025-03-05 16:26:23 |
 | decisionLog.md | 1.71 KB | 2025-03-05 17:25:50 |
 | fileStructureUpdate.md | 3.11 KB | 2025-03-03 19:42:28 |
-| microfeed-index.md | 23.77 KB | 2025-03-05 18:12:32 |
+| microfeed-index.md | 23.72 KB | 2025-03-05 18:19:54 |
 | productContext.md | 3.92 KB | 2025-03-01 16:23:07 |
 | progress.md | 2.05 KB | 2025-03-05 17:32:24 |
 | typeCheckingPlan.md | 3.10 KB | 2025-03-05 17:25:28 |
@@ -98,7 +98,7 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | .eslintrc.ts | 1.36 KB | 2025-03-03 02:01:07 |
-| jest.config.ts | 291 B | 2025-02-28 10:18:55 |
+| jest.config.ts | 388 B | 2025-03-05 18:29:48 |
 | jest.setup.ts | 1.32 KB | 2025-02-28 10:21:45 |
 | postcss.config.ts | 85 B | 2025-02-28 23:30:30 |
 | tailwind.config.ts | 2.81 KB | 2025-02-28 23:37:38 |
@@ -188,9 +188,9 @@ This index provides a structured view of the microfeed project source code.
 | MediaFileUtils.ts | 2.43 KB | 2025-03-05 18:17:46 |
 | OnboardingUtils.ts | 2.29 KB | 2025-03-05 17:48:16 |
 | R2Utils.ts | 1.10 KB | 2025-03-05 17:52:01 |
-| StringUtils.test.js | 1.31 KB | 2025-02-28 09:34:28 |
+| StringUtils.test.ts | 1.44 KB | 2025-03-05 18:22:57 |
 | StringUtils.ts | 10.04 KB | 2025-03-03 19:04:58 |
-| TimeUtils.test.js | 673 B | 2025-02-28 09:34:28 |
+| TimeUtils.test.ts | 836 B | 2025-03-05 18:29:13 |
 | TimeUtils.ts | 2.79 KB | 2025-03-03 19:05:30 |
 | Version.ts | 73 B | 2025-02-28 23:43:03 |
 
@@ -216,6 +216,7 @@ This index provides a structured view of the microfeed project source code.
 | File | Size | Last Modified |
 |------|------|---------------|
 | DatabaseInitializer.test.js | 5.24 KB | 2025-02-28 10:24:19 |
+| DatabaseInitializer.test.ts | 5.67 KB | 2025-03-05 18:33:47 |
 | DatabaseInitializer.ts | 3.78 KB | 2025-03-05 17:36:43 |
 | FeedCrudManager.test.js | 2.67 KB | 2025-02-28 09:34:28 |
 | FeedCrudManager.ts | 4.28 KB | 2025-03-05 17:42:14 |
@@ -793,7 +794,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| package.json | 2.98 KB | 2025-03-05 16:41:44 |
+| package.json | 3.07 KB | 2025-03-05 18:29:24 |
 | tsconfig.json | 709 B | 2025-03-03 00:14:03 |
 | wrangler.json | 872 B | 2025-03-05 16:44:17 |
 
@@ -808,6 +809,12 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Type | Size | Last Modified |
 |------|------|------|---------------|
+| edge-src\models\DatabaseInitializer.test.ts | JavaScript/TypeScript | 5.67 KB | 2025-03-05 18:33:47 |
+| jest.config.ts | JavaScript/TypeScript | 388 B | 2025-03-05 18:29:48 |
+| package.json | Configuration | 3.07 KB | 2025-03-05 18:29:24 |
+| common-src\TimeUtils.test.ts | JavaScript/TypeScript | 836 B | 2025-03-05 18:29:13 |
+| common-src\StringUtils.test.ts | JavaScript/TypeScript | 1.44 KB | 2025-03-05 18:22:57 |
+| memory-bank\microfeed-index.md | Documentation | 23.72 KB | 2025-03-05 18:19:54 |
 | functions\json\index.tsx | React Components | 456 B | 2025-03-05 18:19:03 |
 | common-src\MediaFileUtils.ts | JavaScript/TypeScript | 2.43 KB | 2025-03-05 18:17:46 |
 | functions\sitemap.xml.tsx | React Components | 711 B | 2025-03-05 18:16:01 |
@@ -816,16 +823,10 @@ This index provides a structured view of the microfeed project source code.
 | edge-src\EdgeCommonRequests\index.tsx | React Components | 3.56 KB | 2025-03-05 18:14:53 |
 | client-src\ClientAdminItemsApp\components\EditItemApp\types.ts | JavaScript/TypeScript | 3.40 KB | 2025-03-05 18:14:25 |
 | client-src\ClientAdminItemsApp\components\AllItemsApp\index.tsx | React Components | 8.43 KB | 2025-03-05 18:13:56 |
-| memory-bank\microfeed-index.md | Documentation | 23.77 KB | 2025-03-05 18:12:32 |
 | client-src\ClientAdminHomeApp\components\AdminHomeApp\index.tsx | React Components | 2.31 KB | 2025-03-05 18:09:41 |
 | client-src\ClientAdminChannelApp\components\EditChannelApp\index.tsx | React Components | 15.01 KB | 2025-03-05 18:08:31 |
 | functions\admin\feed\json.tsx | React Components | 414 B | 2025-03-05 18:06:30 |
 | functions\admin\channels\index.tsx | React Components | 336 B | 2025-03-05 18:05:30 |
 | edge-src\common\ViteUtils.ts | JavaScript/TypeScript | 3.36 KB | 2025-03-05 18:04:37 |
 | edge-src\common\RouteUtils.ts | JavaScript/TypeScript | 1.26 KB | 2025-03-05 18:03:49 |
-| edge-src\common\PageUtils.tsx | React Components | 10.40 KB | 2025-03-05 18:02:12 |
-| edge-src\models\Theme.ts | JavaScript/TypeScript | 5.29 KB | 2025-03-05 18:01:17 |
-| edge-src\models\FeedDb.ts | JavaScript/TypeScript | 5.39 KB | 2025-03-05 17:58:25 |
-| client-src\ClientAdminHomeApp\components\AdminHomeApp\component\WhatsNewApp\index.tsx | React Components | 3.21 KB | 2025-03-05 17:57:11 |
-| client-src\components\AdminNavApp\index.tsx | React Components | 5.82 KB | 2025-03-05 17:56:40 |
 
