@@ -93,17 +93,21 @@ class DatabaseInitializer {
 
   private async insertDefaultContent(): Promise<InitializationResult> {
     try {
+      // First check if any content exists
+      const existingContent = await this.db.prepare('SELECT COUNT(*) as count FROM feed_content').first();
+      if (existingContent && (existingContent.count as number) > 0) {
+        return { success: true };
+      }
+
       const defaultContent: FeedContent = {
         channel: this.getDefaultChannel(),
         items: [],
         settings: this.getDefaultSettings()
       };
 
-      const stmt = this.db.prepare(
+      await this.db.prepare(
         'INSERT INTO feed_content (channel, items, settings) VALUES (?, ?, ?)'
-      );
-
-      await stmt.bind(
+      ).bind(
         JSON.stringify(defaultContent.channel),
         JSON.stringify(defaultContent.items),
         JSON.stringify(defaultContent.settings)
@@ -126,14 +130,10 @@ class DatabaseInitializer {
         return tablesResult;
       }
 
-      // Check if content exists
-      const content = await this.db.prepare('SELECT * FROM feed_content').first();
-      if (!content) {
-        // Insert default content if none exists
-        const contentResult = await this.insertDefaultContent();
-        if (!contentResult.success) {
-          return contentResult;
-        }
+      // Insert default content if none exists
+      const contentResult = await this.insertDefaultContent();
+      if (!contentResult.success) {
+        return contentResult;
       }
 
       return { success: true };
