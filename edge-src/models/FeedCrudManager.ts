@@ -122,7 +122,12 @@ export class FeedCrudManager {
   }
 
   async setItemAsDraft(itemId: string): Promise<void> {
-    this.feedContent.item = {
+    if (!this.feedContent.items) {
+      this.feedContent.items = [];
+    }
+
+    const existingItemIndex = this.feedContent.items.findIndex(item => item.id === itemId);
+    const draftItem: Item = {
       id: itemId,
       status: 0,
       title: '',
@@ -130,8 +135,22 @@ export class FeedCrudManager {
       description: '',
       link: '',
       author: '',
-      categories: []
+      categories: [],
+      updated_at: new Date().toISOString()
     };
+
+    if (existingItemIndex !== -1) {
+      // Update existing item
+      this.feedContent.items[existingItemIndex] = {
+        ...this.feedContent.items[existingItemIndex],
+        ...draftItem
+      };
+    } else {
+      // Add new draft item
+      draftItem.created_at = new Date().toISOString();
+      this.feedContent.items.push(draftItem);
+    }
+
     await this.feedDb.updateContent(this.feedContent);
   }
 

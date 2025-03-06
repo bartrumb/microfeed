@@ -18,10 +18,12 @@ async function addSecurityHeaders({ request, next }: Context): Promise<Response>
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https:",
-      "connect-src 'self' https://www.microfeed.org",
+      "img-src 'self' data: https: *.pages.dev",
+      "connect-src 'self' https://www.microfeed.org https://*.pages.dev",
       "font-src 'self' data:",
-      "manifest-src 'self'"
+      "manifest-src 'self'",
+      "worker-src 'self'",
+      "frame-src 'self'"
     ].join('; ')
   );
 
