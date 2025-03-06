@@ -9,12 +9,12 @@
     "build": "node -r dotenv/config ./node_modules/vite/bin/vite.js build --mode production",
     "build:dev": "node -r dotenv/config ./node_modules/vite/bin/vite.js build --mode development",
     "dev:worker": "wrangler pages dev dist --compatibility-date=2024-02-28 --d1 FEED_DB --ip 0.0.0.0 --port 8788",
-    "deploy:dev": "npx cross-env DEPLOYMENT_ENVIRONMENT=development pnpm build:dev && tsc -p ops/tsconfig.json && node dist/ops/deploy.js development",
-    "deploy:preview": "npx cross-env DEPLOYMENT_ENVIRONMENT=preview pnpm build:dev && tsc -p ops/tsconfig.json && node dist/ops/deploy.js preview",
-    "deploy:production": "npx cross-env DEPLOYMENT_ENVIRONMENT=production pnpm build && tsc -p ops/tsconfig.json && node dist/ops/deploy.js production",
-    "db:init:dev": "npx cross-env DEPLOYMENT_ENVIRONMENT=development tsc -p ops/tsconfig.json && node dist/ops/init_feed_db.js",
-    "db:init:preview": "npx cross-env DEPLOYMENT_ENVIRONMENT=preview tsc -p ops/tsconfig.json && node dist/ops/init_feed_db.js",
-    "db:init:production": "npx cross-env DEPLOYMENT_ENVIRONMENT=production tsc -p ops/tsconfig.json && node dist/ops/init_feed_db.js"
+    "deploy:dev": "npx cross-env DEPLOYMENT_ENVIRONMENT=development pnpm build:dev && npx cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/deploy.ts development",
+    "deploy:preview": "npx cross-env DEPLOYMENT_ENVIRONMENT=preview pnpm build:dev && npx cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/deploy.ts preview",
+    "deploy:production": "npx cross-env DEPLOYMENT_ENVIRONMENT=production pnpm build && npx cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/deploy.ts production",
+    "db:init:dev": "npx cross-env DEPLOYMENT_ENVIRONMENT=development NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/init_feed_db.ts",
+    "db:init:preview": "npx cross-env DEPLOYMENT_ENVIRONMENT=preview NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/init_feed_db.ts",
+    "db:init:production": "npx cross-env DEPLOYMENT_ENVIRONMENT=production NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/init_feed_db.ts"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.4",

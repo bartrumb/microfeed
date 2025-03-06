@@ -10,7 +10,13 @@
     "skipLibCheck": true,
     "allowJs": true,
     "declaration": true,
-    "types": ["node"]
+    "types": ["node"],
+    "isolatedModules": true,
+    "preserveValueImports": true,
+    "verbatimModuleSyntax": true
+  },
+  "ts-node": {
+    "esm": true
   },
   "include": ["./**/*"],
   "exclude": ["node_modules"]
