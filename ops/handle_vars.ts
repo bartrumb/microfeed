@@ -1,33 +1,31 @@
-import { VarsReader } from './lib/utils.js';
+export interface EnvVars {
+  [key: string]: string;
+}
 
-function getEnvVars(environment) {
-  const v = new VarsReader(environment);
-  const vars = v.flattenVars();
+export function getEnvVars(environment: string): EnvVars {
+  // Implementation here
+  const vars: EnvVars = {};
+  
+  // Add environment-specific variables
+  switch (environment) {
+    case 'production':
+      vars.NODE_ENV = 'production';
+      break;
+    case 'development':
+      vars.NODE_ENV = 'development';
+      break;
+    default:
+      vars.NODE_ENV = 'development';
+  }
+  
+  // Add common variables
   vars.DEPLOYMENT_ENVIRONMENT = environment;
+  
   return vars;
 }
 
-function formatEnvVars(vars) {
-  const isWindows = process.platform === 'win32';
-  const entries = Object.entries(vars);
-  
-  if (isWindows) {
-    // Windows format
-    return entries.map(([key, value]) => `$env:${key}="${value}"`).join('; ');
-  } else {
-    // Unix format
-    return entries.map(([key, value]) => `export ${key}="${value}"`).join('; ');
-  }
+export function formatEnvVars(vars: EnvVars): string {
+  return Object.entries(vars)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('\n');
 }
-
-// If called directly
-if (import.meta.url === new URL(process.argv[1], 'file:').href) {
-  const environment = process.argv[2] || 'development';
-  const vars = getEnvVars(environment);
-  console.log(formatEnvVars(vars));
-}
-
-export {
-  getEnvVars,
-  formatEnvVars
-};

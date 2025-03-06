@@ -1,7 +1,8 @@
-const https = require('https');
-const {VarsReader, WranglerCmd} = require('./lib/utils');
+import * as https from 'https';
+import { VarsReader, WranglerCmd } from './lib/utils.js';
+import type { VarDict, SyncProjectConfig as SyncProjectConfigType } from './lib/types.js';
 
-const ALLOWED_VARS = [
+const ALLOWED_VARS: VarDict[] = [
   {name: 'CLOUDFLARE_ACCOUNT_ID', encrypted: true, required: true},
   {name: 'CLOUDFLARE_PROJECT_NAME', encrypted: true, required: true},
   {name: 'CLOUDFLARE_API_TOKEN', encrypted: true, required: true},
@@ -17,16 +18,19 @@ const ALLOWED_VARS = [
   {name: 'MICROFEED_VERSION', encrypted: false, required: false},
 ];
 
-class SyncProjectConfig {
+class SyncProjectConfig implements SyncProjectConfigType {
+  readonly currentEnv: string;
+  readonly v: VarsReader;
+  readonly cmd: WranglerCmd;
+
   constructor() {
     this.currentEnv = process.env.DEPLOYMENT_ENVIRONMENT || 'production';
     this.v = new VarsReader(this.currentEnv);
     this.cmd = new WranglerCmd(process.env.DEPLOYMENT_ENVIRONMENT || 'development');
   }
 
-  _getEnvVarsFromFilesJson(envName, databaseId) {
-    // https://api.cloudflare.com/#pages-project-get-projects
-    const envVarsJson = {
+  _getEnvVarsFromFilesJson(envName: string, databaseId: string): Record<string, any> {
+    const envVarsJson: Record<string, any> = {
       [envName]: {
         'env_vars': {
           'DEPLOYMENT_ENVIRONMENT': this.currentEnv,
@@ -50,7 +54,7 @@ class SyncProjectConfig {
     return envVarsJson;
   }
 
-  _updateEnvVars(data, onSuccess) {
+  _updateEnvVars(data: string, onSuccess: (json: any) => void): void {
     const options = {
       hostname: 'api.cloudflare.com',
       port: 443,
@@ -64,22 +68,18 @@ class SyncProjectConfig {
     };
 
     const req = https.request(options, (res) => {
-      // console.log('statusCode:', res.statusCode);
-      // console.log('headers:', res.headers);
       let body = '';
-      res.on('data', (d) => {
-        // d.result.deployment_configs.preview
-        // d.result.deployment_configs.production
-        // process.stdout.write(d);
-        // onSuccess(d);
-        body += d;
+      res.on('data', (d: Buffer) => {
+        body += d.toString();
       });
       res.on("end", () => {
         try {
-          let json = JSON.parse(body);
+          const json = JSON.parse(body);
           onSuccess(json);
         } catch (error) {
-          console.error(error.message);
+          if (error instanceof Error) {
+            console.error(error.message);
+          }
           process.exit(1);
         }
       });
@@ -93,11 +93,11 @@ class SyncProjectConfig {
     req.end();
   }
 
-  syncEnvVars() {
+  syncEnvVars(): void {
     console.log(`Sync-ing for [${this.currentEnv}]...`);
 
     // ensure that required vars are set
-    let missingVars = [];
+    const missingVars: string[] = [];
     ALLOWED_VARS.forEach((varDict) => {
       if (varDict.required && !this.v.get(varDict.name)) {
         missingVars.push(varDict.name);
@@ -112,7 +112,6 @@ class SyncProjectConfig {
       console.error(`Invalid project name: ${this.v.get('CLOUDFLARE_PROJECT_NAME')}`);
       process.exit(1);
     }
-
 
     this.cmd.getDatabaseId((databaseId) => {
       console.log('Database id (num of chars): ', databaseId.length)

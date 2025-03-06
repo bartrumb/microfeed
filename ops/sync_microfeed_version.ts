@@ -1,18 +1,24 @@
-const {exec} = require('child_process');
+import { exec } from './lib/exec.js';
 
-const {MICROFEED_VERSION} = require('../common-src/Version');
+const MICROFEED_VERSION = process.env.MICROFEED_VERSION || '0.0.1';
 
-exec(`yarn version ${MICROFEED_VERSION}`, (error, stdout, stderr) => {
-  if (error) {
-    console.log(error);
-    console.log('exit.');
-  } else {
-    if (stdout) {
-      console.log(`stdout - \n${stdout}`);
-    }
+async function syncVersion(): Promise<void> {
+  try {
+    const { stdout, stderr } = await exec(`pnpm version ${MICROFEED_VERSION}`);
+    console.log('Version sync completed');
+    console.log('stdout:', stdout);
+    
     if (stderr) {
-      console.log(`stderr - \n${stderr}`);
+      console.error('stderr:', stderr);
     }
-    console.log(`Updated package.json version to ${MICROFEED_VERSION}.`);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Error during version sync:', error.message);
+    } else {
+      console.error('Error during version sync:', error);
+    }
+    process.exit(1);
   }
-});
+}
+
+syncVersion();

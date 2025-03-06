@@ -1,83 +1,54 @@
-import { WranglerCmd } from "./lib/utils.js";
-import fs from 'fs';
+import * as fs from 'fs';
+import { WranglerCmd } from './lib/utils.js';
+import type { CloudflareDatabase } from './lib/types.js';
 
-const cmd = new WranglerCmd(process.env.DEPLOYMENT_ENVIRONMENT || 'development');
-
-// Helper function to update wrangler.toml with database ID
-function updateWranglerToml(databaseId) {
-  const wranglerPath = 'wrangler.toml';
-  const currentEnv = process.env.DEPLOYMENT_ENVIRONMENT || 'development';
-
-  // Read existing config
-  let existingConfig = '';
-  try {
-    existingConfig = fs.readFileSync(wranglerPath, 'utf8');
-  } catch (error) {
-    console.warn('No existing wrangler.toml found, creating new one');
-  }
-
-  // Remove any existing database configurations for the current environment
-  if (currentEnv === 'development') {
-    // Remove base database config
-    existingConfig = existingConfig.replace(/\[\[d1_databases\]\][^\[]*/, '');
+function updateWranglerToml(databaseId: string): void {
+  const wranglerPath = './wrangler.toml';
+  
+  if (fs.existsSync(wranglerPath)) {
+    let content = fs.readFileSync(wranglerPath, 'utf8');
+    // Update the database ID in the content
+    content = content.replace(/database_id = ".*"/, `database_id = "${databaseId}"`);
+    fs.writeFileSync(wranglerPath, content);
+    console.log('Updated wrangler.toml with new database ID');
   } else {
-    // Remove environment-specific config
-    const envRegex = new RegExp(`\\[\\[env\\.${currentEnv}\\.d1_databases\\]\\][^\\[]*`, 'g');
-    existingConfig = existingConfig.replace(envRegex, '');
-  }
-
-  // Create new database configuration
-  const dbConfig = currentEnv === 'development'
-    ? `[[d1_databases]]
-binding = "FEED_DB"
-database_name = "${cmd._non_dev_db()}"
-database_id = "${databaseId}"`
-    : `[[env.${currentEnv}.d1_databases]]
-binding = "FEED_DB"
-database_name = "${cmd._non_dev_db()}"
-database_id = "${databaseId}"`;
-
-  // Write updated configuration
-  fs.writeFileSync(wranglerPath, existingConfig ? `${existingConfig.trim()}\n\n${dbConfig}\n` : `${dbConfig}\n`);
-  console.log(`Updated wrangler.toml with database ID: ${databaseId}`);
-}
-
-async function initializeDatabase() {
-  try {
-    // Check for existing database
-    const existingId = await new Promise((resolve) => cmd.getDatabaseId(resolve));
-    
-    if (existingId) {
-      console.log('Found existing database:', existingId);
-      console.log('Deleting existing database...');
-      await new Promise((resolve) => cmd.deleteDatabase(existingId, resolve));
-    }
-
-    // Create new database
-    console.log('Creating new database...');
-    const result = await new Promise((resolve) => cmd.createDatabaseViaApi(resolve));
-
-    if (!result) {
-      throw new Error('Failed to create database');
-    }
-
-    console.log('Database created successfully:', result.uuid);
-    console.log('Database name:', result.name);
-    
-    updateWranglerToml(result.uuid);
-
-    // Initialize database tables using new command execution method
-    console.log('Creating tables...');
-    cmd.createFeedDbTables();
-
-    // Execute SQL initialization script on remote database
-    console.log('Initializing remote database tables...');
-    cmd.createFeedDbTablesRemote();
-    
-  } catch (error) {
-    console.error('Database initialization failed:', error);
+    console.error('wrangler.toml not found');
     process.exit(1);
   }
 }
 
-initializeDatabase();
+async function createDatabase(): Promise<void> {
+  const cmd = new WranglerCmd(process.env.DEPLOYMENT_ENVIRONMENT || 'development');
+
+  try {
+    // Create a new database
+    console.log('Creating new database...');
+    await new Promise<void>((resolve, reject) => {
+      cmd.createDatabaseViaApi((result) => {
+        if (result && result.uuid) {
+          console.log('Database created successfully:', result.uuid);
+          console.log('Database name:', result.name);
+          updateWranglerToml(result.uuid);
+          resolve();
+        } else {
+          reject(new Error('Failed to create database'));
+        }
+      });
+    });
+
+    // Initialize tables
+    console.log('Initializing database tables...');
+    cmd.createFeedDbTablesRemote();
+    console.log('Database tables initialized successfully');
+    
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Error during database initialization:', error.message);
+    } else {
+      console.error('Error during database initialization:', error);
+    }
+    process.exit(1);
+  }
+}
+
+createDatabase();

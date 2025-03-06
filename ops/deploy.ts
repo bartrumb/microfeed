@@ -1,8 +1,8 @@
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { WranglerCmd } from './lib/utils';
-import { Stats } from 'fs';
+import { WranglerCmd } from './lib/utils.js';
+import type { Stats } from 'fs';
 
 interface DatabaseResult {
   uuid: string;
