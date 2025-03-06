@@ -2,27 +2,69 @@ import { describe, expect, jest, test, beforeEach } from '@jest/globals';
 import { Env } from '../../common-src/types/CloudflareTypes';
 import { FeedContent, ChannelData, SettingsData, SETTINGS_CATEGORY } from '../../common-src/types/FeedContent';
 import DatabaseInitializer from './DatabaseInitializer';
+import type { D1Database, D1PreparedStatement, D1Result, D1ExecResult, D1Response } from '@cloudflare/workers-types';
 
 // Helper function to create a type-safe mock D1PreparedStatement
 function createMockPreparedStatement() {
-  return {
-    bind: jest.fn(function(this: any) { return this; }) as jest.MockedFunction<D1PreparedStatement['bind']>,
-    run: jest.fn().mockResolvedValue({ success: true, meta: {}, results: [] }) as jest.MockedFunction<D1PreparedStatement['run']>,
-    first: jest.fn().mockResolvedValue(null) as jest.MockedFunction<D1PreparedStatement['first']>,
-    all: jest.fn().mockResolvedValue({ results: [] }) as jest.MockedFunction<D1PreparedStatement['all']>,
+  const mockResponse: D1Result = {
+    results: [],
+    meta: {
+      duration: 0,
+      size_after: 0,
+      rows_read: 0,
+      rows_written: 0,
+      last_row_id: 0,
+      changed_db: false,
+      changes: 0
+    },
+    success: true
   };
+
+  const stmt = {
+    bind: jest.fn().mockReturnThis(),
+    run: jest.fn().mockImplementation(() => Promise.resolve(mockResponse)),
+    first: jest.fn().mockImplementation(() => Promise.resolve(null)),
+    all: jest.fn().mockImplementation(() => Promise.resolve(mockResponse)),
+    raw: jest.fn().mockImplementation(() => Promise.resolve(null)),
+    text: jest.fn().mockReturnValue(""),
+    toString: jest.fn().mockReturnValue("")
+  };
+
+  return stmt as unknown as jest.Mocked<D1PreparedStatement>;
 }
 
 // Helper function to create a type-safe mock D1Database
 function createMockD1Database() {
   const mockPreparedStatement = createMockPreparedStatement();
-  return {
-    prepare: jest.fn().mockReturnValue(mockPreparedStatement) as jest.MockedFunction<D1Database['prepare']>,
-    batch: jest.fn().mockResolvedValue([{ success: true, meta: {}, results: [] }]) as jest.MockedFunction<D1Database['batch']>,
-    dump: jest.fn() as jest.MockedFunction<D1Database['dump']>,
-    exec: jest.fn() as jest.MockedFunction<D1Database['exec']>,
-    _mockPreparedStatement: mockPreparedStatement, // For test access
+  
+  const mockResponse: D1Result = {
+    results: [],
+    meta: {
+      duration: 0,
+      size_after: 0,
+      rows_read: 0,
+      rows_written: 0,
+      last_row_id: 0,
+      changed_db: false,
+      changes: 0
+    },
+    success: true
   };
+
+  const mockD1ExecResult: D1ExecResult = {
+    count: 0,
+    duration: 0
+  };
+
+  const db = {
+    prepare: jest.fn().mockReturnValue(mockPreparedStatement),
+    batch: jest.fn().mockImplementation(() => Promise.resolve([mockResponse])),
+    dump: jest.fn().mockImplementation(() => Promise.resolve(new ArrayBuffer(0))),
+    exec: jest.fn().mockImplementation(() => Promise.resolve(mockD1ExecResult)),
+    _mockPreparedStatement: mockPreparedStatement
+  };
+
+  return db as unknown as jest.Mocked<D1Database> & { _mockPreparedStatement: jest.Mocked<D1PreparedStatement> };
 }
 
 describe('DatabaseInitializer', () => {
@@ -36,7 +78,7 @@ describe('DatabaseInitializer', () => {
 
     // Create complete mock environment
     mockEnv = {
-      MICROFEED_DB: mockDb as unknown as D1Database,
+      MICROFEED_DB: mockDb,
       MICROFEED_BUCKET: {} as any,
       MICROFEED_KV: {} as any,
       CLOUDFLARE_ACCOUNT_ID: 'test-account',
@@ -59,7 +101,8 @@ describe('DatabaseInitializer', () => {
     });
 
     test('should only create tables when content already exists', async () => {
-      mockDb._mockPreparedStatement.first.mockResolvedValueOnce({ id: '1', data: 'test' });
+      // Use type assertion to ensure it matches what first() is expected to return
+      mockDb._mockPreparedStatement.first.mockResolvedValueOnce({ id: '1', data: 'test' } as any);
 
       const result = await dbInitializer.initialize();
 

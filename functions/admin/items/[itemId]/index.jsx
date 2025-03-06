@@ -2,7 +2,7 @@ import React from "react";
 import EdgeAdminItemsApp from '../../../../edge-src/EdgeAdminItemsApp/Edit';
 import FeedDb from "../../../../edge-src/models/FeedDb";
 import {renderReactToHtml} from "../../../../edge-src/common/PageUtils";
-import OnboardingChecker from "../../../../common-src/OnboardingUtils";
+import {OnboardingChecker} from "../../../../common-src/OnboardingUtils";
 import {STATUSES} from "../../../../common-src/Constants";
 
 export async function onRequestGet({env, params, request}) {
@@ -20,8 +20,8 @@ export async function onRequestGet({env, params, request}) {
   if (!content.item || content.item.status === STATUSES.DELETED) {
     return new Response('Not found', {status:404});
   }
-  const onboardingChecker = new OnboardingChecker(content, request, env);
-  const onboardingResult = onboardingChecker.getResult()
+  const onboardingChecker = new OnboardingChecker(env);
+  const onboardingResult = await onboardingChecker.checkAll();
   const fromReact = renderReactToHtml(
     <EdgeAdminItemsApp
       feedContent={content}

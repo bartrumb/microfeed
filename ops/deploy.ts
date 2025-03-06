@@ -1,14 +1,20 @@
 import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import { WranglerCmd } from './lib/utils.js';
+import * as fs from 'fs';
+import * as path from 'path';
+import { WranglerCmd } from './lib/utils';
+import { Stats } from 'fs';
 
-async function ensureDatabase(env) {
+interface DatabaseResult {
+  uuid: string;
+  name: string;
+}
+
+async function ensureDatabase(env: string): Promise<string> {
   console.log(`Checking database for ${env} environment...`);
   const cmd = new WranglerCmd(env);
 
   // Check for existing database
-  const existingId = await new Promise((resolve) => cmd.getDatabaseId(resolve));
+  const existingId = await new Promise<string>((resolve) => cmd.getDatabaseId(resolve));
   
   if (existingId) {
     console.log('Using existing database:', existingId);
@@ -17,7 +23,7 @@ async function ensureDatabase(env) {
 
   // Create new database if none exists
   console.log('No existing database found, creating new one...');
-  const result = await new Promise((resolve) => cmd.createDatabaseViaApi(resolve));
+  const result = await new Promise<DatabaseResult | null>((resolve) => cmd.createDatabaseViaApi(resolve));
 
   if (!result) {
     throw new Error('Failed to create database');
@@ -33,7 +39,7 @@ async function ensureDatabase(env) {
   return result.uuid;
 }
 
-async function updateWranglerConfig(env) {
+async function updateWranglerConfig(env: string): Promise<void> {
   // First ensure database exists
   const databaseId = await ensureDatabase(env);
 
@@ -47,8 +53,8 @@ async function updateWranglerConfig(env) {
   // Read existing config
   const config = JSON.parse(fs.readFileSync(wranglerPath, 'utf8'));
 
-  const wranglerCmd = new WranglerCmd(env);
-  const dbName = wranglerCmd._non_dev_db();
+  const cmd = new WranglerCmd(env);
+  const dbName = cmd._non_dev_db();
 
   if (env === 'production') {
     // Update production environment config
@@ -78,7 +84,7 @@ async function updateWranglerConfig(env) {
  * Create an initial manifest file before build
  * This ensures the build process has access to manifest data
  */
-async function createInitialManifest() {
+async function createInitialManifest(): Promise<void> {
   const virtualPath = path.join('edge-src', 'common', 'manifest-virtual.js');
   
   // Create a minimal initial manifest
@@ -92,7 +98,7 @@ export const manifestData = {}; // Will be populated with real data after build
   console.log('Created initial manifest-virtual.js for build');
 }
 
-async function updateManifestAfterBuild() {
+async function updateManifestAfterBuild(): Promise<void> {
   const manifestPath = path.join('dist', '.vite', 'manifest.json');
   const virtualPath = path.join('edge-src', 'common', 'manifest-virtual.js');
   
@@ -123,7 +129,7 @@ export const manifestData = ${JSON.stringify(manifestData, null, 2)};
  * Copy static assets from public directory to dist directory
  * This is needed because we have publicDir: false in vite.config.js
  */
-async function copyStaticAssets() {
+async function copyStaticAssets(): Promise<void> {
   // Static assets from public directory
   const publicAssetDirs = [
     ['public/assets/favicon', 'assets/favicon'],
@@ -195,10 +201,10 @@ async function copyStaticAssets() {
 /**
  * Recursively copy a directory
  */
-function copyRecursive(src, dest) {
+function copyRecursive(src: string, dest: string): void {
   const exists = fs.existsSync(src);
   const stats = exists && fs.statSync(src);
-  const isDirectory = exists && stats.isDirectory();
+  const isDirectory = exists && stats && (stats as Stats).isDirectory();
 
   if (isDirectory) {
     fs.mkdirSync(dest, { recursive: true });
@@ -217,7 +223,7 @@ function copyRecursive(src, dest) {
  * Rebuild the project with updated manifest
  * This is needed to ensure the HTML files include correct script references
  */
-async function rebuildWithManifest(env) {
+async function rebuildWithManifest(env: string): Promise<void> {
   console.log(`Rebuilding project with updated manifest for ${env} environment...`);
   
   // Set environment variables for the second build
@@ -233,7 +239,7 @@ async function rebuildWithManifest(env) {
   console.log('Rebuild complete with proper manifest data');
 }
 
-async function deploy() {
+async function deploy(): Promise<void> {
   try {
     // Get environment from command line args
     const env = process.argv[2] || 'preview';
@@ -262,10 +268,10 @@ async function deploy() {
     
     // Run deployment using WranglerCmd
     console.log(`Deploying to ${env}...`);
-    const wranglerCmd = new WranglerCmd(env);
+    const cmd = new WranglerCmd(env);
     execSync(`npx wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle`, {
       stdio: 'inherit',
-      env: { ...process.env, ...wranglerCmd._getEnvVars() }
+      env: { ...process.env, ...cmd._getEnvVars() }
     });
     
   } catch (error) {

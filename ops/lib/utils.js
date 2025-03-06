@@ -1,7 +1,7 @@
-import fs from 'fs';
+import * as fs from 'fs';
 import toml from 'toml';
-import https from 'https';
-import crypto from 'crypto';
+import * as https from 'https';
+import * as crypto from 'crypto';
 import { execSync } from 'child_process';
 
 export class VarsReader {
