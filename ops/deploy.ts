@@ -269,7 +269,7 @@ async function deploy(): Promise<void> {
     // Run deployment using WranglerCmd
     console.log(`Deploying to ${env}...`);
     const cmd = new WranglerCmd(env);
-    execSync(`npx wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle`, {
+    execSync(`npx wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle --commit-dirty=true`, {
       stdio: 'inherit',
       env: { ...process.env, ...cmd._getEnvVars() }
     });

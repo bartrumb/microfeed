@@ -18,7 +18,7 @@ interface ExtendedR2Bucket extends R2Bucket {
 
 export interface Env {
   // Database and Storage
-  MICROFEED_DB: D1Database;
+  FEED_DB: D1Database;
   MICROFEED_BUCKET: ExtendedR2Bucket;
   MICROFEED_KV: KVNamespace;
 

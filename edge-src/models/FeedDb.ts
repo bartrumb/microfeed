@@ -32,7 +32,7 @@ class FeedDb {
   private request?: Request;
 
   constructor(env: Env, request?: Request) {
-    this.db = env.MICROFEED_DB;
+    this.db = env.FEED_DB;
     this.env = env;
     this.request = request;
   }

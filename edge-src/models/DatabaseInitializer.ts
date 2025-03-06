@@ -16,7 +16,7 @@ class DatabaseInitializer {
   private env: Env;
 
   constructor(env: Env) {
-    this.db = env.MICROFEED_DB;
+    this.db = env.FEED_DB;
     this.env = env;
   }
 

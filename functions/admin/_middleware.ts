@@ -2,6 +2,13 @@ import { Context } from "../../common-src/types/CloudflareTypes";
 import FeedDb from "../../edge-src/models/FeedDb";
 import { FeedCrudManager, getFetchItemsParams } from "../../edge-src/models/FeedCrudManager";
 import { OnboardingResult } from "../../common-src/types/FeedContent";
+import DatabaseInitializer from "../../edge-src/models/DatabaseInitializer";
+
+// Import InitializationResult interface
+interface InitializationResult {
+  success: boolean;
+  error?: string;
+}
 
 async function addSecurityHeaders({ request, next }: Context): Promise<Response> {
   const response = await next?.();
@@ -25,7 +32,18 @@ async function addSecurityHeaders({ request, next }: Context): Promise<Response>
   });
 }
 
+async function initializeDatabase({ env }: Context): Promise<InitializationResult> {
+  const initializer = new DatabaseInitializer(env);
+  return initializer.initialize();
+}
+
 async function fetchFeed({ request, next, env, data }: Context): Promise<Response> {
+  // Initialize database first
+  const dbResult = await initializeDatabase({ request, next, env, data });
+  if (!dbResult.success) {
+    return new Response(`Database initialization failed: ${dbResult.error}`, { status: 500 });
+  }
+
   const feedManager = new FeedCrudManager({ env });
   await feedManager.init();
 
