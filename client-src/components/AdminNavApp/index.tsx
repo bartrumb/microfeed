@@ -45,6 +45,8 @@ interface AdminNavAppProps {
   AccessoryComponent?: ReactNode;
   onboardingResult?: OnboardingResult;
   children?: ReactNode;
+  activeCategory?: string;
+  showOnboarding?: boolean;
 }
 
 interface AdminNavAppState {

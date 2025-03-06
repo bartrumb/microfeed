@@ -16,6 +16,7 @@ import { LabelRenderer } from "../../../components/types";
 import LabelWrapper from "../../../components/LabelWrapper";
 import {preventCloseWhenChanged} from "../../../common/BrowserUtils";
 import { EditChannelAppState, LanguageCode, CategoryOption, Channel } from './types';
+import { OnboardingResult } from '../../../../common-src/types/OnboardingTypes';
 
 const SUBMIT_STATUS__START = 1;
 
@@ -75,7 +76,12 @@ export default class EditChannelApp extends React.Component<{}, EditChannelAppSt
         webGlobalSettings: {} 
       } 
     };
-    let onboardingResult = {};
+    let onboardingResult: OnboardingResult = {
+      requiredOk: true,
+      allOk: true,
+      result: {},
+      cloudflareUrls: {}
+    };
     
     try {
       const feedContent = document.getElementById('feed-content')?.innerHTML;

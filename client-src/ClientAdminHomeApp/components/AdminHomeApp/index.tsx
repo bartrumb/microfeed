@@ -8,9 +8,9 @@ import {unescapeHtml} from "../../../../common-src/StringUtils";
 import {
   AdminHomeAppProps,
   AdminHomeAppState,
-  Feed,
-  OnboardingResult
+  Feed
 } from './types';
+import { OnboardingResult } from '../../../../common-src/types/OnboardingTypes';
 
 export default class AdminHomeApp extends React.Component<AdminHomeAppProps, AdminHomeAppState> {
   constructor(props: AdminHomeAppProps) {
@@ -18,6 +18,7 @@ export default class AdminHomeApp extends React.Component<AdminHomeAppProps, Adm
 
     // Safely parse DOM elements with error handling
     let onboardingResult: OnboardingResult = {
+      requiredOk: true,
       allOk: false,
       result: {},
       cloudflareUrls: {}

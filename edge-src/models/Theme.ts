@@ -36,16 +36,18 @@ class Theme {
   private content: FeedContent;
   private settings: SettingsData;
   private config: ThemeConfig;
+  private codeType: SETTINGS_CATEGORY;
 
-  constructor(content: FeedContent, settings: SettingsData) {
+  constructor(content: FeedContent, settings: SettingsData, codeType: SETTINGS_CATEGORY = SETTINGS_CATEGORY.CUSTOM_CODE) {
     this.content = content;
     this.settings = settings;
+    this.codeType = codeType;
     this.config = this.initializeConfig();
   }
 
   private initializeConfig(): ThemeConfig {
     const customCode = this.settings[SETTINGS_CATEGORY.CUSTOM_CODE] || {};
-    const customTheme = customCode.theme || {};
+    const customTheme = (customCode as Record<string, any>).theme || {};
 
     return {
       colors: {
@@ -73,28 +75,28 @@ class Theme {
   getWebHeader(): ThemeSection {
     const customCode = this.settings[SETTINGS_CATEGORY.CUSTOM_CODE] || {};
     return {
-      html: customCode.webHeader || ''
+      html: (customCode as Record<string, any>).webHeader || ''
     };
   }
 
   getWebBodyStart(): ThemeSection {
     const customCode = this.settings[SETTINGS_CATEGORY.CUSTOM_CODE] || {};
     return {
-      html: customCode.webBodyStart || ''
+      html: (customCode as Record<string, any>).webBodyStart || ''
     };
   }
 
   getWebBodyEnd(): ThemeSection {
     const customCode = this.settings[SETTINGS_CATEGORY.CUSTOM_CODE] || {};
     return {
-      html: customCode.webBodyEnd || ''
+      html: (customCode as Record<string, any>).webBodyEnd || ''
     };
   }
 
   getWebItem(item: any): ThemeSection {
     const customCode = this.settings[SETTINGS_CATEGORY.CUSTOM_CODE] || {};
     return {
-      html: customCode.webItem || ''
+      html: (customCode as Record<string, any>).webItem || ''
     };
   }
 

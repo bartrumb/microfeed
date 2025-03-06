@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { OnboardingResult } from '../../../../common-src/types/OnboardingTypes';
 
 export interface LanguageCode {
   code: string;
@@ -42,9 +43,7 @@ export interface Feed {
   };
 }
 
-export interface OnboardingResult {
-  [key: string]: any;
-}
+export type { OnboardingResult };
 
 export interface EditChannelAppState {
   feed: Feed;

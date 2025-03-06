@@ -1,6 +1,8 @@
 // During development, assets are served directly by Vite
 // In production, we need to use the manifest to get the correct hashed filenames
 
+import { Manifest, ManifestEntry } from './RouteUtils';
+
 // Known entry points from vite.config.js
 const ENTRY_POINTS = [
   'adminhome',
@@ -9,7 +11,10 @@ const ENTRY_POINTS = [
   'adminitems',
   'adminsettings',
   'withManifest'
-];
+] as const;
+
+type EntryPoint = typeof ENTRY_POINTS[number];
+type AssetType = 'js' | 'css';
 
 // Match the same environment detection logic from ManifestUtils.js for consistency
 const isDev = typeof process !== 'undefined' && 
@@ -22,7 +27,7 @@ const isDev = typeof process !== 'undefined' &&
 const BASE_PATH = '/_app/immutable';
 
 // Load manifest data
-let manifestData = null;
+let manifestData: Manifest | null = null;
 try {
   manifestData = require('../../dist/.vite/manifest.json');
 } catch (e) {
@@ -35,7 +40,7 @@ try {
  * @param {('js'|'css')} type - Asset type
  * @returns {string} The resolved asset path
  */
-export function getViteAssetPath(name, type = 'js') {
+export function getViteAssetPath(name: string, type: AssetType = 'js'): string {
   // Validate input
   if (!name) {
     console.error('Asset name is required');
@@ -56,7 +61,7 @@ export function getViteAssetPath(name, type = 'js') {
   }
 
   // Determine if this is an entry point
-  const isEntry = ENTRY_POINTS.includes(name);
+  const isEntry = ENTRY_POINTS.includes(cleanName as EntryPoint);
 
   // In development, use non-hashed paths
   if (isDev) {

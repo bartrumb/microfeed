@@ -1,7 +1,7 @@
 import { Env } from '../../common-src/types/CloudflareTypes';
 import { FeedContent, Item, ChannelData, SettingsData } from '../../common-src/types/FeedContent';
 
-interface QueryOptions {
+export interface QueryOptions {
   status?: number;
   limit?: number;
   cursor?: string;
@@ -14,13 +14,27 @@ interface QueryResult {
   prevCursor?: string;
 }
 
+export function getFetchItemsParams(request: Request): QueryOptions {
+  const url = new URL(request.url);
+  const params = new URLSearchParams(url.search);
+  
+  return {
+    status: params.get('status') ? parseInt(params.get('status')!, 10) : undefined,
+    limit: params.get('limit') ? parseInt(params.get('limit')!, 10) : undefined,
+    cursor: params.get('cursor') || undefined,
+    sortOrder: (params.get('sort_order') as 'asc' | 'desc') || 'desc'
+  };
+}
+
 class FeedDb {
   private db: D1Database;
   private env: Env;
+  private request?: Request;
 
-  constructor(env: Env) {
+  constructor(env: Env, request?: Request) {
     this.db = env.MICROFEED_DB;
     this.env = env;
+    this.request = request;
   }
 
   async getContent(options: QueryOptions = {}): Promise<FeedContent> {
@@ -63,6 +77,22 @@ class FeedDb {
 
     feedContent.items = filteredItems;
     return feedContent;
+  }
+
+  async getPublicJsonData(settings: SettingsData | null, forOneItem = false): Promise<any> {
+    const content = await this.getContent();
+    const channel = content.channel || {};
+    const items = content.items || [];
+
+    return {
+      version: "https://jsonfeed.org/version/1.1",
+      title: channel.title || "",
+      description: channel.description || "",
+      home_page_url: channel.link || "",
+      feed_url: this.request?.url || "",
+      items: forOneItem ? items.slice(0, 1) : items,
+      ...settings
+    };
   }
 
   async updateContent(content: Partial<FeedContent>): Promise<void> {

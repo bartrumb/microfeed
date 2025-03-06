@@ -3,10 +3,31 @@ import {OUR_BRAND} from "../../../../../../common-src/Constants";
 import {
   WhatsNewAppProps,
   WhatsNewAppState,
-  WhatsNewResponse
+  WhatsNewResponse,
+  WhatsNewItem
 } from './types';
 
 const FETCH_STATUS__START = 1;
+
+function isWhatsNewResponse(data: unknown): data is WhatsNewResponse {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'items' in data &&
+    Array.isArray((data as WhatsNewResponse).items) &&
+    (data as WhatsNewResponse).items.every(item => 
+      typeof item === 'object' &&
+      item !== null &&
+      'id' in item &&
+      'title' in item &&
+      '_microfeed' in item &&
+      typeof item._microfeed === 'object' &&
+      item._microfeed !== null &&
+      'web_url' in item._microfeed &&
+      'date_published_short' in item._microfeed
+    )
+  );
+}
 
 export default class WhatsNewApp extends React.Component<WhatsNewAppProps, WhatsNewAppState> {
   constructor(props: WhatsNewAppProps) {
@@ -24,11 +45,16 @@ export default class WhatsNewApp extends React.Component<WhatsNewAppProps, Whats
     this.setState({fetchStatus: FETCH_STATUS__START});
     fetch(endpoint)
       .then((response) => response.json())
-      .then((data: WhatsNewResponse) => {
-        this.setState({
-          items: data.items.slice(0, 5),
-          fetchStatus: null,
-        });
+      .then((data: unknown) => {
+        if (isWhatsNewResponse(data)) {
+          this.setState({
+            items: data.items.slice(0, 5),
+            fetchStatus: null,
+          });
+        } else {
+          console.error('Invalid response format');
+          this.setState({fetchStatus: null});
+        }
       })
       .catch(() => {
         this.setState({fetchStatus: null});

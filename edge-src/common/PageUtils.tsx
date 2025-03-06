@@ -1,13 +1,15 @@
 import ReactDOMServer from "react-dom/server";
 import type { D1Database } from '@cloudflare/workers-types';
 import Theme from "../models/Theme";
-import FeedDb, {getFetchItemsParams} from "../models/FeedDb";
-import {CODE_TYPES} from "../../common-src/Constants";
-import {ADMIN_URLS, escapeHtml, urlJoinWithRelative} from "../../common-src/StringUtils";
-import OnboardingChecker from "../../common-src/OnboardingUtils";
-import { FeedContent, SettingsData } from "../../common-src/types/FeedContent";
+import FeedDb, { getFetchItemsParams, QueryOptions } from "../models/FeedDb";
+import { CODE_TYPES } from "../../common-src/Constants";
+import { ADMIN_URLS, escapeHtml, urlJoinWithRelative } from "../../common-src/StringUtils";
+import { OnboardingChecker } from "../../common-src/OnboardingUtils";
+import { FeedContent, SettingsData, SETTINGS_CATEGORY } from "../../common-src/types/FeedContent";
+import { Env } from "../../common-src/types/CloudflareTypes";
 
 import { getViteAssetPath } from "./ViteUtils";
+
 interface ChannelData {
   id: string;
   status: number;
@@ -47,10 +49,6 @@ interface ElementHandler {
   prepend: (content: string, options: { html: boolean }) => void;
 }
 
-interface Env {
-  FEED_DB: D1Database;
-}
-
 export function renderReactToHtml(
   Component: React.ReactElement
 ): string {
@@ -80,11 +78,12 @@ class ResponseBuilder {
   }
 
   protected async fetchFeed(): Promise<void> {
-    this.content = await this.feed.getContent(null) as FeedContent;
+    const options: QueryOptions = {};
+    this.content = await this.feed.getContent(options);
     this.settings = this.content.settings || {};
     const queryKwargs = this.fetchItemsObj.queryKwargs || {};
     const forOneItem = !!queryKwargs.id;
-    this.jsonData = await this.feed.getPublicJsonData(null, forOneItem);
+    this.jsonData = await this.feed.getPublicJsonData(this.settings, forOneItem);
   }
 
   protected _verifyPasscode(): boolean {
@@ -109,8 +108,8 @@ class ResponseBuilder {
       }
     }
 
-    const onboardingChecker = new OnboardingChecker(this.content, this.request, this.env);
-    const onboardingResult = onboardingChecker.getResult();
+    const onboardingChecker = new OnboardingChecker(this.env);
+    const onboardingResult = await onboardingChecker.checkAll();
     if (!onboardingResult.requiredOk) {
       const urlObj = new URL(this.request.url);
       return Response.redirect(ADMIN_URLS.home(urlObj.origin), 302);
@@ -143,12 +142,7 @@ class ResponseBuilder {
   }
 
   protected get _fetchItems(): Record<string, any> {
-    const queryKwargs = this.fetchItemsObj.queryKwargs || {};
-    return getFetchItemsParams(
-      this.request,
-      {
-        ...queryKwargs,
-      }, null);
+    return getFetchItemsParams(this.request);
   }
 
   protected _getResponse(props?: ResponseBuilderProps): Response {
@@ -235,12 +229,7 @@ export class SitemapResponseBuilder extends ResponseBuilder {
   }
 
   protected get _fetchItems(): Record<string, any> {
-    const queryKwargs = this.fetchItemsObj.queryKwargs || {};
-    return getFetchItemsParams(
-      this.request,
-      {
-        ...queryKwargs,
-      }, null);
+    return getFetchItemsParams(this.request);
   }
 }
 
@@ -300,8 +289,8 @@ export class WebResponseBuilder extends ResponseBuilder {
 
   protected _getResponse(props: ResponseBuilderProps): Response {
     const res = super._getResponse(props);
-    const theme = new Theme(this.jsonData, null);
-    const sharedTheme = new Theme(this.jsonData, null, CODE_TYPES.SHARED as any);
+    const theme = new Theme(this.jsonData, this.settings);
+    const sharedTheme = new Theme(this.jsonData, this.settings, SETTINGS_CATEGORY.CUSTOM_CODE);
     const component = props.getComponent ? props.getComponent(this.content, this.jsonData, theme) : null;
     if (!component) {
       return ResponseBuilder.Response404();

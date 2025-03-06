@@ -1,3 +1,5 @@
+import { OnboardingResult } from '../../../../common-src/types/OnboardingTypes';
+
 export interface WebGlobalSettings {
   publicBucketUrl?: string;
   favicon?: {
@@ -11,27 +13,6 @@ export interface WebGlobalSettings {
 
 export interface AdminHomeAppProps {
   // No props required for this component
-}
-
-export interface OnboardState {
-  ready: boolean;
-  required?: boolean;
-}
-
-export interface CloudflareUrls {
-  r2BucketSettingsUrl?: string;
-  pagesDevUrl?: string;
-  addAccessGroupUrl?: string;
-  addAppUrl?: string;
-  pagesCustomDomainUrl?: string;
-}
-
-export interface OnboardingResult {
-  allOk?: boolean;
-  result?: {
-    [key: string]: OnboardState;
-  };
-  cloudflareUrls?: CloudflareUrls;
 }
 
 export interface Feed {

@@ -15,6 +15,43 @@ interface UploadOptions {
   durationSecond?: number;
 }
 
+export function isValidMediaFile(file: File | null): boolean {
+  if (!file) return false;
+  
+  // Add your media file validation logic here
+  // For example, check file type, size limits, etc.
+  const validTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'audio/mpeg',
+    'audio/wav',
+    'video/mp4',
+    'video/webm'
+  ];
+  
+  return validTypes.includes(file.type);
+}
+
+export function getMediaFileFromUrl(urlParams: URLSearchParams): MediaFileMetadata | null {
+  const url = urlParams.get('media_url');
+  const category = urlParams.get('media_category');
+  const contentType = urlParams.get('media_content_type');
+  const durationSecond = urlParams.get('media_duration_second');
+
+  if (!url || !category) {
+    return null;
+  }
+
+  return {
+    url,
+    category: parseInt(category, 10),
+    contentType: contentType || undefined,
+    durationSecond: durationSecond ? parseInt(durationSecond, 10) : undefined
+  };
+}
+
 export async function uploadMediaFile(
   env: Env,
   file: ArrayBuffer | Blob | ReadableStream,
