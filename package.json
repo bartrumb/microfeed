@@ -11,6 +11,7 @@
     "dev:worker": "wrangler pages dev dist --compatibility-date=2024-02-28 --d1 FEED_DB --ip 0.0.0.0 --port 8788",
     "deploy:dev": "npx cross-env DEPLOYMENT_ENVIRONMENT=development pnpm build:dev && npx cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/deploy.ts development",
     "deploy:preview": "npx cross-env DEPLOYMENT_ENVIRONMENT=preview pnpm build:dev && npx cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/deploy.ts preview",
+    "deploy:preview:debug": "npx cross-env DEPLOYMENT_ENVIRONMENT=preview WRANGLER_DEBUG=1 pnpm build:dev && npx cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/deploy.ts preview --debug",
     "deploy:production": "npx cross-env DEPLOYMENT_ENVIRONMENT=production pnpm build && npx cross-env NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/deploy.ts production",
     "db:init:dev": "npx cross-env DEPLOYMENT_ENVIRONMENT=development NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/init_feed_db.ts",
     "db:init:preview": "npx cross-env DEPLOYMENT_ENVIRONMENT=preview NODE_OPTIONS=\"--loader ts-node/esm\" ts-node ops/init_feed_db.ts",

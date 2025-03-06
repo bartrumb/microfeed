@@ -241,8 +241,12 @@ async function rebuildWithManifest(env: string): Promise<void> {
 
 async function deploy(): Promise<void> {
   try {
-    // Get environment from command line args
+    // Get environment and debug flag from command line args
     const env = process.argv[2] || 'preview';
+    const debug = process.argv.includes('--debug');
+    
+    // Create WranglerCmd instance for auth credentials
+    const cmd = new WranglerCmd(env);
     
     // Update wrangler config with database ID
     await updateWranglerConfig(env);
@@ -268,11 +272,32 @@ async function deploy(): Promise<void> {
     
     // Run deployment using WranglerCmd
     console.log(`Deploying to ${env}...`);
-    const cmd = new WranglerCmd(env);
-    execSync(`npx wrangler pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle --commit-dirty=true`, {
-      stdio: 'inherit',
-      env: { ...process.env, ...cmd._getEnvVars() }
-    });
+    
+    // Execute deployment command using WranglerCmd
+    const deployCommand = `pages deploy dist --project-name shop-dawg-microfeed --branch ${env} --no-bundle --commit-dirty=true`;
+    const deployOutput = cmd._execWranglerCmd(deployCommand);
+
+    // Try to extract deployment ID from output using regex
+    let deploymentId;
+    const deploymentIdMatch = deployOutput?.toString().match(/Deployment complete! Take a peek over at (.+)/);
+    if (deploymentIdMatch) {
+      // Extract deployment ID from URL if present
+      const urlMatch = deploymentIdMatch[1].match(/\/([^/]+)$/);
+      if (urlMatch) {
+        deploymentId = urlMatch[1];
+        console.log(`Deployment ID: ${deploymentId}`);
+      }
+    }
+
+    // If debug mode is enabled, start tailing logs after deployment
+    if (debug) {
+      console.log('\nStarting log tail...');
+      const tailCommand = deploymentId
+        ? `pages deployment tail ${deploymentId} --project-name shop-dawg-microfeed`
+        : `pages deployment tail --project-name shop-dawg-microfeed --branch ${env}`;
+      
+      cmd._execWranglerCmd(tailCommand);
+    }
     
   } catch (error) {
     console.error('Deployment failed:', error);
