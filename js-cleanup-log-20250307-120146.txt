@@ -1,0 +1,45 @@
+JavaScript file cleanup log - 03/07/2025 12:01:46
+Found 38 JavaScript files to remove
+Starting removal process...
+SUCCESS: Removed client-src\ClientAdminCustomCodeEditorApp\components\CustomCodeEditorApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminHomeApp\components\AdminHomeApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminHomeApp\components\AdminHomeApp\component\DistributionApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminHomeApp\components\AdminHomeApp\component\SetupChecklistApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminHomeApp\components\AdminHomeApp\component\WhatsNewApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminItemsApp\components\AllItemsApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminItemsApp\components\EditItemApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminItemsApp\components\EditItemApp\components\MediaManager\index.jsx
+SUCCESS: Removed client-src\ClientAdminItemsApp\EditItem\index.jsx
+SUCCESS: Removed client-src\ClientAdminItemsApp\NewItem\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\SettingsApp.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\AccessSettingsApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\ApiSettingsApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\CustomCodeSettingsApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\SettingsBase\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\SubscribeSettingsApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\SubscribeSettingsApp\components\NewSubscribeDialog\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\TrackingSettingsApp\index.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\WebGlobalSettingsApp\index.jsx
+SUCCESS: Removed client-src\components\AdminCodeEditor\index.jsx
+SUCCESS: Removed client-src\components\AdminDatetimePicker\index.jsx
+SUCCESS: Removed client-src\components\AdminDialog\index.jsx
+SUCCESS: Removed client-src\components\AdminNavApp\index.jsx
+SUCCESS: Removed client-src\components\AdminSwitch\index.jsx
+SUCCESS: Removed client-src\components\FileUploaderTest\index.jsx
+SUCCESS: Removed client-src\components\FileUploaderWrapper\index.jsx
+SUCCESS: Removed client-src\ClientAdminItemsApp\components\EditItemApp\FormExplainTexts.jsx
+SUCCESS: Removed client-src\ClientAdminSettingsApp\components\FormExplainTexts.js
+SUCCESS: Removed edge-src\models\FeedDb.test.js
+SUCCESS: Removed functions\admin\ajax\feed.js
+SUCCESS: Removed functions\admin\ajax\r2-ops.js
+WARNING: File not found functions\admin\items\[itemId]\index.jsx
+WARNING: File not found functions\api\channels\[channelId]\index.jsx
+WARNING: File not found functions\api\items\[itemId]\index.jsx
+WARNING: File not found functions\i\[slug]\index.jsx
+WARNING: File not found functions\i\[slug]\json\index.jsx
+WARNING: File not found functions\i\[slug]\rss\index.jsx
+SUCCESS: Removed edge-src\common\manifest-virtual.js
+JavaScript File Cleanup Summary:
+Successfully removed: 32 files
+Files not found: 6
+Failed to remove: 0 files
