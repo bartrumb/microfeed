@@ -3,40 +3,48 @@ import EdgeAdminItemsApp from '../../../../edge-src/EdgeAdminItemsApp/Edit';
 import FeedDb from "../../../../edge-src/models/FeedDb";
 import { renderReactToHtml } from "../../../../edge-src/common/PageUtils";
 import { OnboardingChecker } from "../../../../common-src/OnboardingUtils";
-import { STATUSES } from "../../../../common-src/constants";
+import { STATUSES } from "../../../../common-src/Constants";
 import { Env } from "../../../../common-src/types/CloudflareTypes";
-import { FeedContent, OnboardingResult } from "../../../../common-src/types/FeedContent";
+import { FeedContent } from "../../../../common-src/types/FeedContent";
+import { QueryOptions } from "../../../../edge-src/models/FeedDb";
 
-interface RequestParams {
-  env: Env;
-  params: {
-    itemId: string;
-  };
-  request: Request;
-}
+export const onRequestGet: PagesFunction<Env> = async ({ request, env, params }) => {
+  const itemId = (params as Record<string, string>).itemId;
 
-export async function onRequestGet({ env, params, request }: RequestParams): Promise<Response> {
-  const { itemId } = params;
+  // Initialize FeedDb with full env object
   const feed = new FeedDb(env, request);
-  
-  // Get the specific item
-  const item = await feed.getItem(itemId);
-  if (!item || item.status === STATUSES.DELETED) {
-    return new Response('Not found', { status: 404 });
+
+  // Use proper QueryOptions interface
+  const queryOptions: QueryOptions = {
+    limit: 1,
+    status: undefined,
+    cursor: undefined,
+    sortOrder: 'desc'
+  };
+
+  // Get content with proper query options
+  const content = await feed.getContent(queryOptions);
+
+  // Set the first item if available
+  if (content.items && content.items.length > 0) {
+    content.item = content.items[0];
   }
 
-  // Get the full content with the item
-  const content = await feed.getContent({
-    limit: 1,
-    status: item.status,
-  });
+  // Check if item exists and is not deleted
+  if (!content.item || content.item.status === STATUSES.DELETED) {
+    return new Response('Not found', { 
+      status: 404,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8'
+      }
+    });
+  }
 
-  // Set the specific item in the content
-  content.item = item;
-
+  // Initialize onboarding checker with full env object
   const onboardingChecker = new OnboardingChecker(env);
-  const onboardingResult = await onboardingChecker.checkAll() as OnboardingResult;
+  const onboardingResult = await onboardingChecker.checkAll();
 
+  // Render the React component
   const fromReact = renderReactToHtml(
     <EdgeAdminItemsApp
       feedContent={content}
@@ -50,4 +58,4 @@ export async function onRequestGet({ env, params, request }: RequestParams): Pro
       'Content-Type': 'text/html; charset=utf-8',
     },
   });
-}
+};

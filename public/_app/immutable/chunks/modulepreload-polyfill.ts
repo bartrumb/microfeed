@@ -2,20 +2,26 @@
  * Polyfill for modulepreload
  * Adapted from https://github.com/guybedford/es-module-shims
  */
-(function() {
-  let nonce;
+
+interface Window {
+  __viteModulePreload?: (url: string) => Promise<void>;
+}
+
+(() => {
+  let nonce: string;
   try {
-    nonce = document.querySelector('meta[property="csp-nonce"]').getAttribute('content');
+    const metaElement = document.querySelector('meta[property="csp-nonce"]');
+    nonce = metaElement?.getAttribute('content') || '';
   } catch(e) {
     nonce = '';
   }
 
-  const preloadMap = new Map();
-  const preloadLinks = document.querySelectorAll('link[rel=modulepreload]');
+  const preloadMap = new Map<string, Promise<void>>();
+  const preloadLinks = document.querySelectorAll<HTMLLinkElement>('link[rel=modulepreload]');
   
-  function preload(url) {
+  function preload(url: string): Promise<void> {
     if (preloadMap.has(url)) {
-      return preloadMap.get(url);
+      return preloadMap.get(url)!;
     }
 
     const link = document.createElement('link');
@@ -25,7 +31,7 @@
       link.setAttribute('nonce', nonce);
     }
 
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise<void>((resolve, reject) => {
       link.onload = () => resolve();
       link.onerror = reject;
     });
@@ -41,5 +47,5 @@
   });
 
   // Export for potential manual usage
-  window.__viteModulePreload = preload;
+  (window as Window).__viteModulePreload = preload;
 })();

@@ -8,21 +8,20 @@ import WebGlobalSettingsApp from "./WebGlobalSettingsApp";
 import Requests from "../../common/requests";
 import { ADMIN_URLS, unescapeHtml } from "../../../common-src/StringUtils";
 import { showToast } from "../../common/ToastUtils";
-import { NAV_ITEMS } from "../../../common-src/constants";
+import { NAV_ITEMS } from "../../../common-src/Constants";
 import { preventCloseWhenChanged } from "../../common/BrowserUtils";
 import ApiSettingsApp from "./ApiSettingsApp";
 import { 
   FeedContent, 
   OnboardingResult, 
-  SETTINGS_CATEGORY, 
-  isValidFeedContent 
+  SETTINGS_CATEGORY
 } from '../../../common-src/types/FeedContent';
-import { 
-  BaseSettingsProps, 
-  CustomCodeSettingsAppProps 
-} from './types';
 
 const SUBMIT_STATUS__START = 1;
+
+interface SettingsAppProps {
+  // Empty props as the component gets data from DOM
+}
 
 interface SettingsAppState {
   feed: FeedContent;
@@ -32,12 +31,18 @@ interface SettingsAppState {
   changed: boolean;
 }
 
-export default class SettingsApp extends React.Component<Record<string, never>, SettingsAppState> {
-  constructor(props: Record<string, never>) {
-    super(props);
+// Default settings for each component
+const defaultSettings = {
+  [SETTINGS_CATEGORY.ANALYTICS]: { urls: [] },
+  [SETTINGS_CATEGORY.ACCESS]: { currentPolicy: undefined },
+  [SETTINGS_CATEGORY.SUBSCRIBE]: { enabled: false, buttonText: '', successMessage: '' },
+  [SETTINGS_CATEGORY.WEB_GLOBAL]: { title: '', description: '', language: '', timezone: '' },
+  [SETTINGS_CATEGORY.API_SETTINGS]: { apiKey: '' }
+};
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.setChanged = this.setChanged.bind(this);
+export default class SettingsApp extends React.Component<SettingsAppProps, SettingsAppState> {
+  constructor(props: SettingsAppProps) {
+    super(props);
 
     const $feedContent = document.getElementById('feed-content');
     const $onboardingResult = document.getElementById('onboarding-result');
@@ -46,12 +51,8 @@ export default class SettingsApp extends React.Component<Record<string, never>, 
       throw new Error('Required DOM elements not found');
     }
 
-    const feed = JSON.parse(unescapeHtml($feedContent.innerHTML));
-    const onboardingResult = JSON.parse(unescapeHtml($onboardingResult.innerHTML));
-
-    if (!isValidFeedContent(feed)) {
-      throw new Error('Invalid feed content structure');
-    }
+    const feed = JSON.parse(unescapeHtml($feedContent.innerHTML)) as FeedContent;
+    const onboardingResult = JSON.parse(unescapeHtml($onboardingResult.innerHTML)) as OnboardingResult;
 
     this.state = {
       feed,
@@ -65,47 +66,69 @@ export default class SettingsApp extends React.Component<Record<string, never>, 
     preventCloseWhenChanged(() => this.state.changed);
   }
 
-  setChanged(): void {
-    this.setState({ changed: true });
-  }
-
-  onSubmit(e: React.FormEvent, bundleKey: SETTINGS_CATEGORY, bundle: Record<string, unknown>): void {
-    e.preventDefault();
-    this.setState({ submitForType: bundleKey, submitStatus: SUBMIT_STATUS__START });
-    
-    Requests.axiosPost(ADMIN_URLS.ajaxFeed(), { settings: { [bundleKey]: bundle } })
-      .then(() => {
-        this.setState({ submitStatus: null, submitForType: undefined, changed: false }, () => {
+  createSettingsSaveHandler = (category: SETTINGS_CATEGORY) => {
+    return async (settings: unknown): Promise<void> => {
+      try {
+        this.setState({ submitForType: category, submitStatus: SUBMIT_STATUS__START });
+        await Requests.axiosPost(ADMIN_URLS.ajaxFeed(), { 
+          settings: { [category]: settings } 
+        });
+        
+        // Update local state with new settings
+        this.setState(prevState => ({
+          submitStatus: null,
+          submitForType: undefined,
+          changed: false,
+          feed: {
+            ...prevState.feed,
+            settings: {
+              ...prevState.feed.settings,
+              [category]: settings
+            }
+          }
+        }), () => {
           showToast('Updated!', 'success');
         });
-      })
-      .catch((error: { response?: unknown }) => {
+      } catch (error) {
         this.setState({ submitStatus: null, submitForType: undefined }, () => {
-          if (!error.response) {
+          if (!error || !(error as any).response) {
             showToast('Network error. Please refresh the page and try again.', 'error');
           } else {
             showToast('Failed. Please try again.', 'error');
           }
         });
-      });
-  }
+        throw error;
+      }
+    };
+  };
 
   render(): React.ReactNode {
-    const { submitStatus, feed, submitForType, onboardingResult } = this.state;
-    const submitting = submitStatus === SUBMIT_STATUS__START;
+    const { submitStatus, feed, onboardingResult } = this.state;
 
-    const settingsProps: BaseSettingsProps = {
-      submitting,
-      submitForType,
-      feed,
-      onSubmit: this.onSubmit,
-      setChanged: this.setChanged,
+    // Get settings with defaults for each component
+    const trackingSettings = {
+      ...defaultSettings[SETTINGS_CATEGORY.ANALYTICS],
+      ...feed.settings[SETTINGS_CATEGORY.ANALYTICS]
     };
 
-    const customCodeProps: CustomCodeSettingsAppProps = {
-      submitting,
-      submitForType,
-      feed,
+    const accessSettings = {
+      ...defaultSettings[SETTINGS_CATEGORY.ACCESS],
+      ...feed.settings[SETTINGS_CATEGORY.ACCESS]
+    };
+
+    const subscribeSettings = {
+      ...defaultSettings[SETTINGS_CATEGORY.SUBSCRIBE],
+      ...feed.settings[SETTINGS_CATEGORY.SUBSCRIBE]
+    };
+
+    const webGlobalSettings = {
+      ...defaultSettings[SETTINGS_CATEGORY.WEB_GLOBAL],
+      ...feed.settings[SETTINGS_CATEGORY.WEB_GLOBAL]
+    };
+
+    const apiSettings = {
+      ...defaultSettings[SETTINGS_CATEGORY.API_SETTINGS],
+      ...feed.settings[SETTINGS_CATEGORY.API_SETTINGS]
     };
 
     return (
@@ -116,26 +139,41 @@ export default class SettingsApp extends React.Component<Record<string, never>, 
         <div className="grid grid-cols-1 gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-1 h-full">
-              <TrackingSettingsApp {...settingsProps} />
+              <TrackingSettingsApp
+                settings={trackingSettings}
+                onSave={this.createSettingsSaveHandler(SETTINGS_CATEGORY.ANALYTICS)}
+              />
             </div>
             <div className="col-span-1 h-full">
-              <AccessSettingsApp {...settingsProps} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-1 h-full">
-              <SubscribeSettingsApp {...settingsProps} />
-            </div>
-            <div className="col-span-1 h-full">
-              <WebGlobalSettingsApp {...settingsProps} />
+              <AccessSettingsApp
+                settings={accessSettings}
+                onSave={this.createSettingsSaveHandler(SETTINGS_CATEGORY.ACCESS)}
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-1 h-full">
-              <CustomCodeSettingsApp {...customCodeProps} />
+              <SubscribeSettingsApp
+                settings={subscribeSettings}
+                onSave={this.createSettingsSaveHandler(SETTINGS_CATEGORY.SUBSCRIBE)}
+              />
             </div>
             <div className="col-span-1 h-full">
-              <ApiSettingsApp {...settingsProps} />
+              <WebGlobalSettingsApp
+                settings={webGlobalSettings}
+                onSave={this.createSettingsSaveHandler(SETTINGS_CATEGORY.WEB_GLOBAL)}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-1 h-full">
+              <CustomCodeSettingsApp />
+            </div>
+            <div className="col-span-1 h-full">
+              <ApiSettingsApp
+                settings={apiSettings}
+                onSave={this.createSettingsSaveHandler(SETTINGS_CATEGORY.API_SETTINGS)}
+              />
             </div>
           </div>
         </div>

@@ -1,23 +1,13 @@
-import { Env } from '../../../../common-src/types/CloudflareTypes';
-import { ChannelData } from '../../../../common-src/types/FeedContent';
-import { FeedCrudManager } from '../../../../edge-src/models/FeedCrudManager';
-
-interface RequestParams {
-  params: {
-    channelId: string;
-  };
-  request: Request;
-  data: {
-    feedCrud: FeedCrudManager;
-  };
-}
+import { Env } from "../../../../common-src/types/CloudflareTypes";
+import { ChannelData } from "../../../../common-src/types/FeedContent";
+import { FeedCrudManager } from "../../../../edge-src/models/FeedCrudManager";
 
 interface ApiResponse {
   error?: string;
 }
 
-export async function onRequestPut({ params, request, data }: RequestParams): Promise<Response> {
-  const { channelId } = params;
+export const onRequestPut: PagesFunction<Env> = async ({ params, request, data }) => {
+  const channelId = (params as Record<string, string>).channelId;
 
   let response: ApiResponse = {};
   let status = 200;
@@ -26,9 +16,17 @@ export async function onRequestPut({ params, request, data }: RequestParams): Pr
     status = 400;
     response = { error: 'Invalid channel id' };
   } else {
-    const channelJson = await request.json() as Partial<ChannelData>;
-    const { feedCrud } = data;
-    await feedCrud.upsertChannel(channelJson);
+    try {
+      const channelJson = await request.json() as Partial<ChannelData>;
+      const feedCrud = data.feedCrud as FeedCrudManager;
+      
+      await feedCrud.upsertChannel(channelJson);
+    } catch (error) {
+      status = 500;
+      response = { 
+        error: error instanceof Error ? error.message : 'Internal server error'
+      };
+    }
   }
 
   return new Response(JSON.stringify(response), {
@@ -37,4 +35,4 @@ export async function onRequestPut({ params, request, data }: RequestParams): Pr
     },
     status,
   });
-}
+};

@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import EditItemApp from '../components/EditItemApp';
 
-class NewItemApp extends React.Component<Record<string, unknown>> {
+interface NewItemAppProps {
+  // Empty props interface since we're just passing through props
+}
+
+class NewItemApp extends React.Component<NewItemAppProps> {
   render(): React.ReactNode {
     return <EditItemApp {...this.props} />;
   }
@@ -10,6 +14,7 @@ class NewItemApp extends React.Component<Record<string, unknown>> {
 
 export default NewItemApp;
 
+// Only run in browser environment
 if (typeof window !== 'undefined') {
   const $rootDom = document.getElementById('client-side-root');
   if ($rootDom) {
@@ -19,5 +24,7 @@ if (typeof window !== 'undefined') {
         <NewItemApp />
       </React.StrictMode>
     );
+  } else {
+    console.error('Root element not found');
   }
 }
