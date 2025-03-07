@@ -1,76 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { SettingsBase } from '../SettingsBase';
-import AdminTextarea from '../../../components/AdminTextarea';
-import { FORM_EXPLAIN_TEXTS } from '../FormExplainTexts';
+import React from 'react';
+import AdminTextarea from "../../../components/AdminTextarea";
+import { buildAudioUrlWithTracking } from "../../../../common-src/StringUtils";
+import SettingsBase from '../SettingsBase';
+import { SETTINGS_CATEGORIES } from "../../../../common-src/Constants";
+import { BaseSettingsProps } from '../types';
+import { SETTINGS_CATEGORY } from '../../../../common-src/types/FeedContent';
 
-interface TrackingSettings {
-  code?: string;
+interface TrackingSettingsState {
+  trackingUrls: string;
+  currentType: SETTINGS_CATEGORY;
 }
 
-interface TrackingSettingsAppProps {
-  settings: TrackingSettings;
-  onSave: (settings: TrackingSettings) => Promise<void>;
-}
+export default class TrackingSettingsApp extends React.Component<BaseSettingsProps, TrackingSettingsState> {
+  constructor(props: BaseSettingsProps) {
+    super(props);
 
-export const TrackingSettingsApp: React.FC<TrackingSettingsAppProps> = ({
-  settings,
-  onSave
-}) => {
-  const [localSettings, setLocalSettings] = useState<TrackingSettings>(settings);
-  const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    setLocalSettings(settings);
-  }, [settings]);
-
-  const handleSave = async () => {
-    try {
-      setIsSaving(true);
-      await onSave(localSettings);
-      toast.success('Tracking settings saved successfully');
-    } catch (error) {
-      console.error('Failed to save tracking settings:', error);
-      toast.error('Failed to save tracking settings');
-    } finally {
-      setIsSaving(false);
+    const currentType = SETTINGS_CATEGORIES.ANALYTICS as SETTINGS_CATEGORY;
+    const { feed } = props;
+    let trackingUrls = '';
+    
+    // Type-safe access using SETTINGS_CATEGORY enum
+    const analyticsSettings = feed.settings[SETTINGS_CATEGORY.ANALYTICS];
+    if (analyticsSettings?.urls) {
+      trackingUrls = analyticsSettings.urls.join('\n');
     }
-  };
 
-  return (
-    <SettingsBase
-      title="Tracking Settings"
-      explainText={FORM_EXPLAIN_TEXTS['tracking-code']}
-    >
-      <div className="space-y-6">
+    this.state = {
+      trackingUrls,
+      currentType,
+    };
+  }
+
+  render() {
+    const { trackingUrls, currentType } = this.state;
+    const { submitting, submitForType, setChanged } = this.props;
+    const urls = trackingUrls.trim() !== '' ? trackingUrls.trim().split(/\n/) : [];
+    const exampleAudio = 'https://example.com/audio.mp3';
+    
+    return (
+      <SettingsBase
+        title="Tracking urls"
+        submitting={submitting}
+        submitForType={submitForType}
+        currentType={currentType}
+        onSubmit={(e: React.MouseEvent) => {
+          this.props.onSubmit(e, currentType, {
+            urls,
+          });
+        }}
+      >
         <div>
-          <h3 className="text-lg font-medium">Tracking Code</h3>
-          <div className="mt-4">
-            <AdminTextarea
-              label="HTML Code"
-              value={localSettings.code || ''}
-              onChange={(e) => setLocalSettings(prev => ({
-                ...prev,
-                code: e.target.value
-              }))}
-              placeholder="<!-- Paste your tracking code here -->"
-            />
+          <AdminTextarea
+            placeholder="Put a tracking url on each line, e.g., https://op3.dev/e/, https://pdst.fm/e/, https://chrt.fm/track/..."
+            value={trackingUrls}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => 
+              this.setState({ trackingUrls: e.target.value }, () => setChanged())
+            }
+          />
+        </div>
+        <div className="mt-4 text-xs text-helper-color">
+          microfeed will automatically add 3rd-party tracking urls (e.g., <a href="https://op3.dev/">OP3</a>, <a
+          href="http://analytics.podtrac.com/">Podtrac</a>, <a href="https://chartable.com/">Chartable</a>...) before the url of a media file, so you can easily track download stats. This is a <a href="https://lowerstreet.co/blog/podcast-tracking" target="_blank" rel="noopener noreferrer">common practice in the podcast industry</a>.
+        </div>
+        {urls.length > 0 && <div className="mt-4 text-xs break-all text-helper-color">
+          <div className="mb-2">
+            Example: if an audio url is {exampleAudio}, then the final url in the rss feed will be:
           </div>
-        </div>
-
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={handleSave}
-            disabled={isSaving}
-          >
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
-      </div>
-    </SettingsBase>
-  );
-};
-
-export default TrackingSettingsApp;
+          <b>{buildAudioUrlWithTracking(exampleAudio, urls)}</b>
+        </div>}
+      </SettingsBase>
+    );
+  }
+}

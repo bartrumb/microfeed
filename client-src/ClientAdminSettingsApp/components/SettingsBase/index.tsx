@@ -1,43 +1,44 @@
 import React from 'react';
-import ExplainText from '../../../components/ExplainText';
-import type { ExplainTextProps } from '../../../components/types';
+import { SETTINGS_CATEGORY } from '../../../../common-src/types/FeedContent';
 
 interface SettingsBaseProps {
   title: string;
-  explainText?: {
-    title: string;
-    description: string;
-    learnMoreUrl?: string;
-    customClass?: string;
-  };
+  submitting: boolean;
+  submitForType?: SETTINGS_CATEGORY;
+  currentType: SETTINGS_CATEGORY;
+  onSubmit?: (e: React.MouseEvent) => void;
   children: React.ReactNode;
+  titleComponent?: React.ReactNode;
 }
 
-export const SettingsBase: React.FC<SettingsBaseProps> = ({ 
-  title, 
-  explainText,
-  children 
-}) => {
-  return (
-    <div className="settings-base">
-      <div className="settings-base__header">
-        <h2 className="settings-base__title">{title}</h2>
-        {explainText && (
-          <div className="settings-base__explain">
-            <ExplainText 
-              title={explainText.title}
-              description={explainText.description}
-              learnMoreUrl={explainText.learnMoreUrl}
-              customClass={explainText.customClass}
-            />
+export default class SettingsBase extends React.Component<SettingsBaseProps> {
+  render() {
+    const { submitForType, submitting, currentType, onSubmit, children, title, titleComponent } = this.props;
+    const submittingForThis = submitForType === currentType;
+    
+    return (
+      <form className="lh-page-card h-full">
+        <h2 className="lh-page-title">
+          <div className="flex">
+            <div className="flex-1">
+              {title}
+              {titleComponent}
+            </div>
+            {onSubmit && (
+              <div className="flex-none">
+                <button
+                  disabled={submittingForThis || submitting}
+                  className="lh-btn lh-btn-brand-dark"
+                  onClick={onSubmit}
+                >
+                  {submittingForThis ? 'Updating...' : 'Update'}
+                </button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="settings-base__content">
+        </h2>
         {children}
-      </div>
-    </div>
-  );
-};
-
-export default SettingsBase;
+      </form>
+    );
+  }
+}
