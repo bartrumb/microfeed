@@ -6,10 +6,7 @@ export const manifestData = {
     "file": "_app/immutable/chunks/BrowserUtils.js",
     "name": "BrowserUtils",
     "imports": [
-      "_react-vendor.js",
-      "_ToastUtils.js",
-      "_StringUtils.js",
-      "_index3.js"
+      "_react-vendor.js"
     ]
   },
   "_Constants.js": {
@@ -111,12 +108,12 @@ export const manifestData = {
       "_react-vendor.js",
       "_ToastUtils.js",
       "_admin_styles.js",
-      "_BrowserUtils.js",
-      "_index2.js",
       "_StringUtils.js",
+      "_BrowserUtils.js",
+      "_index.js",
       "_index3.js",
       "_Constants.js",
-      "_index.js"
+      "_index2.js"
     ]
   },
   "client-src/ClientAdminCustomCodeEditorApp/index.tsx": {
@@ -129,7 +126,7 @@ export const manifestData = {
       "_admin_styles.js",
       "_ui-components.js",
       "_Constants.js",
-      "_index.js"
+      "_index2.js"
     ]
   },
   "client-src/ClientAdminHomeApp/index.tsx": {
@@ -142,7 +139,7 @@ export const manifestData = {
       "_Constants.js",
       "_admin_styles.js",
       "_StringUtils.js",
-      "_index3.js",
+      "_index.js",
       "_ToastUtils.js"
     ]
   },
@@ -156,8 +153,8 @@ export const manifestData = {
       "_admin_styles.js",
       "_StringUtils.js",
       "_Constants.js",
-      "_index3.js",
-      "_index2.js"
+      "_index.js",
+      "_index3.js"
     ]
   },
   "client-src/ClientAdminSettingsApp/index.tsx": {
@@ -169,11 +166,11 @@ export const manifestData = {
       "_react-vendor.js",
       "_admin_styles.js",
       "_BrowserUtils.js",
-      "_index2.js",
-      "_Constants.js",
-      "_ToastUtils.js",
       "_StringUtils.js",
-      "_index.js"
+      "_Constants.js",
+      "_index3.js",
+      "_ToastUtils.js",
+      "_index2.js"
     ]
   },
   "functions/admin/_middleware.ts": {
@@ -182,19 +179,19 @@ export const manifestData = {
     "src": "functions/admin/_middleware.ts",
     "isEntry": true
   },
-  "functions/admin/ajax/feed.js": {
+  "functions/admin/ajax/feed.ts": {
     "file": "functions/admin/ajax/feed.js",
     "name": "functions/admin/ajax/feed",
-    "src": "functions/admin/ajax/feed.js",
+    "src": "functions/admin/ajax/feed.ts",
     "isEntry": true,
     "imports": [
       "_utils.js"
     ]
   },
-  "functions/admin/ajax/r2-ops.js": {
+  "functions/admin/ajax/r2-ops.ts": {
     "file": "functions/admin/ajax/r2-ops.js",
     "name": "functions/admin/ajax/r2-ops",
-    "src": "functions/admin/ajax/r2-ops.js",
+    "src": "functions/admin/ajax/r2-ops.ts",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
@@ -237,10 +234,10 @@ export const manifestData = {
       "_withManifest.js"
     ]
   },
-  "functions/admin/items/[itemId]/index.jsx": {
+  "functions/admin/items/[itemId]/index.tsx": {
     "file": "functions/admin/items/_itemId_/index.js",
     "name": "functions/admin/items/_itemId_/index",
-    "src": "functions/admin/items/[itemId]/index.jsx",
+    "src": "functions/admin/items/[itemId]/index.tsx",
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
@@ -287,10 +284,10 @@ export const manifestData = {
     "src": "functions/api/_middleware.ts",
     "isEntry": true
   },
-  "functions/api/channels/[channelId]/index.jsx": {
+  "functions/api/channels/[channelId]/index.tsx": {
     "file": "functions/api/channels/_channelId_/index.js",
     "name": "functions/api/channels/_channelId_/index",
-    "src": "functions/api/channels/[channelId]/index.jsx",
+    "src": "functions/api/channels/[channelId]/index.tsx",
     "isEntry": true
   },
   "functions/api/feed/index.ts": {
@@ -299,16 +296,16 @@ export const manifestData = {
     "src": "functions/api/feed/index.ts",
     "isEntry": true
   },
-  "functions/api/items/[itemId]/index.jsx": {
+  "functions/api/items/[itemId]/index.tsx": {
     "file": "functions/api/items/_itemId_/index.js",
     "name": "functions/api/items/_itemId_/index",
-    "src": "functions/api/items/[itemId]/index.jsx",
+    "src": "functions/api/items/[itemId]/index.tsx",
     "isEntry": true,
     "imports": [
       "_utils.js",
       "_react-vendor.js",
       "functions/i/[slug]/rss/index.jsx",
-      "functions/admin/ajax/r2-ops.js"
+      "functions/admin/ajax/r2-ops.ts"
     ]
   },
   "functions/api/items/index.tsx": {
@@ -345,7 +342,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_utils.js",
       "functions/i/[slug]/rss/index.jsx",
-      "functions/admin/ajax/r2-ops.js"
+      "functions/admin/ajax/r2-ops.ts"
     ]
   },
   "functions/i/[slug]/rss/index.jsx": {
@@ -381,7 +378,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_utils.js",
       "functions/i/[slug]/rss/index.jsx",
-      "functions/admin/ajax/r2-ops.js"
+      "functions/admin/ajax/r2-ops.ts"
     ]
   },
   "functions/json/openapi.yaml/index.tsx": {

@@ -1,39 +1,40 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { SettingsBase } from '../SettingsBase';
+import SettingsBase from '../SettingsBase';
 import { FORM_EXPLAIN_TEXTS } from '../FormExplainTexts';
 import { ADMIN_URLS } from '../../../../common-src/StringUtils';
+import { SETTINGS_CATEGORY } from '../../../../common-src/types/FeedContent';
+import ExplainText from '../../../components/ExplainText';
 
-interface CustomCodeSettingsAppProps {
-  origin: string;
-}
-
-export const CustomCodeSettingsApp: React.FC<CustomCodeSettingsAppProps> = ({
-  origin
-}) => {
+export const CustomCodeSettingsApp: React.FC = () => {
   const history = useHistory();
 
-  const handleOpenEditor = () => {
+  const handleNavigate = () => {
     history.push(ADMIN_URLS.codeEditorSettings());
   };
 
   return (
     <SettingsBase
       title="Custom Code"
-      explainText={FORM_EXPLAIN_TEXTS['custom-code']}
+      submitting={false}
+      currentType={SETTINGS_CATEGORY.CUSTOM_CODE}
+      titleComponent={
+        <ExplainText
+          title={FORM_EXPLAIN_TEXTS['custom-code'].title}
+          description={FORM_EXPLAIN_TEXTS['custom-code'].description}
+          learnMoreUrl={FORM_EXPLAIN_TEXTS['custom-code'].learnMoreUrl}
+        />
+      }
     >
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-medium">Code Editor</h3>
-          <div className="mt-4">
-            <button
-              type="button"
-              className="btn-primary"
-              onClick={handleOpenEditor}
-            >
-              Open Code Editor
-            </button>
-          </div>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleNavigate}
+          >
+            Open Code Editor
+          </button>
         </div>
       </div>
     </SettingsBase>

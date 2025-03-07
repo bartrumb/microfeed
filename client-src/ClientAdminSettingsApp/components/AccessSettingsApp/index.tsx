@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { SettingsBase } from '../SettingsBase';
+import SettingsBase from '../SettingsBase';
 import AdminRadio from '../../../components/AdminRadio';
 import { FORM_EXPLAIN_TEXTS } from '../FormExplainTexts';
 import { CHANNEL_STATUSES, CHANNEL_STATUSES_DICT } from '../../../../common-src/Constants';
+import { SETTINGS_CATEGORY } from '../../../../common-src/types/FeedContent';
+import ExplainText from '../../../components/ExplainText';
 
 interface AccessSettings {
   currentPolicy?: string;
@@ -54,7 +56,16 @@ export const AccessSettingsApp: React.FC<AccessSettingsAppProps> = ({
   return (
     <SettingsBase
       title="Access Settings"
-      explainText={FORM_EXPLAIN_TEXTS['access-policy']}
+      submitting={isSaving}
+      currentType={SETTINGS_CATEGORY.ACCESS}
+      onSubmit={handleSave}
+      titleComponent={
+        <ExplainText
+          title={FORM_EXPLAIN_TEXTS['access-policy'].title}
+          description={FORM_EXPLAIN_TEXTS['access-policy'].description}
+          learnMoreUrl={FORM_EXPLAIN_TEXTS['access-policy'].learnMoreUrl}
+        />
+      }
     >
       <div className="space-y-6">
         <div>
@@ -72,17 +83,6 @@ export const AccessSettingsApp: React.FC<AccessSettingsAppProps> = ({
               {CHANNEL_STATUSES_DICT[currentPolicy]?.description}
             </div>
           </div>
-        </div>
-
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={handleSave}
-            disabled={isSaving}
-          >
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </button>
         </div>
       </div>
     </SettingsBase>
