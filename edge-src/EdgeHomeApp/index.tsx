@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminWholeHtml from "../components/AdminWholeHtml";
-import {OUR_BRAND} from "../../common-src/constants";
+import {OUR_BRAND} from "../../common-src/Constants";
 import { isDev } from '../common/ManifestUtils';
 import { withManifest, WithManifestProps } from '../common/withManifest';
 import { FeedContent, OnboardingResult } from '../../common-src/types/FeedContent';
