@@ -1,5 +1,5 @@
 import { SitemapResponseBuilder } from '../edge-src/common/PageUtils';
-import { STATUSES } from "../common-src/Constants";
+import { STATUSES } from "../common-src/constants";
 import { FeedContent } from "../common-src/types/FeedContent";
 import type { Env } from '../common-src/types/CloudflareTypes';
 

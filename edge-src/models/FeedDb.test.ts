@@ -1,7 +1,7 @@
 import { Env } from '../../common-src/types/CloudflareTypes';
 import { FeedContent } from '../../common-src/types/FeedContent';
 import FeedDb from './FeedDb';
-import { STATUSES } from '../../common-src/Constants';
+import { STATUSES } from '../../common-src/constants';
 
 // Mock types
 interface MockD1Database extends D1Database {

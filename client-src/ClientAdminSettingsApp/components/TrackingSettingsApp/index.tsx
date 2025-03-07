@@ -2,7 +2,7 @@ import React from 'react';
 import AdminTextarea from "../../../components/AdminTextarea";
 import { buildAudioUrlWithTracking } from "../../../../common-src/StringUtils";
 import SettingsBase from '../SettingsBase';
-import { SETTINGS_CATEGORIES } from "../../../../common-src/Constants";
+import { SETTINGS_CATEGORIES } from "../../../../common-src/constants";
 import { BaseSettingsProps } from '../types';
 import { SETTINGS_CATEGORY } from '../../../../common-src/types/FeedContent';
 

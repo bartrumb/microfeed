@@ -7,7 +7,7 @@ Move-Item -Path "tailwind.config.js" -Destination "tailwind.config.ts" -Force
 Move-Item -Path "vite.config.js" -Destination "vite.config.ts" -Force
 
 # Common source files
-Move-Item -Path "common-src/Constants.js" -Destination "common-src/Constants.ts" -Force
+Move-Item -Path "common-src/constants.js" -Destination "common-src/constants.ts" -Force
 Move-Item -Path "common-src/MediaFileUtils.js" -Destination "common-src/MediaFileUtils.ts" -Force
 Move-Item -Path "common-src/OnboardingUtils.js" -Destination "common-src/OnboardingUtils.ts" -Force
 Move-Item -Path "common-src/R2Utils.js" -Destination "common-src/R2Utils.ts" -Force

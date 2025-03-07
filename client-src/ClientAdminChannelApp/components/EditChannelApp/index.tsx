@@ -9,7 +9,7 @@ import {showToast} from "../../../common/ToastUtils";
 import * as AdminSideQuickLinksModule from "../../../components/AdminSideQuickLinks";
 import AdminRichEditor from "../../../components/AdminRichEditor";
 import AdminSelect from "../../../components/AdminSelect";
-import {LANGUAGE_CODES_LIST, ITUNES_CATEGORIES_DICT, NAV_ITEMS} from "../../../../common-src/Constants";
+import {LANGUAGE_CODES_LIST, ITUNES_CATEGORIES_DICT, NAV_ITEMS} from "../../../../common-src/constants";
 import ExplainText, { ExplainBundle } from "../../../components/ExplainText";
 import {CHANNEL_CONTROLS, CONTROLS_TEXTS_DICT} from "./FormExplainTexts";
 import { LabelRenderer } from "../../../components/types";

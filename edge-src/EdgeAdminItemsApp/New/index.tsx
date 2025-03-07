@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminWholeHtml from "../../components/AdminWholeHtml";
-import { NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND } from "../../../common-src/Constants";
+import { NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND } from "../../../common-src/constants";
 import { isDev } from '../../common/ManifestUtils';
 import { withManifest, WithManifestProps } from '../../common/withManifest';
 import { FeedContent, OnboardingResult } from "../../../common-src/types/FeedContent";

@@ -8,7 +8,7 @@ import WebGlobalSettingsApp from "./WebGlobalSettingsApp";
 import Requests from "../../common/requests";
 import { ADMIN_URLS, unescapeHtml } from "../../../common-src/StringUtils";
 import { showToast } from "../../common/ToastUtils";
-import { NAV_ITEMS } from "../../../common-src/Constants";
+import { NAV_ITEMS } from "../../../common-src/constants";
 import { preventCloseWhenChanged } from "../../common/BrowserUtils";
 import ApiSettingsApp from "./ApiSettingsApp";
 import { 

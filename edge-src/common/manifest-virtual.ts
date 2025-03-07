@@ -12,9 +12,9 @@ export const manifestData = {
       "_index3.js"
     ]
   },
-  "_Constants.js": {
-    "file": "_app/immutable/chunks/Constants.js",
-    "name": "Constants"
+  "_constants.js": {
+    "file": "_app/immutable/chunks/constants.js",
+    "name": "constants"
   },
   "_StringUtils.js": {
     "file": "_app/immutable/chunks/StringUtils.js",
@@ -36,7 +36,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_StringUtils.js",
-      "_Constants.js"
+      "_constants.js"
     ]
   },
   "_index.js": {
@@ -115,7 +115,7 @@ export const manifestData = {
       "_index2.js",
       "_StringUtils.js",
       "_index3.js",
-      "_Constants.js",
+      "_constants.js",
       "_index.js"
     ]
   },
@@ -128,7 +128,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_admin_styles.js",
       "_ui-components.js",
-      "_Constants.js",
+      "_constants.js",
       "_index.js"
     ]
   },
@@ -139,7 +139,7 @@ export const manifestData = {
     "isEntry": true,
     "imports": [
       "_react-vendor.js",
-      "_Constants.js",
+      "_constants.js",
       "_admin_styles.js",
       "_StringUtils.js",
       "_index3.js",
@@ -155,7 +155,7 @@ export const manifestData = {
       "_react-vendor.js",
       "_admin_styles.js",
       "_StringUtils.js",
-      "_Constants.js",
+      "_constants.js",
       "_index3.js",
       "_index2.js"
     ]
@@ -170,7 +170,7 @@ export const manifestData = {
       "_admin_styles.js",
       "_BrowserUtils.js",
       "_index2.js",
-      "_Constants.js",
+      "_constants.js",
       "_ToastUtils.js",
       "_StringUtils.js",
       "_index.js"
@@ -225,7 +225,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -252,7 +252,7 @@ export const manifestData = {
       "functions/admin/ajax/feed.js",
       "functions/sitemap.xml.tsx",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_withManifest.js"
     ]
   },
@@ -264,7 +264,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_index5.js",
       "_utils.js",
       "functions/admin/ajax/feed.js",
@@ -289,7 +289,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -306,7 +306,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_index5.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
@@ -323,7 +323,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -339,7 +339,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",
@@ -356,7 +356,7 @@ export const manifestData = {
     "imports": [
       "_utils.js",
       "functions/admin/ajax/feed.js",
-      "_Constants.js"
+      "_constants.js"
     ]
   },
   "functions/api/channels/[channelId]/index.jsx": {
@@ -463,7 +463,7 @@ export const manifestData = {
     "imports": [
       "_react-vendor.js",
       "_index4.js",
-      "_Constants.js",
+      "_constants.js",
       "_withManifest.js",
       "functions/rss/stylesheet.jsx",
       "_utils.js",

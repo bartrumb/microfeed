@@ -14,12 +14,6 @@
           "database_id": "6e5ba262-e767-401b-bc88-6189ab7b70d9",
           "migrations_dir": "migrations"
         }
-      ],
-      "tail_consumers": [
-        {
-          "service": "preview",
-          "environment": "preview"
-        }
       ]
     },
     "production": {

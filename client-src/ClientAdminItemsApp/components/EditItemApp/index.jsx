@@ -17,7 +17,7 @@ import {
   NAV_ITEMS_DICT,
   STATUSES,
   ITEM_STATUSES_DICT,
-} from "../../../../common-src/Constants";
+} from "../../../../common-src/constants";
 import {AdminSideQuickLinks, SideQuickLink} from "../../../components/AdminSideQuickLinks";
 import AdminRichEditor from "../../../components/AdminRichEditor";
 import ExplainText from "../../../components/ExplainText";

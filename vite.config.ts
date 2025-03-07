@@ -39,7 +39,7 @@ const manualChunks = {
     ],
     enforce: true
   },
-  'Constants': ['@common/Constants']
+  'constants': ['@common/constants']
   // Fixed case to match output file name
 };
 
@@ -132,9 +132,9 @@ export default defineConfig(({ mode }) => ({
           return chunkInfo.name;
         },
         chunkFileNames: (chunkInfo) => {
-          // Special handling for Constants chunk to preserve case
-          if (chunkInfo.name === 'Constants') {
-            return '_app/immutable/chunks/Constants.js';
+          // Special handling for constants chunk to preserve case
+          if (chunkInfo.name === 'constants') {
+            return '_app/immutable/chunks/constants.js';
           }
           // Default handling for other chunks
           return '_app/immutable/chunks/[name].js';

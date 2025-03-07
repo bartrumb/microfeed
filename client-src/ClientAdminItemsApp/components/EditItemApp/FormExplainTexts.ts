@@ -1,4 +1,4 @@
-import { ITEM_STATUSES_DICT, STATUSES } from "../../../../common-src/Constants";
+import { ITEM_STATUSES_DICT, STATUSES } from "../../../../common-src/constants";
 
 export const ITEM_CONTROLS = {
   TITLE: 'item_title',

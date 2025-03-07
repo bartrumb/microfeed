@@ -16,7 +16,7 @@ import {
   NAV_ITEMS,
   NAV_ITEMS_DICT,
   ITEMS_SORT_ORDERS
-} from "../../../../common-src/Constants";
+} from "../../../../common-src/constants";
 import {msToDatetimeLocalString} from '../../../../common-src/TimeUtils';
 import {
   createColumnHelper,

@@ -11,7 +11,7 @@ import {
   ENCLOSURE_CATEGORIES,
   ENCLOSURE_CATEGORIES_DICT,
   SUPPORTED_ENCLOSURE_CATEGORIES
-} from "../../../../../../common-src/Constants";
+} from "../../../../../../common-src/constants";
 import AdminRadio from "../../../../../components/AdminRadio";
 import AdminInput from "../../../../../components/AdminInput";
 import FileUploaderWrapper from "../../../../../components/FileUploaderWrapper";

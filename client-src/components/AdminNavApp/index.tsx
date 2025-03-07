@@ -11,7 +11,7 @@ import {
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 import { ADMIN_URLS } from "../../../common-src/StringUtils";
-import { NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND } from "../../../common-src/Constants";
+import { NAV_ITEMS, NAV_ITEMS_DICT, OUR_BRAND } from "../../../common-src/constants";
 
 type HeroIcon = React.ForwardRefExoticComponent<
   Omit<React.SVGProps<SVGSVGElement>, "ref"> & {

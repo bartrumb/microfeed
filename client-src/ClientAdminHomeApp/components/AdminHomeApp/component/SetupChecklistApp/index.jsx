@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ONBOARDING_TYPES, OUR_BRAND, SETTINGS_CATEGORIES} from "../../../../../../common-src/Constants";
+import {ONBOARDING_TYPES, OUR_BRAND, SETTINGS_CATEGORIES} from "../../../../../../common-src/constants";
 import {CheckCircleIcon, ArrowRightCircleIcon} from "@heroicons/react/20/solid";
 import AdminInput from "../../../../../components/AdminInput";
 import Requests from "../../../../../common/requests";

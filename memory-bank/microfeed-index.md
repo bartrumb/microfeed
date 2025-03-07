@@ -694,7 +694,7 @@ This index provides a structured view of the microfeed project source code.
 
 | File | Size | Last Modified |
 |------|------|---------------|
-| Constants.ts | 14.14 KB | 2025-03-02 22:43:05 |
+| constants.ts | 14.14 KB | 2025-03-02 22:43:05 |
 | MediaFileUtils.ts | 2.43 KB | 2025-03-05 18:17:46 |
 | OnboardingUtils.ts | 2.29 KB | 2025-03-05 17:48:16 |
 | R2Utils.ts | 1.10 KB | 2025-03-05 17:52:01 |

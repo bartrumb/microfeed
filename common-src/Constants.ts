@@ -765,7 +765,7 @@ export const ITUNES_CATEGORIES_DICT = {
   ]
 };
 
-const Constants = {
+const constants = {
 };
 
-export default Constants;
+export default constants;

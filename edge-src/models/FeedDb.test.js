@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import FeedDb from './FeedDb';
-import { STATUSES } from '../../common-src/Constants';
+import { STATUSES } from '../../common-src/constants';
 
 describe('FeedDb', () => {
 let mockDb;

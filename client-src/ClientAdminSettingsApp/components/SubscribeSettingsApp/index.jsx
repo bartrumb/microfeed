@@ -6,7 +6,7 @@ import { PlusCircleIcon, TrashIcon, ArrowSmallUpIcon, ArrowSmallDownIcon } from 
 import AdminInput from "../../../components/AdminInput";
 import AdminSwitch from "../../../components/AdminSwitch";
 import ExternalLink from "../../../components/ExternalLink";
-import {PREDEFINED_SUBSCRIBE_METHODS, SETTINGS_CATEGORIES} from '../../../../common-src/Constants';
+import {PREDEFINED_SUBSCRIBE_METHODS, SETTINGS_CATEGORIES} from '../../../../common-src/constants';
 import NewSubscribeDialog from "./components/NewSubscribeDialog";
 import ExplainText from "../../../components/ExplainText";
 import {

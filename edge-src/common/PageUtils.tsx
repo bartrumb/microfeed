@@ -2,7 +2,7 @@ import ReactDOMServer from "react-dom/server";
 import type { D1Database } from '@cloudflare/workers-types';
 import Theme from "../models/Theme";
 import FeedDb, { getFetchItemsParams, QueryOptions } from "../models/FeedDb";
-import { CODE_TYPES } from "../../common-src/Constants";
+import { CODE_TYPES } from "../../common-src/constants";
 import { ADMIN_URLS, escapeHtml, urlJoinWithRelative } from "../../common-src/StringUtils";
 import { OnboardingChecker } from "../../common-src/OnboardingUtils";
 import { FeedContent, SettingsData, SETTINGS_CATEGORY } from "../../common-src/types/FeedContent";

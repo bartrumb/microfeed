@@ -1,6 +1,6 @@
 import { Env } from './types/CloudflareTypes';
 import { uploadToR2, getPublicUrl, projectPrefix } from './R2Utils';
-import { ENCLOSURE_CATEGORIES } from './Constants';
+import { ENCLOSURE_CATEGORIES } from './constants';
 
 interface MediaFileMetadata {
   category: string;

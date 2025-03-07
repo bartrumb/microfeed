@@ -7,7 +7,7 @@ import {
   DEFAULT_ITEMS_PER_PAGE,
   ITEMS_SORT_ORDERS,
   MAX_ITEMS_PER_PAGE,
-} from "../../../../common-src/Constants";
+} from "../../../../common-src/constants";
 import AdminRadio from "../../../components/AdminRadio";
 import {showToast} from "../../../common/ToastUtils";
 import ExplainText from "../../../components/ExplainText";

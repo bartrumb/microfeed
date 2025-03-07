@@ -1,5 +1,5 @@
 import React from 'react';
-import {NAV_ITEMS} from "../../../../common-src/Constants";
+import {NAV_ITEMS} from "../../../../common-src/constants";
 import AdminNavApp from "../../../components/AdminNavApp";
 import WhatsNewApp from "./component/WhatsNewApp";
 import DistributionApp from "./component/DistributionApp";

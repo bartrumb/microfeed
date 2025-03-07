@@ -1,5 +1,5 @@
 import { OnboardingResult } from '../../../../common-src/types/FeedContent';
-import { CODE_FILES, CODE_TYPES } from '../../../../common-src/Constants';
+import { CODE_FILES, CODE_TYPES } from '../../../../common-src/constants';
 
 // Add History State interface
 export interface HistoryState {

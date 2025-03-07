@@ -1,7 +1,7 @@
 import {RssResponseBuilder} from "../../../../edge-src/common/PageUtils";
 import FeedPublicRssBuilder from "../../../../edge-src/models/FeedPublicRssBuilder";
 import {getIdFromSlug} from "../../../../common-src/StringUtils";
-import {STATUSES} from "../../../../common-src/Constants";
+import {STATUSES} from "../../../../common-src/constants";
 
 export async function onRequestGet({request, env, params}) {
   const {slug} = params;

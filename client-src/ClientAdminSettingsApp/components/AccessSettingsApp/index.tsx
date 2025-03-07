@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import SettingsBase from '../SettingsBase';
 import AdminRadio from '../../../components/AdminRadio';
 import { FORM_EXPLAIN_TEXTS } from '../FormExplainTexts';
-import { CHANNEL_STATUSES, CHANNEL_STATUSES_DICT } from '../../../../common-src/Constants';
+import { CHANNEL_STATUSES, CHANNEL_STATUSES_DICT } from '../../../../common-src/constants';
 import { SETTINGS_CATEGORY } from '../../../../common-src/types/FeedContent';
 import ExplainText from '../../../components/ExplainText';
 

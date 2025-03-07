@@ -1,5 +1,5 @@
 import React from 'react';
-import {OUR_BRAND} from "../../../../../../common-src/Constants";
+import {OUR_BRAND} from "../../../../../../common-src/constants";
 
 const FETCH_STATUS__START = 1;
 

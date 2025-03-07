@@ -3,7 +3,7 @@ import { RadioGroup } from '@headlessui/react'
 import clsx from "clsx";
 import { CheckIcon } from '@heroicons/react/20/solid'
 import SettingsBase from '../SettingsBase';
-import {SETTINGS_CATEGORIES} from "../../../../common-src/Constants";
+import {SETTINGS_CATEGORIES} from "../../../../common-src/constants";
 
 function AccessOption({value, header, description}) {
   return (<RadioGroup.Option value={value}>

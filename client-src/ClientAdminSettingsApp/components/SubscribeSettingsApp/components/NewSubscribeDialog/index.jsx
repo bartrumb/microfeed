@@ -1,6 +1,6 @@
 import React from 'react';
 import AdminDialog from "../../../../../components/AdminDialog";
-import {PREDEFINED_SUBSCRIBE_METHODS} from '../../../../../../common-src/Constants';
+import {PREDEFINED_SUBSCRIBE_METHODS} from '../../../../../../common-src/constants';
 import AdminInput from "../../../../../components/AdminInput";
 import {randomShortUUID} from "../../../../../../common-src/StringUtils";
 import AdminSelect from "../../../../../components/AdminSelect";

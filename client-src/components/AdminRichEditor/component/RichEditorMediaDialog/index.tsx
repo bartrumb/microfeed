@@ -5,7 +5,7 @@ import AdminDialog from "../../../AdminDialog";
 import AdminRadio from "../../../AdminRadio";
 import AdminInput from "../../../AdminInput";
 import {CloudArrowUpIcon} from "@heroicons/react/24/outline";
-import {ENCLOSURE_CATEGORIES_DICT, ENCLOSURE_CATEGORIES} from "../../../../../common-src/Constants";
+import {ENCLOSURE_CATEGORIES_DICT, ENCLOSURE_CATEGORIES} from "../../../../../common-src/constants";
 import {randomHex, urlJoinWithRelative} from "../../../../../common-src/StringUtils";
 import Requests from "../../../../common/requests";
 import {showToast} from "../../../../common/ToastUtils";

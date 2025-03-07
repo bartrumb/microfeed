@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { OnboardingResult } from '../../../../common-src/types/FeedContent';
-import { ENCLOSURE_CATEGORIES } from '../../../../common-src/Constants';
+import { ENCLOSURE_CATEGORIES } from '../../../../common-src/constants';
 
 export type EnclosureCategory = typeof ENCLOSURE_CATEGORIES[keyof typeof ENCLOSURE_CATEGORIES];
 

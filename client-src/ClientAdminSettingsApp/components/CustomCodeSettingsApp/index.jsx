@@ -1,7 +1,7 @@
 import React from 'react';
 import {ADMIN_URLS} from "../../../../common-src/StringUtils";
 import SettingsBase from '../SettingsBase';
-import {SETTINGS_CATEGORIES, CODE_TYPES} from "../../../../common-src/Constants";
+import {SETTINGS_CATEGORIES, CODE_TYPES} from "../../../../common-src/constants";
 
 function NavBlock({url, text}) {
   return (<div>

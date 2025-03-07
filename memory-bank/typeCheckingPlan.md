@@ -14,7 +14,7 @@ Successfully migrated the following files from JavaScript to TypeScript:
 - vite.config.js → vite.config.ts
 
 2. Common Source Files:
-- common-src/Constants.js → .ts
+- common-src/constants.js → .ts
 - common-src/MediaFileUtils.js → .ts
 - common-src/OnboardingUtils.js → .ts
 - common-src/R2Utils.js → .ts

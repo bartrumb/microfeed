@@ -11,7 +11,7 @@ import {
   CODE_TYPES,
   CODE_FILES,
   SETTINGS_CATEGORIES,
-} from "../../../../common-src/Constants";
+} from "../../../../common-src/constants";
 import AdminSelect from "../../../components/AdminSelect";
 import {
   CodeTypeOption,

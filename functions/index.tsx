@@ -1,7 +1,7 @@
 import React from "react";
 import EdgeHomeApp from '../edge-src/EdgeHomeApp';
 import { WebResponseBuilder } from '../edge-src/common/PageUtils';
-import { STATUSES } from "../common-src/Constants";
+import { STATUSES } from "../common-src/constants";
 import { FeedContent, OnboardingResult } from "../common-src/types/FeedContent";
 import Theme from "../edge-src/models/Theme";
 import type { Env } from '../common-src/types/CloudflareTypes';

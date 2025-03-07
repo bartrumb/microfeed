@@ -2,7 +2,7 @@ import React from "react";
 import EdgeItemApp from "../../../edge-src/EdgeItemApp";
 import {WebResponseBuilder} from '../../../edge-src/common/PageUtils';
 import {PUBLIC_URLS, getIdFromSlug} from "../../../common-src/StringUtils";
-import {STATUSES} from "../../../common-src/Constants";
+import {STATUSES} from "../../../common-src/constants";
 
 export async function onRequestGet({params, env, request}) {
   const {slug} = params;

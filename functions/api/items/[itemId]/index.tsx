@@ -1,5 +1,5 @@
 import { getIdFromSlug } from "../../../../common-src/StringUtils";
-import { ITEM_STATUSES_STRINGS_DICT, STATUSES } from "../../../../common-src/Constants";
+import { ITEM_STATUSES_STRINGS_DICT, STATUSES } from "../../../../common-src/constants";
 import { onFetchItemRequestGet } from "../../../../edge-src/EdgeCommonRequests";
 import { Env } from "../../../../common-src/types/CloudflareTypes";
 import { FeedContent, Item } from "../../../../common-src/types/FeedContent";

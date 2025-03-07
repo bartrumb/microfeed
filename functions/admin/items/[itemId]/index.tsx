@@ -3,7 +3,7 @@ import EdgeAdminItemsApp from '../../../../edge-src/EdgeAdminItemsApp/Edit';
 import FeedDb from "../../../../edge-src/models/FeedDb";
 import { renderReactToHtml } from "../../../../edge-src/common/PageUtils";
 import { OnboardingChecker } from "../../../../common-src/OnboardingUtils";
-import { STATUSES } from "../../../../common-src/Constants";
+import { STATUSES } from "../../../../common-src/constants";
 import { Env } from "../../../../common-src/types/CloudflareTypes";
 import { FeedContent, OnboardingResult } from "../../../../common-src/types/FeedContent";
 

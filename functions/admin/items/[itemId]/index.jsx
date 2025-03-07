@@ -3,7 +3,7 @@ import EdgeAdminItemsApp from '../../../../edge-src/EdgeAdminItemsApp/Edit';
 import FeedDb from "../../../../edge-src/models/FeedDb";
 import {renderReactToHtml} from "../../../../edge-src/common/PageUtils";
 import {OnboardingChecker} from "../../../../common-src/OnboardingUtils";
-import {STATUSES} from "../../../../common-src/Constants";
+import {STATUSES} from "../../../../common-src/constants";
 
 export async function onRequestGet({env, params, request}) {
   const { itemId } = params;

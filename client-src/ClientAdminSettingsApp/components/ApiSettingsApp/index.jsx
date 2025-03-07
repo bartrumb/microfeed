@@ -4,7 +4,7 @@ import AdminSwitch from "../../../components/AdminSwitch";
 import clsx from "clsx";
 import {randomHex, randomShortUUID} from "../../../../common-src/StringUtils";
 import AdminInput from "../../../components/AdminInput";
-import {SETTINGS_CATEGORIES} from "../../../../common-src/Constants";
+import {SETTINGS_CATEGORIES} from "../../../../common-src/constants";
 
 export default class ApiSettingsApp extends React.Component {
   constructor(props) {
