@@ -18,9 +18,27 @@ interface RequestParams {
   };
 }
 
-interface ItemResponse extends Partial<Item> {
+// Define a separate interface for the incoming JSON structure
+interface ItemRequestBody {
+  status?: ValidStatusString;
   _microfeed?: {
     status: ValidStatusString;
+  };
+  title?: string;
+  name?: string;
+  pub_date?: string;
+  pubDateMs?: number;
+  created_at?: string;
+  updated_at?: string;
+  content?: string;
+  description?: string;
+  link?: string;
+  author?: string;
+  categories?: string[];
+  enclosure?: {
+    url: string;
+    type: string;
+    length?: number;
   };
 }
 
@@ -91,7 +109,7 @@ export async function onRequestPut({ params, request, data, env }: RequestParams
   }
 
   const res = await onRequestGet({ params, request, env, data });
-  let oldItem: ItemResponse = {};
+  let oldItem: Partial<Item> = {};
   
   if (res.status === 200) {
     const feed = await res.json() as FeedContent;
@@ -102,30 +120,37 @@ export async function onRequestPut({ params, request, data, env }: RequestParams
     return res;
   }
 
-  const itemJson = await request.json() as ItemResponse;
+  const itemJson = await request.json() as ItemRequestBody;
+  
+  // Create a new object without the status field from itemJson
+  const { status: _, _microfeed, ...restItemJson } = itemJson;
+  
   const newItemJson: Partial<Item> = {
     ...oldItem,
-    ...itemJson,
+    ...restItemJson,
   };
 
+  // Handle publication date
+  const now = new Date();
   if (!itemJson.pubDateMs) {
-    newItemJson.pubDateMs = itemJson.pub_date ?
-      new Date(itemJson.pub_date).getTime() : Date.now();
+    const pubDate = itemJson.pub_date ? new Date(itemJson.pub_date) : now;
+    newItemJson.pubDateMs = pubDate.getTime();
+    newItemJson.pub_date = pubDate.toISOString();
   }
 
   // Determine the status with proper type checking
-  let status = STATUSES.PUBLISHED;
+  let status: number = STATUSES.PUBLISHED;
   if (itemJson.status && isValidStatusString(itemJson.status)) {
     status = ITEM_STATUSES_STRINGS_DICT[itemJson.status];
-  } else if (oldItem._microfeed?.status && isValidStatusString(oldItem._microfeed.status)) {
-    status = ITEM_STATUSES_STRINGS_DICT[oldItem._microfeed.status];
+  } else if (itemJson._microfeed?.status && isValidStatusString(itemJson._microfeed.status)) {
+    status = ITEM_STATUSES_STRINGS_DICT[itemJson._microfeed.status];
   }
 
   const { feedCrud } = data;
   await feedCrud.updateItem(itemUniqId, {
     ...newItemJson,
     status,
-    updated_at: new Date().toISOString()
+    updated_at: now.toISOString()
   });
 
   return new Response(JSON.stringify({}), {
